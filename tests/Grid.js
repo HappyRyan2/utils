@@ -53,5 +53,3 @@ testing.addUnit("Grid.rotate()", [
 		])
 	]
 ]);
-testing.runTestByName("Grid.rotate() - test case 2");
-testing.testAll();
