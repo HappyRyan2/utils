@@ -88,7 +88,7 @@ Set.cartesianProduct = function(...sets) {
 Set.cartesianProductGenerator = function*(...sets) {
 	if(sets.length === 1) {
 		for(const element of sets[0]) {
-			yield element;
+			yield [element];
 		}
 		return;
 	}
