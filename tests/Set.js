@@ -96,4 +96,15 @@ testing.addUnit("Set.cartesianProduct()", Set.cartesianProduct, [
 		])
 	]
 ]);
+testing.addUnit("Set.cartesianProductGenerator()", [
+	() => {
+		const set1 = new Set(["a", "b"]);
+		const set2 = new Set(["c", "d"]);
+		const product = new Set([]);
+		for(const combination of Set.cartesianProductGenerator(set1, set2)) {
+			product.add(combination);
+		}
+		expect(product).toEqual(Set.cartesianProduct(set1, set2));
+	}
+]);
 testing.testUnit("Set.cartesianProduct()");

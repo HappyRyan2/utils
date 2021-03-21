@@ -85,6 +85,23 @@ Set.cartesianProduct = function(...sets) {
 	});
 	return result;
 };
+Set.cartesianProductGenerator = function*(...sets) {
+	if(sets.length === 1) {
+		for(const element of sets[0]) {
+			yield element;
+		}
+		return;
+	}
+	else {
+		const firstSet = sets[0];
+		const otherSets = sets.slice(1);
+		for(const element of firstSet) {
+			for(const product of Set.cartesianProductGenerator(...otherSets)) {
+				yield [element, ...product];
+			}
+		}
+	}
+};
 
 
 Set.method(function map(callback) {
