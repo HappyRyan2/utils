@@ -7,12 +7,25 @@ Array.method(function repeat(numTimes) {
 });
 Array.method(function partitions() {
 	/* returns the set of all partitionings of this array. */
-	if(this.length === 1) {
-		return new Set([[this.map(v => v)]]);
+	const partitions = new Set([]);
+	for(const partition of this.partitionGenerator()) {
+		partitions.add(partition);
 	}
-	const partitionsOfOthers = this.slice(1).partitions();
-	return new Set([
-		...partitionsOfOthers.map(partition => [[this[0]], ...partition]),
-		...partitionsOfOthers.map(partition => [[this[0], ...partition[0]], ...partition.slice(1)])
-	]);
+	return partitions;
+});
+Array.method(function* partitionGenerator() {
+	if(this.length === 1) {
+		yield [[this[0]]];
+		return;
+	}
+	for(const partition of this.slice(1).partitionGenerator()) {
+		yield [
+			[this[0]],
+			...partition
+		];
+		yield [
+			[this[0], ...partition[0]],
+			...partition.slice(1)
+		];
+	}
 });
