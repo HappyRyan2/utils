@@ -23,8 +23,21 @@ testing.addUnit("Set.difference()", [
 	[[1, 2, 3], [3, 4, 5], new Set([1, 2])],
 	[[1, 2], [3, 4], new Set([1, 2])]
 ]);
-testing.addUnit("Set.powerSet()", [
-	(set) => set.powerSet(),
+testing.addUnit("Set.subsets()", [
+	(set) => set.subsets(),
+	[
+		new Set([]),
+		new Set([
+			new Set([])
+		])
+	],
+	[
+		new Set(["A"]),
+		new Set([
+			new Set([]),
+			new Set(["A"])
+		])
+	],
 	[
 		new Set([1, 2]),
 		new Set([

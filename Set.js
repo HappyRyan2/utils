@@ -53,22 +53,27 @@ Set.method(function difference(set) {
 	});
 	return result;
 });
-Set.method(function powerSet() {
+Set.method(function subsets() {
 	/* returns the power set: the set of every subset of this set. */
-	const powerSet = new Set();
-	const powerSetSize = 2 ** this.size;
-	const itemsArray = [...this];
-	for(let i = 0; i < powerSetSize; i ++) {
-		const binaryString = i.toString(2).padStart(this.size, "0");
-		const subset = new Set();
-		[...binaryString].forEach((bit, index) => {
-			if(bit === "1") {
-				subset.add(itemsArray[index]);
-			}
-		});
-		powerSet.add(subset);
+	if(this.size === 0) {
+		return new Set([
+			new Set([])
+		]);
 	}
-	return powerSet;
+	if(this.size === 1) {
+		return new Set([
+			new Set([]),
+			new Set(this)
+		]);
+	}
+	const elementsArray = [...this];
+	const arbitraryElement = [...this][0];
+	const otherElements = elementsArray.slice(1);
+	const subsetsOfOthers = new Set(otherElements).subsets();
+	return new Set([
+		...subsetsOfOthers,
+		...subsetsOfOthers.map(subset => new Set([arbitraryElement, ...subset]))
+	]);
 });
 Set.cartesianProduct = function(...sets) {
 	const firstSet = sets[0];
