@@ -128,4 +128,3 @@ testing.addUnit("Set.cartesianProductGenerator()", [
 		expect(product).toEqual(Set.cartesianProduct(set1));
 	}
 ]);
-testing.testUnit("Set.cartesianProduct()");

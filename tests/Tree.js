@@ -32,6 +32,3 @@ testing.addUnit("Tree.iterate()", [
 		]);
 	}
 ]);
-
-testing.runTestByName("Grid.rotate() - test case 2");
-testing.testAll();
