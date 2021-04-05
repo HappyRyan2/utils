@@ -44,7 +44,12 @@ testing.addUnit("Object.equals()", {
 	},
 	"returns true for primitive values that are equal": () => {
 		testing.assert((1).equals(1));
+		testing.assert((1).equals(new Number(1)));
+		testing.assert((new Number(1)).equals(1));
+		testing.assert((new Number(1)).equals(new Number(1)));
 		testing.assert((true).equals(true));
+		testing.assert((false).equals(false));
+		testing.assert((NaN).equals(NaN));
 	},
 	"returns false for objects with different property values": () => {
 		const obj1 = { prop1: { prop2: { prop3: "foo" }}};
@@ -69,8 +74,8 @@ testing.addUnit("Object.equals()", {
 		class Bar {};
 		const foo = new Foo();
 		const bar = new Bar();
-		testing.refute(obj1.equals(obj2));
-		testing.refute(obj2.equals(obj1));
+		testing.refute(foo.equals(bar));
+		testing.refute(bar.equals(foo));
 	},
 	"returns false for non-identical non-reference cyclic objects": () => {
 		const obj1 = { foo: "bar" };

@@ -18,9 +18,18 @@ Object.method(function clone() {
 	}
 	return clone;
 });
-Object.method(function equals(obj) {
-	if(typeof this !== "object" || (typeof obj !== "object" || obj === null)) {
-		return this === obj;
+Object.method(function equals(obj, history = []) {
+	if(
+		(this.valueOf() !== this) ||
+		(typeof obj !== "object" || obj === null)
+	) {
+		return (
+			this.valueOf() === obj?.valueOf() ||
+			(Number.isNaN(this.valueOf()) && Number.isNaN(obj.valueOf()))
+		);
+	}
+	if(this.__proto__ !== obj.__proto__) {
+		return false;
 	}
 	if(Object.keys(this).length !== Object.keys(obj).length) {
 		return false;
@@ -34,8 +43,18 @@ Object.method(function equals(obj) {
 			return false;
 		}
 		else if(type1 === "object" || type1 === "array" || type1 === "instance") {
-			if(!prop1.equals(prop2)) {
-				return false;
+			var historyItem = history.find(v => v.selfItem === prop1);
+			if(historyItem) {
+				return historyItem.otherItem === prop2;
+			}
+			else {
+				var newHistory = [
+					...history,
+					{ selfItem: prop1, otherItem: prop2 }
+				];
+				if(!prop1.equals(prop2, newHistory)) {
+					return false;
+				}
 			}
 		}
 		else if(prop1 !== prop2) {
