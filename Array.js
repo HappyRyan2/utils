@@ -5,6 +5,7 @@ Array.method(function repeat(numTimes) {
 	}
 	return result;
 });
+
 Array.method(function partitions() {
 	/* returns the set of all partitionings of this array. */
 	const partitions = new Set([]);
@@ -27,5 +28,24 @@ Array.method(function* partitionGenerator() {
 			[this[0], ...partition[0]],
 			...partition.slice(1)
 		];
+	}
+});
+
+Array.method(function sum(func, thisArg) {
+	const add = (a, b) => a + b;
+	if(typeof func === "function") {
+		return this.map(func, thisArg).reduce(add, 0);
+	}
+	else {
+		return this.reduce(add, 0);
+	}
+});
+Array.method(function product(func, thisArg) {
+	const multiply = (a, b) => a * b;
+	if(typeof func === "function") {
+		return this.map(func, thisArg).reduce(multiply, 1);
+	}
+	else {
+		return this.reduce(multiply, 1);
 	}
 });
