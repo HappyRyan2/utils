@@ -1,12 +1,22 @@
 /* Represents a finite or infinite sequence of integers. */
 class Sequence {
-	constructor(generator, properties = {}) {
-		this.generator = generator;
-		this.properties = {
-			...properties,
-			isMonotonic: false
-		};
-		this[Symbol.iterator] = generator;
+	constructor(func, properties = {}) {
+		const GeneratorFunction = Object.getPrototypeOf(function*() {}).constructor;
+		const isGeneratorFunc = (func instanceof GeneratorFunction);
+		if(isGeneratorFunc) {
+			this.generator = func;
+		}
+		else {
+			this.nthTerm = func;
+			this.generator = function*() {
+				for(let index = 0; index < Infinity; index ++) {
+					yield func(index);
+				}
+			};
+		}
+		this[Symbol.iterator] = this.generator;
+
+		this.isMonotonic = properties.isMonotonic ?? null;
 	}
 
 	static POSITIVE_INTEGERS = new Sequence(

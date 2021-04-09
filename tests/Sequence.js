@@ -1,3 +1,27 @@
+testing.addUnit("Sequence constructor", {
+	"can create a sequence from a generator function": () => {
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i += 10) {
+				yield i;
+			}
+		});
+		const terms = [];
+		for(const number of sequence.generator()) {
+			terms.push(number);
+			if(terms.length >= 5) { break; }
+		}
+		expect(terms).toEqual([0, 10, 20, 30, 40]);
+	},
+	"can create a sequence from an nth-term formula": () => {
+		const sequence = new Sequence(n => n * 10);
+		const terms = [];
+		for(const number of sequence.generator()) {
+			terms.push(number);
+			if(terms.length >= 5) { break; }
+		}
+		expect(terms).toEqual([0, 10, 20, 30, 40]);
+	}
+});
 testing.addUnit("Sequence iteration", [
 	() => {
 		const positiveIntegers = new Sequence(function*() {
