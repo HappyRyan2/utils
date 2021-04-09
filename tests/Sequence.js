@@ -71,6 +71,15 @@ testing.addUnit("Sequence.slice()", {
 		expect(terms).toEqual([50, 60, 70, 80, 90]);
 	}
 });
+testing.addUnit("Sequence.nthTerm()", [
+	() => {
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i += 10) { yield i; }
+		}); // {0, 10, 20, 30, ...}
+		const term = sequence.nthTerm(3);
+		expect(term).toEqual(30);
+	}
+]);
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {

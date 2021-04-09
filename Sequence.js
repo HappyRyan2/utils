@@ -19,6 +19,15 @@ class Sequence {
 		this.isMonotonic = properties.isMonotonic ?? null;
 	}
 
+	nthTerm(termIndex) {
+		/* returns the term at the given zero-based index. */
+		let iterations = 0;
+		for(const term of this) {
+			if(iterations === termIndex) { return term; }
+			iterations ++;
+		}
+	}
+
 	slice(minIndex, maxIndex = Infinity) {
 		/*
 		Returns an array if `minIndex` and `maxIndex` are provided, and a Sequence if `maxIndex` is not provided.
