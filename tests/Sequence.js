@@ -35,6 +35,42 @@ testing.addUnit("Sequence iteration", [
 		expect(sequenceItems).toEqual([1, 2, 3, 4, 5]);
 	}
 ]);
+testing.addUnit("Sequence.slice()", {
+	"works for finite subsequences with nth-term formulas": () => {
+		const sequence = new Sequence(n => n * 10); // {0, 10, 20, 30, ...}
+		const sliced = sequence.slice(0, 5);
+		expect(sliced).toEqual([0, 10, 20, 30, 40]);
+	},
+	"works for infinite subsequences with nth-term formulas": () => {
+		const sequence = new Sequence(n => n * 10); // {0, 10, 20, 30, ...}
+		const sliced = sequence.slice(5, Infinity);
+		const terms = [];
+		for(const term of sliced) {
+			terms.push(term);
+			if(terms.length >= 5) { break; }
+		}
+		expect(terms).toEqual([50, 60, 70, 80, 90]);
+	},
+	"works for finite subsequences without nth-term formulas": () => {
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i += 10) { yield i; }
+		}); // {0, 10, 20, 30, ...}
+		const sliced = sequence.slice(0, 5);
+		expect(sliced).toEqual([0, 10, 20, 30, 40]);
+	},
+	"works for infinite sequences without nth-term formulas": () => {
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i += 10) { yield i; }
+		}); // {0, 10, 20, 30, ...}
+		const sliced = sequence.slice(5, Infinity);
+		const terms = [];
+		for(const term of sliced) {
+			terms.push(term);
+			if(terms.length >= 5) { break; }
+		}
+		expect(terms).toEqual([50, 60, 70, 80, 90]);
+	}
+});
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {
