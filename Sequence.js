@@ -27,6 +27,33 @@ class Sequence {
 			iterations ++;
 		}
 	}
+	indexOf(searchTarget) {
+		/*
+		returns the index of the first occurence, or -1 if it is not present.
+		Note that this will loop infinitely if searching for a nonexistent item in a non-monotonic sequence.
+		*/
+		if(this.isMonotonic) {
+			const isIncreasing = this.nthTerm(1) > this.nthTerm(0);
+			let index = 0;
+			for(const term of this) {
+				if(
+					(term > searchTarget && isIncreasing) ||
+					(term < searchTarget && !isIncreasing)
+				) {
+					return -1;
+				}
+				if(term === searchTarget) { return index; }
+				index ++;
+			}
+		}
+		else {
+			let index = 0;
+			for(const term of this) {
+				if(term === searchTarget) { return index; }
+				index ++;
+			}
+		}
+	}
 
 	slice(minIndex, maxIndex = Infinity) {
 		/*

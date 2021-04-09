@@ -80,6 +80,20 @@ testing.addUnit("Sequence.nthTerm()", [
 		expect(term).toEqual(30);
 	}
 ]);
+testing.addUnit("Sequence.indexOf()", {
+	"works when the term is in the sequence - test case 1": () => {
+		const index = Sequence.POSITIVE_INTEGERS.indexOf(29);
+		expect(index).toEqual(28);
+	},
+	"works when the term is in the sequence - test case 2": () => {
+		const index = Sequence.INTEGERS.indexOf(3);
+		expect(index).toEqual(5); // 0, 1, -1, 2, -2, 3 --> 3 is at index 5
+	},
+	"returns -1 when the term is not in the sequence": () => {
+		const index = Sequence.POSITIVE_INTEGERS.indexOf(-347);
+		expect(index).toEqual(-1);
+	}
+});
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {
