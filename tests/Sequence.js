@@ -125,3 +125,13 @@ testing.addUnit("Sequence.PRIMES", [
 		expect(primes).toEqual([2, 3, 5, 7, 11, 13, 17, 19, 23, 29]);
 	}
 ]);
+testing.addUnit("Sequence.powersOf", [
+	() => {
+		const terms = Sequence.powersOf(2).slice(0, 5);
+		expect(terms).toEqual([1, 2, 4, 8, 16]);
+	},
+	() => {
+		const terms = Sequence.powersOf(3).slice(0, 5);
+		expect(terms).toEqual([1, 3, 9, 27, 81]);
+	}
+]);

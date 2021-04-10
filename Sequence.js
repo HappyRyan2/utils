@@ -144,4 +144,10 @@ class Sequence {
 		},
 		{ isMonotonic: true }
 	);
+	static powersOf(num) {
+		return new Sequence(
+			index => num ** index,
+			{ isMonotonic: num >= 0 }
+		);
+	}
 }
