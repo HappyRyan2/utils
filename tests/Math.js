@@ -12,3 +12,13 @@ testing.addUnit("Math.logBase()", {
 		expect(result).toApproximatelyEqual(Math.log2(10));
 	}
 });
+testing.addUnit("Math.factorize()", {
+	"can return a list of factors": () => {
+		const result = Math.factorize(300);
+		expect(result).toEqual([2, 2, 3, 5, 5]);
+	},
+	"can return an object containing the exponent on each prime": () => {
+		const result = Math.factorize(300, "prime-exponents");
+		expect(result).toEqual({ 2: 2, 3: 1, 5: 2 });
+	}
+});
