@@ -135,3 +135,13 @@ testing.addUnit("Sequence.powersOf", [
 		expect(terms).toEqual([1, 3, 9, 27, 81]);
 	}
 ]);
+testing.addUnit("Sequence.fibonacci", {
+	"correctly generates the sequence from default starting values": () => {
+		const terms = Sequence.fibonacci().slice(0, 10);
+		expect(terms).toEqual([1, 1, 2, 3, 5, 8, 13, 21, 34, 55]);
+	},
+	"correctly generates the sequence from custom starting values": () => {
+		const terms = Sequence.fibonacci(2, 1).slice(0, 10);
+		expect(terms).toEqual([2, 1, 3, 4, 7, 11, 18, 29, 47, 76]);
+	}
+});

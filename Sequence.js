@@ -150,4 +150,18 @@ class Sequence {
 			{ isMonotonic: num >= 0 }
 		);
 	}
+	static fibonacci(start1 = 1, start2 = 1) {
+		return new Sequence(
+			function*() {
+				yield start1;
+				yield start2;
+				let v1 = start1, v2 = start2;
+				while(true) {
+					const next = v1 + v2;
+					yield next;
+					v1 = v2, v2 = next;
+				}
+			}
+		)
+	}
 }
