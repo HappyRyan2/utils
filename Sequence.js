@@ -68,6 +68,18 @@ class Sequence {
 			}
 		);
 	}
+	map(callback) {
+		const originalSequence = this;
+		return new Sequence(
+			function*() {
+				let iterations = 0;
+				for(const value of originalSequence) {
+					yield callback(value, iterations, originalSequence);
+					iterations ++;
+				}
+			}
+		);
+	}
 
 	slice(minIndex, maxIndex = Infinity) {
 		/*

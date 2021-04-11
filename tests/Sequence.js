@@ -101,6 +101,13 @@ testing.addUnit("Sequence.filter()", [
 		expect(terms).toEqual([2, 4, 6, 8, 10]);
 	}
 ]);
+testing.addUnit("Sequence.map()", [
+	() => {
+		const evenNumbers = Sequence.POSITIVE_INTEGERS.map(n => n * 2);
+		const terms = evenNumbers.slice(0, 5);
+		expect(terms).toEqual([2, 4, 6, 8, 10]);
+	}
+]);
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {
