@@ -16,5 +16,12 @@ Math.factorize = function(number, mode = "factors-list") {
 			}
 		}
 	}
+	if(number !== 1) {
+		if(mode === "factors-list") { result.push(number); }
+		else if(mode === "prime-exponents") {
+			result[number] ??= 0;
+			result[number] ++;
+		}
+	}
 	return result;
 };

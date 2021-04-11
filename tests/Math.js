@@ -13,9 +13,13 @@ testing.addUnit("Math.logBase()", {
 	}
 });
 testing.addUnit("Math.factorize()", {
-	"can return a list of factors": () => {
+	"can return a list of factors - test case 1": () => {
 		const result = Math.factorize(300);
 		expect(result).toEqual([2, 2, 3, 5, 5]);
+	},
+	"can return a list of factors - test case 2": () => {
+		const result = Math.factorize(1188);
+		expect(result).toEqual([2, 2, 3, 3, 3, 11]);
 	},
 	"can return an object containing the exponent on each prime": () => {
 		const result = Math.factorize(300, "prime-exponents");
