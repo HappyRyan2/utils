@@ -54,6 +54,20 @@ class Sequence {
 			}
 		}
 	}
+	filter(callback) {
+		const originalSequence = this;
+		return new Sequence(
+			function*() {
+				let iterations = 0;
+				for(const value of originalSequence) {
+					if(callback(value, iterations, originalSequence)) {
+						yield value;
+					}
+					iterations ++;
+				}
+			}
+		);
+	}
 
 	slice(minIndex, maxIndex = Infinity) {
 		/*

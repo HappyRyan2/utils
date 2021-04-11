@@ -94,6 +94,13 @@ testing.addUnit("Sequence.indexOf()", {
 		expect(index).toEqual(-1);
 	}
 });
+testing.addUnit("Sequence.filter()", [
+	() => {
+		const evenNumbers = Sequence.POSITIVE_INTEGERS.filter(v => v % 2 === 0);
+		const terms = evenNumbers.slice(0, 5);
+		expect(terms).toEqual([2, 4, 6, 8, 10]);
+	}
+]);
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {
