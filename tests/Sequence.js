@@ -108,6 +108,22 @@ testing.addUnit("Sequence.map()", [
 		expect(terms).toEqual([2, 4, 6, 8, 10]);
 	}
 ]);
+testing.addUnit("Sequence.entries()", [
+	() => {
+		const results = [];
+		for(const [value, index] of Sequence.POSITIVE_INTEGERS.entries()) {
+			results.push([value, index]);
+			if(results.length >= 5) { break; }
+		}
+		expect(results).toEqual([
+			[1, 0],
+			[2, 1],
+			[3, 2],
+			[4, 3],
+			[5, 4]
+		]);
+	}
+]);
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {
