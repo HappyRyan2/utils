@@ -26,3 +26,15 @@ testing.addUnit("Math.factorize()", {
 		expect(result).toEqual({ 2: 2, 3: 1, 5: 2 });
 	}
 });
+testing.addUnit("Math.isPrime()", Math.isPrime, [
+	[1, false],
+	[2, true],
+	[3, true],
+	[4, false],
+	[5, true],
+	[6, false],
+	[7, true],
+	[8, false],
+	[9, false],
+	[10, false]
+]);
