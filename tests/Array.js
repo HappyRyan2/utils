@@ -4,6 +4,20 @@ testing.addUnit("Array.repeat()", [
 		expect(result).toEqual([1, 2, 1, 2, 1, 2]);
 	}
 ]);
+testing.addUnit("Array.subArrays()", [
+	() => {
+		const result = [1, 2, 3].subArrays();
+		expect(result).toEqual(new Set([
+			[],
+			[1],
+			[2],
+			[3],
+			[1, 2],
+			[2, 3],
+			[1, 2, 3]
+		]));
+	}
+]);
 testing.addUnit("Array.partitions()", [
 	() => {
 		const result = [1].partitions();

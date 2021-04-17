@@ -6,6 +6,17 @@ Array.method(function repeat(numTimes) {
 	return result;
 });
 
+Array.method(function subArrays() {
+	const result = new Set([
+		[]
+	]);
+	for(let start = 0; start < this.length; start ++) {
+		for(let end = start + 1; end <= this.length; end ++) {
+			result.add(this.slice(start, end));
+		}
+	}
+	return result;
+});
 Array.method(function partitions() {
 	/* returns the set of all partitionings of this array. */
 	const partitions = new Set([]);
