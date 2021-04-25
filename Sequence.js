@@ -186,6 +186,7 @@ class Sequence {
 			let nextStep = null;
 			let primesInStep = 1;
 			let offsets = [1];
+			let nextOffsets = [1];
 			let primes = [2]; // numbers to check divisibility for when testing for primality
 			loop1: for(let i = 2; i < Infinity; i += step) {
 				loop2: for(let j = 0; j < offsets.length; j ++) {
@@ -200,27 +201,10 @@ class Sequence {
 							nextStep = primes.slice(0, primesInStep).product();
 						}
 					}
+					if(possibleNextPrime % primes[primesInStep - 1] !== 0) {
+						nextOffsets.push(possibleNextPrime);
+					}
 					if(possibleNextPrime >= nextStep - 1) {
-						const nextOffsets = [];
-						const possiblePrimeFactors = primes.slice(primesInStep);
-						const maxExponents = possiblePrimeFactors.map(prime =>
-							Math.floor(Math.logBase(prime, nextStep))
-						);
-						const checkCombination = (exponents = [], value = 1) => {
-							if(exponents.length === possiblePrimeFactors.length) {
-								nextOffsets.push(value);
-							}
-							else {
-								const nextMaxExponent = maxExponents[exponents.length];
-								for(let i = 0; i <= nextMaxExponent; i ++) {
-									const nextValue = value * (possiblePrimeFactors[exponents.length] ** i);
-									if(nextValue > nextStep) { return; }
-									checkCombination([...exponents, i], nextValue);
-								}
-							}
-						};
-						checkCombination([]);
-
 						const nextPossiblePrime = (j === offsets.length - 1) ? i + step + offsets[0] : i + offsets[j + 1];
 						const getMultiplierAndOffsetIndex = (number, step, offsets) => {
 							const multiplier = Math.floor(number / step);
@@ -229,9 +213,10 @@ class Sequence {
 								offsets.findIndex(offset => multiplier * step + offset >= number)
 							];
 						};
+						offsets = nextOffsets;
+						nextOffsets = nextOffsets.filter(v => v !== primes[primesInStep]);
 						step = nextStep;
-						nextStep = null;
-						offsets = nextOffsets.sort((a, b) => a - b);
+						nextStep = primes[primesInStep] ? step * primes[primesInStep] : null;
 						[i, j] = getMultiplierAndOffsetIndex(nextPossiblePrime, step, offsets);
 						j --;
 						continue loop2;
