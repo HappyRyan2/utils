@@ -216,7 +216,11 @@ class Sequence {
 						offsets = nextOffsets;
 						nextOffsets = nextOffsets.filter(v => v !== primes[primesInStep]);
 						step = nextStep;
-						nextStep = primes[primesInStep] ? step * primes[primesInStep] : null;
+						if(primes[primesInStep]) {
+							nextStep = step * primes[primesInStep];
+							primesInStep ++;
+						}
+						else { primesInStep = null; }
 						[i, j] = getMultiplierAndOffsetIndex(nextPossiblePrime, step, offsets);
 						j --;
 						continue loop2;
