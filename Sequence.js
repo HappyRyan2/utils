@@ -155,7 +155,8 @@ class Sequence {
 		},
 		{ isMonotonic: false }
 	);
-	static PRIMES = new Sequence(
+
+	static MODIFIED_SIEVE_PRIMES = new Sequence(
 		function*() {
 			const nextPrimeDivisors = []; // the `i`th sub-array contains the distinct prime factors of `i`.
 			for(let i = 2; i < Infinity; i ++) {
@@ -173,6 +174,69 @@ class Sequence {
 					}
 				}
 				delete nextPrimeDivisors[i];
+			}
+		},
+		{ isMonotonic: true }
+	);
+
+	static PRIMES = new Sequence(
+		function*() {
+			yield 2;
+			let step = 2;
+			let nextStep = null;
+			let primesInStep = 1;
+			let offsets = [1];
+			let primes = [2]; // numbers to check divisibility for when testing for primality
+			loop1: for(let i = 2; i < Infinity; i += step) {
+				loop2: for(let j = 0; j < offsets.length; j ++) {
+					const offset = offsets[j];
+					const possibleNextPrime = i + offset;
+					if(primes.every(p => possibleNextPrime % p !== 0)) {
+						// `possibleNextPrime` is prime
+						yield possibleNextPrime;
+						primes.push(possibleNextPrime);
+						if(nextStep == null) {
+							primesInStep ++;
+							nextStep = primes.slice(0, primesInStep).product();
+						}
+					}
+					if(possibleNextPrime >= nextStep - 1) {
+						const nextOffsets = [];
+						const possiblePrimeFactors = primes.slice(primesInStep);
+						const maxExponents = possiblePrimeFactors.map(prime =>
+							Math.floor(Math.logBase(prime, nextStep))
+						);
+						const checkCombination = (exponents = [], value = 1) => {
+							if(exponents.length === possiblePrimeFactors.length) {
+								nextOffsets.push(value);
+							}
+							else {
+								const nextMaxExponent = maxExponents[exponents.length];
+								for(let i = 0; i <= nextMaxExponent; i ++) {
+									const nextValue = value * (possiblePrimeFactors[exponents.length] ** i);
+									if(nextValue > nextStep) { return; }
+									checkCombination([...exponents, i], nextValue);
+								}
+							}
+						};
+						checkCombination([]);
+
+						const nextPossiblePrime = (j === offsets.length - 1) ? i + step + offsets[0] : i + offsets[j + 1];
+						const getMultiplierAndOffsetIndex = (number, step, offsets) => {
+							const multiplier = Math.floor(number / step);
+							return [
+								multiplier * step,
+								offsets.findIndex(offset => multiplier * step + offset >= number)
+							];
+						};
+						step = nextStep;
+						nextStep = null;
+						offsets = nextOffsets.sort((a, b) => a - b);
+						[i, j] = getMultiplierAndOffsetIndex(nextPossiblePrime, step, offsets);
+						j --;
+						continue loop2;
+					}
+				}
 			}
 		},
 		{ isMonotonic: true }
