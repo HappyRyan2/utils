@@ -205,14 +205,6 @@ class Sequence {
 						nextOffsets.push(possibleNextPrime);
 					}
 					if(possibleNextPrime >= nextStep - 1) {
-						const nextPossiblePrime = (j === offsets.length - 1) ? i + step + offsets[0] : i + offsets[j + 1];
-						const getMultiplierAndOffsetIndex = (number, step, offsets) => {
-							const multiplier = Math.floor(number / step);
-							return [
-								multiplier * step,
-								offsets.findIndex(offset => multiplier * step + offset >= number)
-							];
-						};
 						offsets = nextOffsets;
 						nextOffsets = nextOffsets.filter(v => v !== primes[primesInStep]);
 						step = nextStep;
@@ -221,8 +213,8 @@ class Sequence {
 							primesInStep ++;
 						}
 						else { primesInStep = null; }
-						[i, j] = getMultiplierAndOffsetIndex(nextPossiblePrime, step, offsets);
-						j --;
+						i = step;
+						j = -1;
 						continue loop2;
 					}
 				}
