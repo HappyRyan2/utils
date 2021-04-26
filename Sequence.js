@@ -181,6 +181,13 @@ class Sequence {
 
 	static PRIMES = new Sequence(
 		function*() {
+			const isPrime = (n, primesBelow) => {
+				for(let i = 0; i < primesBelow.length && primesBelow[i] ** 2 <= n; i ++) {
+					if(n % primesBelow[i] === 0) { return false; }
+				}
+				return true;
+			};
+
 			yield 2;
 			let step = 2;
 			let nextStep = null;
@@ -192,7 +199,7 @@ class Sequence {
 				loop2: for(let j = 0; j < offsets.length; j ++) {
 					const offset = offsets[j];
 					const possibleNextPrime = i + offset;
-					if(primes.every(p => possibleNextPrime % p !== 0)) {
+					if(isPrime(possibleNextPrime, primes)) {
 						// `possibleNextPrime` is prime
 						yield possibleNextPrime;
 						primes.push(possibleNextPrime);
