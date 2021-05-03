@@ -88,6 +88,37 @@ class Sequence {
 		);
 	}
 
+	static union(...sequences) {
+		for(const s of sequences) {
+			if(!s.isMonotonic) {
+				throw new Error("Cannot calculuate a union of non-monotonic sequences.");
+			}
+		}
+		let increasing = (sequences[0].nthTerm(0) < sequences[0].nthTerm(1));
+		for(const s of sequences) {
+			if(s.nthTerm(0) < s.nthTerm(1) !== increasing) {
+				throw new Error("Sequences must be either all increasing or all decreasing.");
+			}
+		}
+
+		return new Sequence(
+			function*() {
+				let generators = sequences.map(s => s.generator());
+				let values = generators.map(s => s.next().value);
+				while(true) {
+					const nextVal = increasing ? values.min() : values.max();
+					yield nextVal;
+					values.forEach((val, i) => {
+						while(values[i] === nextVal) {
+							values[i] = generators[i].next().value;
+						}
+					});
+				}
+			},
+			{ isMonotonic: true }
+		);
+	}
+
 	slice(minIndex, maxIndex = Infinity) {
 		/*
 		Returns an array if `minIndex` and `maxIndex` are provided, and a Sequence if `maxIndex` is not provided.

@@ -124,6 +124,61 @@ testing.addUnit("Sequence.entries()", [
 		]);
 	}
 ]);
+testing.addUnit("Sequence.union()", {
+	"works for increasing monotonic sequences": () => {
+		const s1 = new Sequence(
+			i => i * 2, // sequence of even numbers
+			{ isMonotonic: true }
+		);
+		const s2 = new Sequence(
+			i => i * 3, // sequence of numbers divisible by 3
+			{ isMonotonic: true }
+		);
+		const union = Sequence.union(s1, s2); // numbers divisible by 2 or 3
+		expect(union.slice(0, 14)).toEqual([
+			0, 2, 3, 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20
+		]);
+	},
+	"works for decreasing monotonic sequences": () => {
+		const s1 = new Sequence(
+			i => -i * 2, // sequence of negative even numbers
+			{ isMonotonic: true }
+		);
+		const s2 = new Sequence(
+			i => -i * 3, // sequence of negative numbers divisible by 3
+			{ isMonotonic: true }
+		);
+		const union = Sequence.union(s1, s2); // numbers divisible by 2 or 3
+		expect(union.slice(0, 14)).toEqual([
+			-0, -2, -3, -4, -6, -8, -9, -10, -12, -14, -15, -16, -18, -20
+		]);
+	},
+	"works for sequences that contain duplicates": () => {
+		const s1 = new Sequence(function*() {
+			yield 0;
+			for(let i = 10; i < Infinity; i += 10) { yield i; yield i; }
+		}, { isMonotonic: true }); // s1 = [0, 10, 10, 20, 20, 30, 30, ...]
+		const s2 = new Sequence(
+			n => n * 4,
+			{ isMonotonic: true }
+		); // s2 = [0, 4, 8, 12, 16, ...]
+		const union = Sequence.union(s1, s2);
+		expect(union.slice(0, 10)).toEqual([
+			0, 4, 8, 10, 12, 16, 20, 24, 28, 30
+		]);
+	},
+	"throws an error for non-monotonic sequences": () => {
+		const s1 = new Sequence(function*() {
+			yield 2; yield 3; yield 1;
+		}, { isMonotonic: false });
+		const s2 = new Sequence(function*() {
+			yield 10; yield 100; yield 3;
+		}, { isMonotonic: false });
+		testing.assertThrows(() => {
+			Sequence.union(s1, s2);
+		});
+	}
+});
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {
