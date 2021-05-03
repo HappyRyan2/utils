@@ -60,3 +60,62 @@ Array.method(function product(func, thisArg) {
 		return this.reduce(multiply, 1);
 	}
 });
+
+Array.method(function min(func, thisArg, resultType = "object") {
+	if(typeof func === "function") {
+		let lowestIndex = 0;
+		let lowestValue = Infinity;
+		this.forEach((item, index, array) => {
+			let value = func.call(thisArg, item, index, array);
+			if(value < lowestValue) {
+				lowestValue = value;
+				lowestIndex = index;
+			}
+		});
+
+		if(resultType === "object") {
+			return this[lowestIndex];
+		}
+		else if(resultType === "index") {
+			return lowestIndex;
+		}
+		else if(resultType === "value") {
+			return lowestValue;
+		}
+		else if(resultType === "all") {
+			return [this[lowestIndex], lowestIndex, lowestValue];
+		}
+	}
+	else {
+		return this.min(num => num, thisArg, resultType);
+	}
+});
+Array.method(function max(func, thisArg, resultType = "object") {
+	if(typeof func === "function") {
+		let highestIndex = 0;
+		let highestValue = -Infinity;
+		this.forEach((item, index, array) => {
+			let value = func.call(thisArg, item, index, array);
+			if(value > highestValue) {
+				highestValue = value;
+				highestIndex = index;
+			}
+		});
+
+		if(resultType === "object") {
+			return this[highestIndex];
+		}
+		else if(resultType === "index") {
+			return highestIndex;
+		}
+		else if(resultType === "value") {
+			return highestValue;
+		}
+		else if(resultType === "all") {
+			return [this[highestIndex], highestIndex, highestValue];
+		}
+	}
+	else {
+		return this.max(num => num, thisArg, resultType);
+	}
+});
