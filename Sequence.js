@@ -119,6 +119,22 @@ class Sequence {
 		);
 	}
 
+	isIncreasing() {
+		if(this.isMonotonic == null) { return null; }
+		if(!this.isMonotonic) { return false; }
+		let firstTerm = null;
+		for(const term of this) {
+			firstTerm ??= term;
+			if(term !== firstTerm) {
+				return term > firstTerm;
+			}
+		}
+	}
+	isDecreasing() {
+		if(this.isMonotonic == null) { return null; }
+		return !this.isIncreasing();
+	}
+
 	slice(minIndex, maxIndex = Infinity) {
 		/*
 		Returns an array if `minIndex` and `maxIndex` are provided, and a Sequence if `maxIndex` is not provided.

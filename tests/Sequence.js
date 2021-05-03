@@ -179,6 +179,36 @@ testing.addUnit("Sequence.union()", {
 		});
 	}
 });
+testing.addUnit("Sequence.isIncreasing()", {
+	"returns null (unknown) when it is not known whether the sequence is monotonic": () => {
+		const sequence = new Sequence(n => n + 1);
+		/* the sequence is clearly monotonic and increasing, but its
+		`isMonotonic` property is null (unknown) */
+		expect(sequence.isIncreasing()).toEqual(null);
+	},
+	"returns true for increasing sequences": () => {
+		const sequence = new Sequence(n => n + 1, { isMonotonic: true });
+		expect(sequence.isIncreasing()).toEqual(true);
+	},
+	"returns false for non-increasing sequences": () => {
+		const sequence = new Sequence(n => -n, { isMonotonic: true });
+		expect(sequence.isIncreasing()).toEqual(false);
+	},
+	"works for sequences where the first few terms are constant": () => {
+		const sequence = new Sequence(
+			n => Math.floor(n / 5), // 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, ...
+			{ isMonotonic: true }
+		);
+		expect(sequence.isIncreasing()).toEqual(true);
+	},
+	"works for sequences where the first few terms are constant": () => {
+		const sequence = new Sequence(
+			n => Math.floor(n / 5), // 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, ...
+			{ isMonotonic: true }
+		);
+		expect(sequence.isIncreasing()).toEqual(true);
+	}
+});
 
 testing.addUnit("Sequence.POSITIVE_INTEGERS", [
 	() => {
