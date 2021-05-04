@@ -94,9 +94,9 @@ class Sequence {
 				throw new Error("Cannot calculuate a union of non-monotonic sequences.");
 			}
 		}
-		let increasing = (sequences[0].nthTerm(0) < sequences[0].nthTerm(1));
+		let increasing = sequences[0].isIncreasing();
 		for(const s of sequences) {
-			if(s.nthTerm(0) < s.nthTerm(1) !== increasing) {
+			if(s.isIncreasing() !== increasing) {
 				throw new Error("Sequences must be either all increasing or all decreasing.");
 			}
 		}

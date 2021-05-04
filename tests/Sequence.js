@@ -167,6 +167,18 @@ testing.addUnit("Sequence.union()", {
 			0, 4, 8, 10, 12, 16, 20, 24, 28, 30
 		]);
 	},
+	"works for sequences where the first few terms are equal": () => {
+		const s1 = new Sequence(
+			n => Math.floor(n / 5), // 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, ...
+			{ isMonotonic: true }
+		);
+		const s2 = new Sequence(
+			n => 2 * (n + 1), // 0, 1, 2, 3, 4,
+			{ isMonotonic: true }
+		);
+		const union = Sequence.union(s1, s2);
+		expect(union.slice(0, 10)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+	},
 	"throws an error for non-monotonic sequences": () => {
 		const s1 = new Sequence(function*() {
 			yield 2; yield 3; yield 1;
