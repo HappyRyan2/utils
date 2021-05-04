@@ -127,3 +127,35 @@ testing.addUnit("Array.max()", {
 		expect(value).toEqual(3);
 	}
 });
+testing.addUnit("Array.permutations()", {
+	"basic functionality works": () => {
+		const permutations = [1, 2, 3].permutations();
+		expect(permutations).toEqual(new Set([
+			[1, 2, 3],
+			[1, 3, 2],
+			[2, 1, 3],
+			[2, 3, 1],
+			[3, 1, 2],
+			[3, 2, 1]
+		]));
+	},
+	"works for arrays with duplicate elements": () => {
+		const permutations = [1, 2, 2].permutations();
+		expect(permutations).toEqual(new Set([
+			[1, 2, 2],
+			[2, 1, 2],
+			[2, 2, 1]
+		]));
+	},
+	"works for arrays with multiple duplicate elements": () => {
+		const permutations = [1, 1, 2, 2].permutations();
+		expect(permutations).toEqual(new Set([
+			[1, 1, 2, 2],
+			[1, 2, 2, 1],
+			[1, 2, 1, 2],
+			[2, 1, 2, 1],
+			[2, 1, 1, 2],
+			[2, 2, 1, 1],
+		]));
+	}
+});

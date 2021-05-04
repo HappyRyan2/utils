@@ -119,3 +119,23 @@ Array.method(function max(func, thisArg, resultType = "object") {
 		return this.max(num => num, thisArg, resultType);
 	}
 });
+
+Array.method(function permutations() {
+	if(this.length === 1) {
+		return new Set([
+			[this[0]]
+		]);
+	}
+
+	const permutations = new Set();
+	new Set(this).forEach(value => {
+		const index = this.indexOf(value);
+		const others = this.filter((v, i) => i !== index);
+		const permutationsOfOthers = others.permutations();
+		for(const otherPermutation of permutationsOfOthers) {
+			permutations.add([value, ...otherPermutation]);
+		}
+	});
+	
+	return permutations;
+});
