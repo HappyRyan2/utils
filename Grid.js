@@ -91,6 +91,22 @@ class Grid {
 		}
 	}
 
+	containsGrid(grid) {
+		for(let gridX = 0; gridX <= this.width() - grid.width(); gridX ++) {
+			loop2: for(let gridY = 0; gridY <= this.height() - grid.height(); gridY ++) {
+				for(let x = 0; x < grid.width(); x ++) {
+					for(let y = 0; y < grid.height(); y ++) {
+						if(this.get(gridX + x, gridY + y) !== grid.get(x, y)) {
+							continue loop2;
+						}
+					}
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
 	forEach(callback) {
 		for(let x = 0; x < this.width(); x ++) {
 			for(let y = 0; y < this.height(); y ++) {

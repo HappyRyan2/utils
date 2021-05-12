@@ -53,3 +53,37 @@ testing.addUnit("Grid.rotate()", [
 		])
 	]
 ]);
+testing.addUnit("Grid.containsGrid()", {
+	"returns true if the grid contains the other grid - test case 1": () => {
+		const grid1 = new Grid([
+			[1, 2],
+			[3, 4]
+		]);
+		const grid2 = new Grid([
+			[1],
+			[3]
+		]);
+		expect(grid1.containsGrid(grid2)).toEqual(true);
+	},
+	"returns true if the grid contains the other grid - test case 2": () => {
+		const grid1 = new Grid([
+			[1, 2],
+			[3, 4]
+		]);
+		const grid2 = new Grid([
+			[3, 4]
+		]);
+		expect(grid1.containsGrid(grid2)).toEqual(true);
+	},
+	"returns false if the grid does not contain the other grid": () => {
+		const grid1 = new Grid([
+			[1, 2],
+			[3, 4]
+		]);
+		const grid2 = new Grid([
+			[1],
+			[4]
+		]);
+		expect(grid1.containsGrid(grid2)).toEqual(false);
+	}
+});
