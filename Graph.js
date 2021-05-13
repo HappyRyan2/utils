@@ -71,6 +71,10 @@ class Graph {
 		return this.nodes.size;
 	}
 
+	values() {
+		return [...this.nodes.values()].map(node => node.value);
+	}
+
 	setConnection(value1, value2, connected) {
 		if(connected) {
 			this.connect(value1, value2);

@@ -200,3 +200,10 @@ testing.addUnit("Graph.size()", {
 		expect(graph.size()).toEqual(3);
 	}
 });
+
+testing.addUnit("Graph.values()", {
+	"returns a list of the values in the graph": () => {
+		const graph = new Graph([["A", []], ["B", []], ["C", []]]);
+		expect(graph.values()).toEqual(["A", "B", "C"]);
+	}
+});
