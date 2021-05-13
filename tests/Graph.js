@@ -193,3 +193,10 @@ testing.addUnit("Graph.toggleConnection()", {
 		testing.assertThrows(() => graph.toggleConnection("B", "A"));
 	}
 });
+
+testing.addUnit("Graph.size()", {
+	"returns the number of nodes in the graph": () => {
+		const graph = new Graph([["A", []], ["B", []], ["C", []]]);
+		expect(graph.size()).toEqual(3);
+	}
+});

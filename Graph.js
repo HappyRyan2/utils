@@ -67,6 +67,10 @@ class Graph {
 		node2.connections.delete(node1);
 	}
 
+	size() {
+		return this.nodes.size;
+	}
+
 	setConnection(value1, value2, connected) {
 		if(connected) {
 			this.connect(value1, value2);
