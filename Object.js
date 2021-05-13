@@ -19,6 +19,7 @@ Object.method(function clone() {
 	return clone;
 });
 Object.method(function equals(obj, history = []) {
+	if(this === obj) { return true; }
 	if(
 		(this.valueOf() !== this) ||
 		(typeof obj !== "object" || obj === null)
