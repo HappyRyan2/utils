@@ -3,11 +3,20 @@ class Graph {
 		if(arguments.length === 0) {
 			this.nodes = new Map();
 		}
-		else if(Array.isArray(arguments[0]) && arguments[0].every(Array.isArray)) {
+		else if(
+			Array.isArray(arguments[0]) &&
+			arguments[0].every(Array.isArray) &&
+			arguments[0].every(a => a.length === 2)
+		) {
 			const [nodes] = arguments;
 			this.nodes = new Map();
 			for(const [value] of nodes) { this.nodes.set(value, { value }); }
 			for(const [value, connections] of nodes) {
+				for(const connection of connections) {
+					if(!this.nodes.has(connection)) {
+						throw new Error(`Cannot connect '${value}' to '${connection}' as '${connection}' is not in the graph.`);
+					}
+				}
 				this.nodes.get(value).connections = new Set(connections.map(c => this.nodes.get(c)));
 			}
 		}

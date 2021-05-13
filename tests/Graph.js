@@ -1,7 +1,8 @@
 testing.addUnit("Graph constructor", {
 	"can create an empty graph when the constructor is called without arguments": () => {
 		const graph = new Graph();
-		expect(graph.nodes).toEqual(new Map());
+		expect(graph.size()).toEqual(0);
+		expect(graph.values()).toEqual([]);
 	},
 	"can create a graph from a list of nodes with their connections": () => {
 		const graph = new Graph([
@@ -10,15 +11,20 @@ testing.addUnit("Graph constructor", {
 			["C", ["A"]], // C is connected to A
 			["D", []] // D is not connected to anything
 		]);
-		expect(graph.nodes.size).toEqual(4);
-		const node1 = graph.nodes.get("A");
-		const node2 = graph.nodes.get("B");
-		const node3 = graph.nodes.get("C");
-		const node4 = graph.nodes.get("D");
-		expect(node1).toEqual({ value: "A", connections: new Set([node2, node3]) });
-		expect(node2).toEqual({ value: "B", connections: new Set([node1]) });
-		expect(node3).toEqual({ value: "C", connections: new Set([node1]) });
-		expect(node4).toEqual({ value: "D", connections: new Set([]) });
+		expect(graph.values()).toEqual(["A", "B", "C", "D"]);
+		expect(graph.areConnected("A", "B")).toEqual(true);
+		expect(graph.areConnected("A", "C")).toEqual(true);
+		expect(graph.areConnected("A", "D")).toEqual(false);
+		expect(graph.areConnected("B", "C")).toEqual(false);
+		expect(graph.areConnected("B", "D")).toEqual(false);
+		expect(graph.areConnected("C", "D")).toEqual(false);
+	},
+	"throws an error when nodes are connected to nodes not in the graph": () => {
+		testing.assertThrows(() => {
+			const graph = new Graph([
+				["A", ["B"]], // A is connected to B, but B is not in the graph
+			]);
+		})
 	}
 });
 testing.addUnit("Graph.has()", {
