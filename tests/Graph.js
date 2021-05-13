@@ -137,3 +137,40 @@ testing.addUnit("Graph.disconnect()", {
 		testing.assertThrows(() => graph.disconnect(123, "A"));
 	}
 });
+
+testing.addUnit("Graph.setConnection()", {
+	"can connect two nodes in a graph": () => {
+		const graph = new Graph([["A", []], ["B", []]]);
+		expect(graph.areConnected("A", "B")).toEqual(false);
+		graph.setConnection("A", "B", true);
+		expect(graph.areConnected("A", "B")).toEqual(true);
+	},
+	"can disconnect two nodes in a graph": () => {
+		const graph = new Graph([["A", ["B"]], ["B", ["A"]]]);
+		expect(graph.areConnected("A", "B")).toEqual(true);
+		graph.setConnection("A", "B", false);
+		expect(graph.areConnected("A", "B")).toEqual(false);
+	},
+	"fails silently when attempting to connect two already-connected nodes": () => {
+		const graph = new Graph([["A", ["B"]], ["B", ["A"]]]);
+		expect(graph.areConnected("A", "B")).toEqual(true);
+		graph.setConnection("A", "B", true);
+		expect(graph.areConnected("A", "B")).toEqual(true);
+	},
+	"fails silently when attempting to disconnect two already-disconnected nodes": () => {
+		const graph = new Graph([["A", []], ["B", []]]);
+		expect(graph.areConnected("A", "B")).toEqual(false);
+		graph.setConnection("A", "B", false);
+		expect(graph.areConnected("A", "B")).toEqual(false);
+	},
+	"throws an error when attempting to connect nodes not in the graph": () => {
+		const graph = new Graph(["A", []]);
+		testing.assertThrows(() => graph.setConnection("A", "B", true));
+		testing.assertThrows(() => graph.setConnection("B", "A", true));
+	},
+	"throws an error when attempting to disconnect nodes not in the graph": () => {
+		const graph = new Graph(["A", []]);
+		testing.assertThrows(() => graph.setConnection("A", "B", false));
+		testing.assertThrows(() => graph.setConnection("B", "A", false));
+	},
+});
