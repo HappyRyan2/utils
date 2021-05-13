@@ -21,3 +21,119 @@ testing.addUnit("Graph constructor", {
 		expect(node4).toEqual({ value: "D", connections: new Set([]) });
 	}
 });
+testing.addUnit("Graph.has()", {
+	"returns true when the value is in the graph": () => {
+		const graph = new Graph([
+			["A", []],
+		]);
+		expect(graph.has("A")).toEqual(true);
+	},
+	"returns false when the value is not in the graph": () => {
+		const graph = new Graph([
+			["A", []],
+		]);
+		expect(graph.has("B")).toEqual(false);
+	}
+});
+testing.addUnit("Graph.add()", {
+	"can add a value to the graph": () => {
+		const graph = new Graph();
+		graph.add("A");
+		expect(graph.has("A")).toEqual(true);
+	},
+	"fails silently when the value is already in the graph": () => {
+		const graph = new Graph([
+			["A", []]
+		]);
+		graph.add("A");
+		expect(graph.has("A")).toEqual(true);
+	}
+});
+testing.addUnit("Graph.remove()", {
+	"can remove a value from the graph": () => {
+		const graph = new Graph([
+			["A", []]
+		]);
+		graph.remove("A");
+		expect(graph.has("A")).toEqual(false);
+	},
+	// TODO: this should fail silently
+	"fails silently when the value to remove is not in the graph": () => {
+		const graph = new Graph();
+		graph.remove("A");
+		expect(graph.has("A")).toEqual(false);
+	}
+});
+testing.addUnit("Graph.areConnected()", {
+	"returns true when the nodes are connected": () => {
+		const graph = new Graph([
+			["A", ["B"]],
+			["B", ["A"]]
+		]);
+		expect(graph.areConnected("A", "B")).toEqual(true);
+	},
+	"returns false when the nodes are not connected": () => {
+		const graph = new Graph([
+			["A", []],
+			["B", []]
+		]);
+		expect(graph.areConnected("A", "B")).toEqual(false);
+	},
+	"throws an error when either node is not in the graph": () => {
+		const graph = new Graph([
+			["A", []]
+		]);
+		testing.assertThrows(() => graph.areConnected("A", 123));
+		testing.assertThrows(() => graph.areConnected(123, "A"));
+	}
+});
+testing.addUnit("Graph.connect()", {
+	"can connect two values in a graph": () => {
+		const graph = new Graph([
+			["A", []],
+			["B", []]
+		]);
+		graph.connect("A", "B");
+		expect(graph.areConnected("A", "B")).toEqual(true);
+	},
+	"fails silently when the values are already connected": () => {
+		const graph = new Graph([
+			["A", ["B"]],
+			["B", ["A"]]
+		]);
+		graph.connect("A", "B");
+		expect(graph.areConnected("A", "B")).toEqual(true);
+	},
+	"throws an error when either node is not in the graph": () => {
+		const graph = new Graph([
+			["A", []]
+		]);
+		testing.assertThrows(() => graph.connect("A", 123));
+		testing.assertThrows(() => graph.connect(123, "A"));
+	}
+});
+testing.addUnit("Graph.disconnect()", {
+	"can disconnect two nodes in a graph": () => {
+		const graph = new Graph([
+			["A", ["B"]],
+			["B", ["A"]]
+		]);
+		graph.disconnect("A", "B");
+		expect(graph.areConnected("A", "B")).toEqual(false);
+	},
+	"fails silently when the values are already not connected": () => {
+		const graph = new Graph([
+			["A", []],
+			["B", []]
+		]);
+		graph.disconnect("A", "B");
+		expect(graph.areConnected("A", "B")).toEqual(false);
+	},
+	"throws an error when either node is not in the graph": () => {
+		const graph = new Graph([
+			["A", []]
+		]);
+		testing.assertThrows(() => graph.disconnect("A", 123));
+		testing.assertThrows(() => graph.disconnect(123, "A"));
+	}
+});
