@@ -174,3 +174,22 @@ testing.addUnit("Graph.setConnection()", {
 		testing.assertThrows(() => graph.setConnection("B", "A", false));
 	},
 });
+testing.addUnit("Graph.toggleConnection()", {
+	"can toggle a connection between two connected nodes": () => {
+		const graph = new Graph([["A", ["B"]], ["B", ["A"]]]);
+		expect(graph.areConnected("A", "B")).toEqual(true);
+		graph.toggleConnection("A", "B");
+		expect(graph.areConnected("A", "B")).toEqual(false);
+	},
+	"can toggle a connection between two disconnected nodes": () => {
+		const graph = new Graph([["A", []], ["B", []]]);
+		expect(graph.areConnected("A", "B")).toEqual(false);
+		graph.toggleConnection("A", "B");
+		expect(graph.areConnected("A", "B")).toEqual(true);
+	},
+	"throws an error when attempting to toggle connections between nonexistent nodes": () => {
+		const graph = new Graph([["A", []]]);
+		testing.assertThrows(() => graph.toggleConnection("A", "B"));
+		testing.assertThrows(() => graph.toggleConnection("B", "A"));
+	}
+});

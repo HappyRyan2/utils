@@ -75,4 +75,12 @@ class Graph {
 			this.disconnect(value1, value2);
 		}
 	}
+	toggleConnection(value1, value2) {
+		if(this.areConnected(value1, value2)) {
+			this.disconnect(value1, value2);
+		}
+		else {
+			this.connect(value1, value2);
+		}
+	}
 }
