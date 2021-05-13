@@ -20,6 +20,14 @@ class Graph {
 				this.nodes.get(value).connections = new Set(connections.map(c => this.nodes.get(c)));
 			}
 		}
+		else if(Array.isArray(arguments[0])) {
+			const [values] = arguments;
+			this.nodes = new Map();
+			for(const value of values) {
+				const node = { value: value, connections: new Set() };
+				this.nodes.set(value, node);
+			}
+		}
 	}
 
 	has(value) {

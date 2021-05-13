@@ -25,6 +25,13 @@ testing.addUnit("Graph constructor", {
 				["A", ["B"]], // A is connected to B, but B is not in the graph
 			]);
 		})
+	},
+	"can create a graph from a list of nodes": () => {
+		const graph = new Graph(["A", "B", "C"]);
+		expect(graph.values()).toEqual(["A", "B", "C"]);
+		expect(graph.areConnected("A", "B")).toEqual(false);
+		expect(graph.areConnected("B", "C")).toEqual(false);
+		expect(graph.areConnected("C", "A")).toEqual(false);
 	}
 });
 testing.addUnit("Graph.has()", {
