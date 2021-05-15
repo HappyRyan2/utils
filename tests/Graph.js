@@ -26,12 +26,28 @@ testing.addUnit("Graph constructor", {
 			]);
 		})
 	},
+	"throws an error when nodes are not symmetrically connected": () => {
+		testing.assertThrows(() => new Graph([
+			["A", ["B"]], // A is connected to B...
+			["B", []] // ... but B is not connected to A! Oh no!
+		]));
+	},
+	"throws an error if the array of nodes / connections contains duplicates": () => {
+		testing.assertThrows(() => new Graph([
+			["A", []],
+			["B", []],
+			["A", []]
+		]));
+	},
 	"can create a graph from a list of nodes": () => {
 		const graph = new Graph(["A", "B", "C"]);
 		expect(graph.values()).toEqual(["A", "B", "C"]);
 		expect(graph.areConnected("A", "B")).toEqual(false);
 		expect(graph.areConnected("B", "C")).toEqual(false);
 		expect(graph.areConnected("C", "A")).toEqual(false);
+	},
+	"throws an error if the list of nodes contains duplicates": () => {
+		testing.assertThrows(() => new Graph(["A", "B", "A"]));
 	},
 	"can create a graph from another graph": () => {
 		const graph1 = new Graph([
@@ -63,6 +79,13 @@ testing.addUnit("Graph constructor", {
 		expect(graph.areConnected("B", "C")).toEqual(false);
 		expect(graph.areConnected("B", "D")).toEqual(true);
 		expect(graph.areConnected("C", "D")).toEqual(true);
+	},
+	"throws an error when creating a graph from a Grid containing duplicate values": () => {
+		const grid = new Grid([
+			["A", "B"],
+			["C", "A"]
+		]);
+		testing.assertThrows(() => new Graph(grid));
 	}
 });
 testing.addUnit("Graph.has()", {

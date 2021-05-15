@@ -10,11 +10,19 @@ class Graph {
 		) {
 			const [nodes] = arguments;
 			this.nodes = new Map();
-			for(const [value] of nodes) { this.nodes.set(value, { value }); }
+			for(const [value] of nodes) {
+				if(this.nodes.has(value)) {
+					throw new Error(`Cannot create Graph: input nodes contain duplicate value '${value}'.`);
+				}
+				this.nodes.set(value, { value });
+			}
 			for(const [value, connections] of nodes) {
 				for(const connection of connections) {
 					if(!this.nodes.has(connection)) {
 						throw new Error(`Cannot connect '${value}' to '${connection}' as '${connection}' is not in the graph.`);
+					}
+					if(!nodes.find(v => v[0] === connection)[1].includes(value)) {
+						throw new Error(`Nodes must be connected symmetrically: cannot connect '${value}' to '${connection}' without also connecting '${connection}' to '${value}'.`);
 					}
 				}
 				this.nodes.get(value).connections = new Set(connections.map(c => this.nodes.get(c)));
@@ -24,6 +32,9 @@ class Graph {
 			const [values] = arguments;
 			this.nodes = new Map();
 			for(const value of values) {
+				if(this.nodes.has(value)) {
+					throw new Error(`Cannot create Graph: input nodes contain duplicate value '${value}'.`);
+				}
 				const node = { value: value, connections: new Set() };
 				this.nodes.set(value, node);
 			}
