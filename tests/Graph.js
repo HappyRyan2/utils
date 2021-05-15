@@ -68,6 +68,13 @@ testing.addUnit("Graph.add()", {
 		graph.add("A");
 		expect(graph.has("A")).toEqual(true);
 	},
+	"value added by Graph.add() can be connected to other values": () => {
+		// regression test
+		const graph = new Graph(["A"]);
+		graph.add("B");
+		graph.connect("A", "B");
+		expect(graph.areConnected("A", "B")).toEqual(true);
+	},
 	"fails silently when the value is already in the graph": () => {
 		const graph = new Graph([
 			["A", []]

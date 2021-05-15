@@ -59,7 +59,7 @@ class Graph {
 	}
 	add(value) {
 		if(!this.nodes.has(value)) {
-			const node = { value: value, connections: [] };
+			const node = { value: value, connections: new Set() };
 			this.nodes.set(value, node);
 		}
 	}
