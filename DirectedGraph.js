@@ -1,0 +1,160 @@
+class DirectedGraph {
+	constructor() {
+		if(arguments.length === 0) {
+			this.nodes = new Map();
+		}
+		else if(
+			Array.isArray(arguments[0]) &&
+			arguments[0].every(Array.isArray) &&
+			arguments[0].every(a => a.length === 2)
+		) {
+			const [nodes] = arguments;
+			this.nodes = new Map();
+			for(const [value] of nodes) {
+				if(this.nodes.has(value)) {
+					throw new Error(`Cannot create Graph: input nodes contain duplicate value '${value}'.`);
+				}
+				this.nodes.set(value, { value, nodesBefore: new Set(), nodesAfter: new Set() });
+			}
+			for(const [value, connections] of nodes) {
+				this.nodes.get(value).nodesAfter = new Set(connections.map(c => this.nodes.get(c)));
+				for(const connection of connections) {
+					if(!this.nodes.has(connection)) {
+						throw new Error(`Cannot connect '${value}' to '${connection}' as '${connection}' is not in the graph.`);
+					}
+					const node = this.nodes.get(connection);
+					node.nodesBefore.add(this.nodes.get(value));
+				}
+			}
+		}
+		else if(Array.isArray(arguments[0])) {
+			const [values] = arguments;
+			this.nodes = new Map();
+			for(const value of values) {
+				if(this.nodes.has(value)) {
+					throw new Error(`Cannot create Graph: input nodes contain duplicate value '${value}'.`);
+				}
+				const node = { value: value, nodesBefore: new Set(), nodesAfter: new Set() };
+				this.nodes.set(value, node);
+			}
+		}
+		else if(arguments[0] instanceof Graph) {
+			const [graph] = arguments;
+			this.nodes = new Map();
+			for(const value of graph.values()) {
+				this.add(value);
+			}
+			for(const [value, node] of graph.nodes) {
+				for(const connectedNode of node.connections) {
+					this.connect(value, connectedNode.value);
+				}
+			}
+		}
+		else if(arguments[0] instanceof DirectedGraph) {
+			const [graph] = arguments;
+			this.nodes = new Map();
+			for(const value of graph.values()) {
+				this.add(value);
+			}
+			for(const [value, node] of graph.nodes) {
+				for(const connected of node.nodesAfter) {
+					this.nodes.get(value).nodesAfter.add(this.nodes.get(connected.value));
+				}
+				for(const connected of node.nodesBefore) {
+					this.nodes.get(value).nodesBefore.add(this.nodes.get(connected.value));
+				}
+			}
+		}
+		else if(arguments[0] instanceof Grid) {
+			const [grid] = arguments;
+			this.nodes = new Map();
+			grid.forEach(value => {
+				if(this.nodes.has(value)) {
+					throw new Error(`Cannot construct a graph from a grid containing duplicate values.`);
+				}
+				this.nodes.set(value, { value: value, nodesBefore: new Set(), nodesAfter: new Set() });
+			});
+			grid.forEach((value, x, y) => {
+				if(x !== 0) {
+					this.connect(value, grid.get(x - 1, y));
+				}
+				if(x !== grid.width() - 1) {
+					this.connect(value, grid.get(x + 1, y));
+				}
+				if(y !== 0) {
+					this.connect(value, grid.get(x, y - 1));
+				}
+				if(y !== grid.height() - 1) {
+					this.connect(value, grid.get(x, y + 1));
+				}
+			});
+		}
+	}
+
+	size() { return this.nodes.size; }
+	values() {
+		return [...this.nodes.values()].map(node => node.value);
+	}
+
+	has(value) {
+		return this.nodes.has(value);
+	}
+	add(value) {
+		if(!this.nodes.has(value)) {
+			const node = { value: value, nodesBefore: new Set(), nodesAfter: new Set() };
+			this.nodes.set(value, node);
+		}
+	}
+	remove(value) {
+		if(this.nodes.has(value)) {
+			const node = this.nodes.get(value);
+			for(const connectedNode of node.nodesBefore) {
+				connectedNode.nodesAfter.delete(node);
+			}
+			for(const connectedNode of node.nodesAfter) {
+				connectedNode.nodesBefore.delete(node);
+			}
+			this.nodes.delete(value);
+		}
+	}
+	areConnected(value1, value2) {
+		if(!this.nodes.has(value1)) {
+			throw new Error(`Expected the graph to contain '${value1}.'`);
+		}
+		if(!this.nodes.has(value2)) {
+			throw new Error(`Expected the graph to contain '${value2}.'`);
+		}
+		const node1 = this.nodes.get(value1);
+		const node2 = this.nodes.get(value2);
+		return node1.nodesAfter.has(node2);
+	}
+	connect(value1, value2) {
+		const node1 = this.nodes.get(value1);
+		const node2 = this.nodes.get(value2);
+		node1.nodesAfter.add(node2);
+		node2.nodesBefore.add(node1);
+	}
+	disconnect(value1, value2) {
+		const node1 = this.nodes.get(value1);
+		const node2 = this.nodes.get(value2);
+		node1.nodesAfter.delete(node2);
+		node2.nodesBefore.delete(node1);
+	}
+
+	setConnection(value1, value2, connected) {
+		if(connected) {
+			this.connect(value1, value2);
+		}
+		else {
+			this.disconnect(value1, value2);
+		}
+	}
+	toggleConnection(value1, value2) {
+		if(this.areConnected(value1, value2)) {
+			this.disconnect(value1, value2);
+		}
+		else {
+			this.connect(value1, value2);
+		}
+	}
+}
