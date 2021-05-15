@@ -33,6 +33,23 @@ testing.addUnit("Graph constructor", {
 		expect(graph.areConnected("B", "C")).toEqual(false);
 		expect(graph.areConnected("C", "A")).toEqual(false);
 	},
+	"can create a graph from another graph": () => {
+		const graph1 = new Graph([
+			["A", ["B", "C"]], // A is connected to B and C
+			["B", ["A"]], // B is connected to A
+			["C", ["A"]], // C is connected to A
+			["D", []] // D is not connected to anything
+		]);
+		const graph2 = new Graph(graph1);
+		expect(graph1).toNotStrictlyEqual(graph2);
+		expect(graph1.values()).toEqual(["A", "B", "C", "D"]);
+		expect(graph1.areConnected("A", "B")).toEqual(true);
+		expect(graph1.areConnected("A", "C")).toEqual(true);
+		expect(graph1.areConnected("A", "D")).toEqual(false);
+		expect(graph1.areConnected("B", "C")).toEqual(false);
+		expect(graph1.areConnected("B", "D")).toEqual(false);
+		expect(graph1.areConnected("C", "D")).toEqual(false);
+	},
 	"can create a graph from a Grid object": () => {
 		const grid = new Grid([
 			["A", "B"],

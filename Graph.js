@@ -28,6 +28,18 @@ class Graph {
 				this.nodes.set(value, node);
 			}
 		}
+		else if(arguments[0] instanceof Graph) {
+			const [graph] = arguments;
+			this.nodes = new Map();
+			for(const value of graph.values()) {
+				this.add(value);
+			}
+			for(const [value, node] of graph.nodes) {
+				for(const connectedNode of node.connections) {
+					this.connect(value, connectedNode.value);
+				}
+			}
+		}
 		else if(arguments[0] instanceof Grid) {
 			const [grid] = arguments;
 			this.nodes = new Map();
