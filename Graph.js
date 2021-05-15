@@ -28,6 +28,30 @@ class Graph {
 				this.nodes.set(value, node);
 			}
 		}
+		else if(arguments[0] instanceof Grid) {
+			const [grid] = arguments;
+			this.nodes = new Map();
+			grid.forEach(value => {
+				if(this.nodes.has(value)) {
+					throw new Error(`Cannot construct a graph from a grid containing duplicate values.`);
+				}
+				this.nodes.set(value, { value: value, connections: new Set() });
+			});
+			grid.forEach((value, x, y) => {
+				if(x !== 0) {
+					this.connect(value, grid.get(x - 1, y));
+				}
+				if(x !== grid.width() - 1) {
+					this.connect(value, grid.get(x + 1, y));
+				}
+				if(y !== 0) {
+					this.connect(value, grid.get(x, y - 1));
+				}
+				if(y !== grid.height() - 1) {
+					this.connect(value, grid.get(x, y + 1));
+				}
+			});
+		}
 	}
 
 	has(value) {

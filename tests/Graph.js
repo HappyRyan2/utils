@@ -32,6 +32,20 @@ testing.addUnit("Graph constructor", {
 		expect(graph.areConnected("A", "B")).toEqual(false);
 		expect(graph.areConnected("B", "C")).toEqual(false);
 		expect(graph.areConnected("C", "A")).toEqual(false);
+	},
+	"can create a graph from a Grid object": () => {
+		const grid = new Grid([
+			["A", "B"],
+			["C", "D"]
+		]);
+		const graph = new Graph(grid);
+		expect(new Set(graph.values())).toEqual(new Set(["A", "B", "C", "D"]));
+		expect(graph.areConnected("A", "B")).toEqual(true);
+		expect(graph.areConnected("A", "C")).toEqual(true);
+		expect(graph.areConnected("A", "D")).toEqual(false);
+		expect(graph.areConnected("B", "C")).toEqual(false);
+		expect(graph.areConnected("B", "D")).toEqual(true);
+		expect(graph.areConnected("C", "D")).toEqual(true);
 	}
 });
 testing.addUnit("Graph.has()", {
