@@ -247,6 +247,17 @@ testing.addUnit("Graph.setConnection()", {
 		testing.assertThrows(() => graph.setConnection("B", "A", false));
 	},
 });
+testing.addUnit("Graph.setConnections()", {
+	"allows setting connections in the graph with a callback": () => {
+		const graph = new Graph([-1, -2, 1, 2]);
+		graph.setConnections((a, b) => a < 0 === b < 0 && a !== b);
+		const connections = new Set(graph.connections().map(c => new Set(c)));
+		expect(connections).toEqual(new Set([
+			new Set([-1, -2]),
+			new Set([1, 2])
+		]));
+	}
+});
 testing.addUnit("Graph.toggleConnection()", {
 	"can toggle a connection between two connected nodes": () => {
 		const graph = new Graph([["A", ["B"]], ["B", ["A"]]]);

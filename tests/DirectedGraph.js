@@ -265,6 +265,19 @@ testing.addUnit("DirectedGraph.setConnection()", {
 		testing.assertThrows(() => graph.setConnection("B", "A", false));
 	},
 });
+testing.addUnit("DirectedGraph.setConnections()", {
+	"allows setting connections in the graph with a callback": () => {
+		const graph = new DirectedGraph([-1, -2, 1, 2]);
+		graph.setConnections((a, b) => a < 0 === b < 0 && a !== b);
+		const connections = graph.connections();
+		expect(new Set(connections)).toEqual(new Set([
+			[-1, -2],
+			[-2, -1],
+			[1, 2],
+			[2, 1]
+		]));
+	}
+});
 testing.addUnit("DirectedGraph.toggleConnection()", {
 	"can toggle a connection between two connected nodes": () => {
 		const graph = new DirectedGraph([["A", ["B"]], ["B", ["A"]]]);

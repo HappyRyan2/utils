@@ -158,6 +158,17 @@ class Graph {
 			this.disconnect(value1, value2);
 		}
 	}
+	setConnections(callback) {
+		const pairsChecked = new Set();
+		for(const [value1] of this.nodes) {
+			for(const [value2] of this.nodes) {
+				if(!pairsChecked.some(([v1, v2]) => value1 === v1 && value2 === v2)) {
+					this.setConnection(value1, value2, callback(value1, value2, this));
+					pairsChecked.add([value2, value1]);
+				}
+			}
+		}
+	}
 	toggleConnection(value1, value2) {
 		if(this.areConnected(value1, value2)) {
 			this.disconnect(value1, value2);

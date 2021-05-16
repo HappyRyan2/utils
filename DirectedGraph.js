@@ -158,6 +158,17 @@ class DirectedGraph {
 			this.disconnect(value1, value2);
 		}
 	}
+	setConnections(callback) {
+		for(const node1 of this.nodes.values()) {
+			for(const node2 of this.nodes.values()) {
+				this.setConnection(
+					node1.value,
+					node2.value,
+					callback(node1.value, node2.value, this)
+				);
+			}
+		}
+	}
 	toggleConnection(value1, value2) {
 		if(this.areConnected(value1, value2)) {
 			this.disconnect(value1, value2);
