@@ -273,10 +273,23 @@ testing.addUnit("Graph.size()", {
 		expect(graph.size()).toEqual(3);
 	}
 });
-
 testing.addUnit("Graph.values()", {
 	"returns a list of the values in the graph": () => {
 		const graph = new Graph([["A", []], ["B", []], ["C", []]]);
 		expect(graph.values()).toEqual(["A", "B", "C"]);
+	}
+});
+testing.addUnit("Graph.connections()", {
+	"returns an array containing all connections in the graph": () => {
+		const graph = new Graph(["A", "B", "C", "D", "E"]);
+		graph.connect("A", "B");
+		graph.connect("D", "E");
+		const connections = graph.connections();
+
+		const connectionSet = new Set(connections.map(c => new Set(c)));
+		expect(connectionSet).toEqual(new Set([
+			new Set(["A", "B"]),
+			new Set(["D", "E"])
+		]));
 	}
 });

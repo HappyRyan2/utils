@@ -134,9 +134,20 @@ class Graph {
 	size() {
 		return this.nodes.size;
 	}
-
 	values() {
 		return [...this.nodes.values()].map(node => node.value);
+	}
+	connections() {
+		const result = [];
+		for(const node of this.nodes.values()) {
+			for(const connection of node.connections) {
+				if(!result.some(c => (
+					(c[0] === node.value && c[1] === connection.value)) ||
+					(c[1] === node.value && c[0] === connection.value)
+				)) { result.push([node.value, connection.value]); }
+			}
+		}
+		return result;
 	}
 
 	setConnection(value1, value2, connected) {

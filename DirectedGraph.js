@@ -95,6 +95,15 @@ class DirectedGraph {
 	values() {
 		return [...this.nodes.values()].map(node => node.value);
 	}
+	connections() {
+		const result = [];
+		for(const node of this.nodes.values()) {
+			for(const connection of node.nodesAfter) {
+				result.push([node.value, connection.value]);
+			}
+		}
+		return result;
+	}
 
 	has(value) {
 		return this.nodes.has(value);

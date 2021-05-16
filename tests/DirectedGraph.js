@@ -423,3 +423,19 @@ testing.addUnit("DirectedGraph.pathExists()", {
 		expect(exists).toEqual(false);
 	}
 });
+
+testing.addUnit("DirectedGraph.connections()", {
+	"returns an array containing all connections in the graph": () => {
+		const graph = new DirectedGraph(["A", "B", "C", "D", "E"]);
+		graph.connect("A", "B");
+		graph.connect("C", "C");
+		graph.connect("D", "E");
+		graph.connect("E", "D");
+		expect(new Set(graph.connections())).toEqual(new Set([
+			["A", "B"],
+			["C", "C"],
+			["D", "E"],
+			["E", "D"]
+		]));
+	}
+});
