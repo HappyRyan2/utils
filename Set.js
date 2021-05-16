@@ -116,7 +116,7 @@ Set.method(function every(callback) {
 	return new Set([...this].every(callback));
 });
 Set.method(function some(callback) {
-	return new Set([...this].some(callback));
+	return [...this].some(callback);
 });
 Set.method(function filter(callback) {
 	return new Set([...this].filter(callback));
