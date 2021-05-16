@@ -381,3 +381,45 @@ testing.addUnit("DirectedGraph.paths()", {
 		expect(paths).toEqual(new Set());
 	}
 });
+testing.addUnit("DirectedGraph.pathExists()", {
+	"returns true when a path exists in an acyclic graph": () => {
+		const graph = new DirectedGraph([
+			["S", ["1"]],
+			["1", ["2"]],
+			["2", ["3"]],
+			["3", ["F"]],
+			["F", []]
+		]);
+		const exists = graph.pathExists(["S"], ["F"], 4);
+		expect(exists).toEqual(true);
+	},
+	"returns true when a path exists in a cyclic graph": () => {
+		const graph = new DirectedGraph([
+			["S", ["1"]],
+			["1", ["F"]],
+			["F", ["S"]]
+		]);
+		const exists = graph.pathExists(["S"], ["F"], 302);
+		expect(exists).toEqual(true);
+	},
+	"returns false when a path of the given length does not exist in an acyclic graph": () => {
+		const graph = new DirectedGraph([
+			["S", ["1"]],
+			["1", ["2"]],
+			["2", ["3"]],
+			["3", ["F"]],
+			["F", []]
+		]);
+		const exists = graph.pathExists(["S"], ["F"], 5);
+		expect(exists).toEqual(false);
+	},
+	"returns false when a path of the given length does not exist in a cyclic graph": () => {
+		const graph = new DirectedGraph([
+			["S", ["1"]],
+			["1", ["F"]],
+			["F", ["S"]]
+		]);
+		const exists = graph.pathExists(["S"], ["F"], 304);
+		expect(exists).toEqual(false);
+	}
+});

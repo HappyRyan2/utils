@@ -174,4 +174,32 @@ class DirectedGraph {
 		}
 		return new Set(paths.filter(p => ends.includes(p[p.length - 1])));
 	}
+	pathExists(starts, ends, length) {
+		let reachables = new Set(starts.map(s => this.nodes.get(s)));
+		const nodes = [...this.nodes.values()];
+		nodes.forEach((node, index) => {
+			// assign each node an ID (this will be deleted when the algorithm finishes)
+			node.id = index;
+		});
+		const pastStates = new Map();
+		for(let i = 0; i < length; i ++) {
+			if(reachables.size === 0) { return false; }
+			const newReachables = new Set();
+			for(const reachable of reachables) {
+				for(const newReachable of reachable.nodesAfter) {
+					newReachables.add(newReachable);
+				}
+			}
+			reachables = newReachables;
+			const stateString = [...reachables].map(n => n.id).sort((a, b) => a - b).join(",");
+			if(pastStates.has(stateString)) {
+				const lastTime = pastStates.get(stateString);
+				i += (i - lastTime) * Math.floor((length - i) / (i - lastTime));
+			}
+			pastStates.set(stateString, i);
+		}
+		for(const node of nodes) { delete node.id; }
+		const reachableValues = reachables.map(r => r.value);
+		return ends.some(e => reachableValues.has(e));
+	}
 }
