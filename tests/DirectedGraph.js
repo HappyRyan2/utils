@@ -284,3 +284,100 @@ testing.addUnit("DirectedGraph.toggleConnection()", {
 		testing.assertThrows(() => graph.toggleConnection("B", "A"));
 	}
 });
+
+testing.addUnit("DirectedGraph.paths()", {
+	"works for acyclic graphs": () => {
+		const graph = new DirectedGraph([
+			["S", ["1A", "1B"]],
+			["1A", ["1"]],
+			["1B", ["1"]],
+			["1", ["2A", "2B"]],
+			["2A", ["2"]],
+			["2B", ["2"]],
+			["2", ["F"]],
+			["F", []]
+		]);
+		const paths = graph.paths(["S"], ["F"], 5);
+		expect(paths).toEqual(new Set([
+			["S", "1A", "1", "2A", "2", "F"],
+			["S", "1B", "1", "2A", "2", "F"],
+			["S", "1A", "1", "2B", "2", "F"],
+			["S", "1B", "1", "2B", "2", "F"]
+		]));
+	},
+	"works for cyclic graphs": () => {
+		const graph = new DirectedGraph([
+			["S", ["1"]],
+			["1", ["S", "F"]],
+			["F", []]
+		]);
+		const paths = graph.paths(["S"], ["F"], 10);
+		expect(paths).toEqual(new Set([
+			["S", "1", "S", "1", "S", "1", "S", "1", "S", "1", "F"]
+		]));
+	},
+	"works when there are multiple starting nodes": () => {
+		const graph = new DirectedGraph([
+			["S1", ["A"]],
+			["S2", ["A"]],
+			["A", ["F"]],
+			["F", []]
+		]);
+		const paths = graph.paths(["S1", "S2"], ["F"], 2);
+		expect(paths).toEqual(new Set([
+			["S1", "A", "F"],
+			["S2", "A", "F"]
+		]));
+	},
+	"works when there are multiple ending nodes": () => {
+		const graph = new DirectedGraph([
+			["S", ["F1", "F2", "F3"]],
+			["F1", []],
+			["F2", []],
+			["F3", []],
+		]);
+		const paths = graph.paths(["S"], ["F1", "F2", "F3"], 1);
+		expect(paths).toEqual(new Set([
+			["S", "F1"],
+			["S", "F2"],
+			["S", "F3"]
+		]));
+	},
+	"works when there are multiple starting and ending nodes": () => {
+		const graph = new DirectedGraph([
+			["S1", ["A"]],
+			["S2", ["A"]],
+			["A", ["F1", "F2"]],
+			["F1", []],
+			["F2", []],
+		]);
+		const paths = graph.paths(["S1", "S2"], ["F1", "F2"], 2);
+		expect(paths).toEqual(new Set([
+			["S1", "A", "F1"],
+			["S1", "A", "F2"],
+			["S2", "A", "F1"],
+			["S2", "A", "F2"],
+		]));
+	},
+	"works when there is no path of the given length": () => {
+		const graph = new DirectedGraph([
+			["A", ["B"]],
+			["B", ["C"]],
+			["C", ["D"]],
+			["D", []]
+		]);
+		const paths = graph.paths(["A"], ["D"], 7392);
+		expect(paths).toEqual(new Set());
+	},
+	"works when there is no path between the nodes": () => {
+		const graph = new DirectedGraph([
+			["A", ["B"]],
+			["B", ["C"]],
+			["C", ["A"]],
+			["D", ["E"]],
+			["E", ["D"]]
+		]);
+		const paths = graph.paths(["A"], ["E"], 5);
+		expect(paths).toEqual(new Set());
+	}
+});

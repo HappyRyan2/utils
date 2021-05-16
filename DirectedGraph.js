@@ -157,4 +157,21 @@ class DirectedGraph {
 			this.connect(value1, value2);
 		}
 	}
+
+	paths(starts, ends, length) {
+		let paths = starts.map(startValue => [startValue]);
+		for(let i = 0; i < length; i ++) {
+			const newPaths = [];
+			for(const path of paths) {
+				const lastStep = path[path.length - 1];
+				const node = this.nodes.get(lastStep);
+				for(const connection of node.nodesAfter) {
+					newPaths.push([...path, connection.value]);
+				}
+			}
+			paths = newPaths;
+			if(paths.length === 0) { return new Set(); }
+		}
+		return new Set(paths.filter(p => ends.includes(p[p.length - 1])));
+	}
 }
