@@ -222,4 +222,27 @@ class DirectedGraph {
 		const reachableValues = reachables.map(r => r.value);
 		return ends.some(e => reachableValues.has(e));
 	}
+	numPaths(starts, ends, length) {
+		starts = new Set(starts);
+		ends = [...ends];
+		let paths = new Map();
+		for(const [_, node] of this.nodes) {
+			paths.set(node, starts.has(node.value) ? 1 : 0);
+		}
+		for(let i = 0; i < length; i ++) {
+			const newPaths = new Map();
+			for(const [node, numPaths] of paths) {
+				for(const connectedNode of node.nodesAfter) {
+					if(!newPaths.has(connectedNode)) {
+						newPaths.set(connectedNode, numPaths);
+					}
+					else {
+						newPaths.set(connectedNode, newPaths.get(connectedNode) + numPaths);
+					}
+				}
+			}
+			paths = newPaths;
+		}
+		return ends.sum(e => paths.get(this.nodes.get(e)));
+	}
 }

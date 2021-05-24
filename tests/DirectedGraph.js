@@ -436,6 +436,81 @@ testing.addUnit("DirectedGraph.pathExists()", {
 		expect(exists).toEqual(false);
 	}
 });
+testing.addUnit("DirectedGraph.numPaths()", {
+	"works for an acyclic graph with a single path": () => {
+		const graph = new DirectedGraph([
+			["A", ["B"]],
+			["B", ["C"]],
+			["C", ["D"]],
+			["D", []]
+		]);
+		const paths = graph.numPaths(["A"], ["D"], 3);
+		expect(paths).toEqual(1);
+	},
+	"works for an acyclic graph with multiple paths": () => {
+		const graph = new DirectedGraph([
+			["S", ["1A", "1B"]],
+			["1A", ["1"]],
+			["1B", ["1"]],
+			["1", ["2A", "2B"]],
+			["2A", ["2"]],
+			["2B", ["2"]],
+			["2", ["F"]],
+			["F", []]
+		]);
+		const paths = graph.numPaths(["S"], ["F"], 5);
+		expect(paths).toEqual(4);
+	},
+	"works for a cyclic graph with a single path": () => {
+		const graph = new DirectedGraph([
+			["A", ["B"]],
+			["B", ["A", "C"]],
+			["C", []]
+		]);
+		const paths = graph.numPaths(["A"], ["C"], 152);
+		expect(paths).toEqual(1);
+	},
+	"works for a cyclic graph with multiple paths": () => {
+		const graph = new DirectedGraph([
+			["S", ["A", "B"]],
+			["A", ["F"]],
+			["B", ["F"]],
+			["F", ["S"]]
+		]);
+		const paths = graph.numPaths(["S"], ["F"], 11);
+		expect(paths).toEqual(16);
+	},
+	"works when there are multiple starting nodes": () => {
+		const graph = new DirectedGraph([
+			["S", ["F1", "F2"]],
+			["F1", []],
+			["F2", []]
+		]);
+		const paths = graph.numPaths(["S"], ["F1", "F2"], 1);
+		expect(paths).toEqual(2);
+	},
+	"works when there are multiple starting nodes": () => {
+		const graph = new DirectedGraph([
+			["S1", ["F"]],
+			["S2", ["F"]],
+			["F", []]
+		]);
+		const paths = graph.numPaths(["S1", "S2"], ["F"], 1);
+		expect(paths).toEqual(2);
+	},
+	"works when there are multiple starting and ending nodes": () => {
+		const graph = new DirectedGraph([
+			["S1", ["A", "B"]],
+			["S2", ["A", "B"]],
+			["A", ["F1"]],
+			["B", ["F2"]],
+			["F1", []],
+			["F2", []]
+		]);
+		const paths = graph.numPaths(["S1", "S2"], ["F1", "F2"], 2);
+		expect(paths).toEqual(4);
+	}
+});
 
 testing.addUnit("DirectedGraph.connections()", {
 	"returns an array containing all connections in the graph": () => {
