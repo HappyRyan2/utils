@@ -93,37 +93,53 @@ testing.addUnit("Sequence.nthTerm()", [
 	}
 ]);
 testing.addUnit("Sequence.indexOf()", {
-	"works when the term is in the sequence - test case 1": () => {
-		const index = Sequence.POSITIVE_INTEGERS.indexOf(29);
+	"works when the term is in the sequence": () => {
+		const positiveIntegers = new Sequence(
+			termIndex => termIndex + 1,
+			{ isMonotonic: true }
+		);
+		const index = positiveIntegers.indexOf(29);
 		expect(index).toEqual(28);
 	},
-	"works when the term is in the sequence - test case 2": () => {
-		const index = Sequence.INTEGERS.indexOf(3);
-		expect(index).toEqual(5); // 0, 1, -1, 2, -2, 3 --> 3 is at index 5
-	},
 	"returns -1 when the term is not in the sequence": () => {
-		const index = Sequence.POSITIVE_INTEGERS.indexOf(-347);
+		const positiveIntegers = new Sequence(
+			termIndex => termIndex + 1,
+			{ isMonotonic: true }
+		);
+		const index = positiveIntegers.indexOf(-347);
 		expect(index).toEqual(-1);
 	}
 });
 testing.addUnit("Sequence.filter()", [
 	() => {
-		const evenNumbers = Sequence.POSITIVE_INTEGERS.filter(v => v % 2 === 0);
+		const positiveIntegers = new Sequence(
+			termIndex => termIndex + 1,
+			{ isMonotonic: true }
+		);
+		const evenNumbers = positiveIntegers.filter(v => v % 2 === 0);
 		const terms = evenNumbers.slice(0, 5);
 		expect(terms).toEqual([2, 4, 6, 8, 10]);
 	}
 ]);
 testing.addUnit("Sequence.map()", [
 	() => {
-		const evenNumbers = Sequence.POSITIVE_INTEGERS.map(n => n * 2);
+		const positiveIntegers = new Sequence(
+			termIndex => termIndex + 1,
+			{ isMonotonic: true }
+		);
+		const evenNumbers = positiveIntegers.map(n => n * 2);
 		const terms = evenNumbers.slice(0, 5);
 		expect(terms).toEqual([2, 4, 6, 8, 10]);
 	}
 ]);
 testing.addUnit("Sequence.entries()", [
 	() => {
+		const positiveIntegers = new Sequence(
+			termIndex => termIndex + 1,
+			{ isMonotonic: true }
+		);
 		const results = [];
-		for(const [value, index] of Sequence.POSITIVE_INTEGERS.entries()) {
+		for(const [value, index] of positiveIntegers.entries()) {
 			results.push([value, index]);
 			if(results.length >= 5) { break; }
 		}
