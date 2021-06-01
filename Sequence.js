@@ -173,11 +173,11 @@ class Sequence {
 				const terms = [];
 				let iterations = 0;
 				for(const term of this) {
-					if(iterations >= maxIndex) { break; }
 					if(iterations >= minIndex) {
 						terms.push(term);
 					}
 					iterations ++;
+					if(iterations >= maxIndex) { break; }
 				}
 				return terms;
 			}

@@ -69,6 +69,18 @@ testing.addUnit("Sequence.slice()", {
 			if(terms.length >= 5) { break; }
 		}
 		expect(terms).toEqual([50, 60, 70, 80, 90]);
+	},
+	"only calculates as many terms as are needed": () => {
+		let termsCalculated = 0;
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i ++) {
+				termsCalculated ++;
+				yield i;
+			}
+		});
+		const terms = sequence.slice(0, 5);
+		expect(terms).toEqual([0, 1, 2, 3, 4]);
+		expect(termsCalculated).toEqual(5);
 	}
 });
 testing.addUnit("Sequence.nthTerm()", [
