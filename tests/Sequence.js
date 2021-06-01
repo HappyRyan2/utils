@@ -224,13 +224,6 @@ testing.addUnit("Sequence.isIncreasing()", {
 			{ isMonotonic: true }
 		);
 		expect(sequence.isIncreasing()).toEqual(true);
-	},
-	"works for sequences where the first few terms are constant": () => {
-		const sequence = new Sequence(
-			n => Math.floor(n / 5), // 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, ...
-			{ isMonotonic: true }
-		);
-		expect(sequence.isIncreasing()).toEqual(true);
 	}
 });
 
