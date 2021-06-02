@@ -6,7 +6,7 @@ testing.addUnit("Sequence constructor", {
 			}
 		});
 		const terms = [];
-		for(const number of sequence.generator()) {
+		for(const number of sequence) {
 			terms.push(number);
 			if(terms.length >= 5) { break; }
 		}
@@ -15,15 +15,15 @@ testing.addUnit("Sequence constructor", {
 	"can create a sequence from an nth-term formula": () => {
 		const sequence = new Sequence(n => n * 10);
 		const terms = [];
-		for(const number of sequence.generator()) {
+		for(const number of sequence) {
 			terms.push(number);
 			if(terms.length >= 5) { break; }
 		}
 		expect(terms).toEqual([0, 10, 20, 30, 40]);
 	}
 });
-testing.addUnit("Sequence iteration", [
-	() => {
+testing.addUnit("Sequence iteration", {
+	"correctly iterates through sequence": () => {
 		const positiveIntegers = new Sequence(function*() {
 			for(let i = 1; i < Infinity; i ++) { yield i; }
 		});
@@ -33,8 +33,64 @@ testing.addUnit("Sequence iteration", [
 			if(sequenceItems.length >= 5) { break; }
 		}
 		expect(sequenceItems).toEqual([1, 2, 3, 4, 5]);
+	},
+	"correctly caches terms when creating a sequence from a generator function": () => {
+		let termsCalculated = 0;
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i ++) {
+				termsCalculated ++;
+				yield i;
+			}
+		});
+
+		let i = 0;
+		const terms1 = [];
+		for(const term of sequence) {
+			terms1.push(term);
+			i ++;
+			if(i >= 10) { break; }
+		}
+		expect(terms1).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+		expect(termsCalculated).toEqual(10);
+
+		i = 0;
+		const terms2 = [];
+		for(const term of sequence) {
+			terms2.push(term);
+			i ++;
+			if(i >= 5) { break; }
+		}
+		expect(terms2).toEqual([0, 1, 2, 3, 4]);
+		expect(termsCalculated).toEqual(10);
+	},
+	"correctly caches terms when creating a sequence from an nth-term formula": () => {
+		let termsCalculated = 0;
+		const sequence = new Sequence(index => {
+			termsCalculated ++;
+			return index;
+		});
+
+		let i = 0;
+		const terms1 = [];
+		for(const term of sequence) {
+			terms1.push(term);
+			i ++;
+			if(i >= 10) { break; }
+		}
+		expect(terms1).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+		expect(termsCalculated).toEqual(10);
+
+		i = 0;
+		const terms2 = [];
+		for(const term of sequence) {
+			terms2.push(term);
+			i ++;
+			if(i >= 5) { break; }
+		}
+		expect(terms2).toEqual([0, 1, 2, 3, 4]);
+		expect(termsCalculated).toEqual(10);
 	}
-]);
+});
 testing.addUnit("Sequence.slice()", {
 	"works for finite subsequences with nth-term formulas": () => {
 		const sequence = new Sequence(n => n * 10); // {0, 10, 20, 30, ...}
@@ -81,17 +137,64 @@ testing.addUnit("Sequence.slice()", {
 		const terms = sequence.slice(0, 5);
 		expect(terms).toEqual([0, 1, 2, 3, 4]);
 		expect(termsCalculated).toEqual(5);
+	},
+	"correctly uses term caching optimizations": () => {
+		let termsCalculated = 0;
+		const sequence = new Sequence(termIndex => {
+			termsCalculated ++;
+			return termIndex;
+		});
+
+		const terms1 = sequence.slice(0, 10);
+		const terms2 = sequence.slice(0, 5);
+		const terms3 = sequence.slice(0, 1);
+		expect(terms1).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+		expect(terms2).toEqual([0, 1, 2, 3, 4]);
+		expect(terms3).toEqual([0]);
+		expect(termsCalculated).toEqual(10);
 	}
 });
-testing.addUnit("Sequence.nthTerm()", [
-	() => {
+testing.addUnit("Sequence.nthTerm()", {
+	"correctly calculates the term at a given index": () => {
 		const sequence = new Sequence(function*() {
 			for(let i = 0; i < Infinity; i += 10) { yield i; }
 		}); // {0, 10, 20, 30, ...}
 		const term = sequence.nthTerm(3);
 		expect(term).toEqual(30);
+	},
+	"correctly uses term caching optimizations": () => {
+		let termsCalculated = 0;
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i ++) {
+				termsCalculated ++;
+				yield i;
+			}
+		});
+
+		const term1 = sequence.nthTerm(10);
+		const term2 = sequence.nthTerm(10);
+		const term3 = sequence.nthTerm(10);
+		expect(term1).toEqual(10);
+		expect(term2).toEqual(10);
+		expect(term3).toEqual(10);
+		expect(termsCalculated).toEqual(11);
+	},
+	"correctly uses term caching optimizations when an nth-term function is provided": () => {
+		let termsCalculated = 0;
+		const sequence = new Sequence(termIndex => {
+			termsCalculated ++;
+			return termIndex;
+		});
+
+		const term1 = Sequence.prototype.nthTerm.call(sequence, 10);
+		const term2 = Sequence.prototype.nthTerm.call(sequence, 10);
+		const term3 = Sequence.prototype.nthTerm.call(sequence, 10);
+		expect(term1).toEqual(10);
+		expect(term2).toEqual(10);
+		expect(term3).toEqual(10);
+		expect(termsCalculated).toEqual(1);
 	}
-]);
+});
 testing.addUnit("Sequence.indexOf()", {
 	"works when the term is in the sequence": () => {
 		const positiveIntegers = new Sequence(
@@ -108,6 +211,23 @@ testing.addUnit("Sequence.indexOf()", {
 		);
 		const index = positiveIntegers.indexOf(-347);
 		expect(index).toEqual(-1);
+	},
+	"correctly uses term caching optimizations": () => {
+		let termsCalculated = 0;
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i ++) {
+				termsCalculated ++;
+				yield i;
+			}
+		}, { isMonotonic: true });
+
+		const index1 = sequence.indexOf(17);
+		const index2 = sequence.indexOf(17);
+		const index3 = sequence.indexOf(17);
+		expect(index1).toEqual(17);
+		expect(index2).toEqual(17);
+		expect(index3).toEqual(17);
+		expect(termsCalculated).toEqual(18);
 	}
 });
 testing.addUnit("Sequence.filter()", [

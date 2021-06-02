@@ -3,18 +3,38 @@ class Sequence {
 	constructor(func, properties = {}) {
 		const GeneratorFunction = Object.getPrototypeOf(function*() {}).constructor;
 		const isGeneratorFunc = (func instanceof GeneratorFunction);
+		const self = this;
 		if(isGeneratorFunc) {
-			this.generator = func;
+			this.generatorFunction = func;
 		}
 		else {
-			this.nthTerm = func;
-			this.generator = function*() {
+			this.nthTerm = (termIndex) => {
+				const term = func(termIndex);
+				this.cachedTerms[termIndex] = term;
+				return term;
+			};
+			this.generatorFunction = function*() {
 				for(let index = 0; index < Infinity; index ++) {
-					yield func(index);
+					const term = func(index);
+					self.cachedTerms[index] = term;
+					yield term;
 				}
 			};
 		}
-		this[Symbol.iterator] = this.generator;
+		this.generator = this.generatorFunction();
+		this[Symbol.iterator] = function*() {
+			for(let index = 0; index < Infinity; index ++) {
+				if(index < this.numCachedTerms) {
+					yield this.cachedTerms[index];
+				}
+				else {
+					const term = this.generator.next().value;
+					this.cachedTerms[index] = term;
+					this.numCachedTerms ++;
+					yield term;
+				}
+			}
+		};
 		this.entries = function*() {
 			let index = 0;
 			for(const term of this) {
@@ -22,12 +42,21 @@ class Sequence {
 				index ++;
 			}
 		};
+		this.cachedTerms = [];
+		this.numCachedTerms = 0;
 
 		this.isMonotonic = properties.isMonotonic ?? null;
 	}
 
 	nthTerm(termIndex) {
 		/* returns the term at the given zero-based index. */
+		if(typeof this.cachedTerms[termIndex] === "number") {
+			return this.cachedTerms[termIndex];
+		}
+		if(this.hasOwnProperty("nthTerm")) {
+			return this.nthTerm(termIndex);
+		}
+
 		let iterations = 0;
 		for(const term of this) {
 			if(iterations === termIndex) { return term; }
@@ -103,7 +132,7 @@ class Sequence {
 
 		return new Sequence(
 			function*() {
-				let generators = sequences.map(s => s.generator());
+				let generators = sequences.map(s => s[Symbol.iterator]());
 				let values = generators.map(s => s.next().value);
 				while(true) {
 					const nextVal = increasing ? values.min() : values.max();
@@ -165,7 +194,12 @@ class Sequence {
 			if(this.hasOwnProperty("nthTerm")) {
 				const terms = [];
 				for(let i = minIndex; i < maxIndex; i ++) {
-					terms.push(this.nthTerm(i));
+					if(typeof this.cachedTerms[i] === "number") {
+						terms.push(this.cachedTerms[i]);
+					}
+					else {
+						terms.push(this.nthTerm(i));
+					}
 				}
 				return terms;
 			}
