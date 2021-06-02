@@ -56,6 +56,9 @@ class Sequence {
 			iterations ++;
 		}
 	}
+	nextTerm(term) {
+		return this.nthTerm(this.indexOf(term) + 1);
+	}
 	indexOf(searchTarget) {
 		/*
 		returns the index of the first occurence, or -1 if it is not present.

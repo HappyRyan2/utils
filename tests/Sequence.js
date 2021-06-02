@@ -195,6 +195,13 @@ testing.addUnit("Sequence.nthTerm()", {
 		expect(termsCalculated).toEqual(1);
 	}
 });
+testing.addUnit("Sequence.nextTerm()", {
+	"returns the term after the first occurence of the given term": () => {
+		const sequence = new Sequence(n => n);
+		const nextTerm = sequence.nextTerm(10);
+		expect(nextTerm).toEqual(11);
+	}
+});
 testing.addUnit("Sequence.indexOf()", {
 	"works when the term is in the sequence": () => {
 		const positiveIntegers = new Sequence(
