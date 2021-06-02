@@ -236,75 +236,24 @@ class Sequence {
 		},
 		{ isMonotonic: false }
 	);
-
-	static MODIFIED_SIEVE_PRIMES = new Sequence(
-		function*() {
-			const nextPrimeDivisors = []; // the `i`th sub-array contains the distinct prime factors of `i`.
-			for(let i = 2; i < Infinity; i ++) {
-				const distinctFactors = nextPrimeDivisors[i] ?? [];
-				if(distinctFactors.length === 0) {
-					/* i is prime */
-					yield i;
-					nextPrimeDivisors[i * 2] ??= [];
-					nextPrimeDivisors[i * 2].push(i);
-				}
-				else {
-					for(const factor of distinctFactors) {
-						nextPrimeDivisors[i + factor] ??= [];
-						nextPrimeDivisors[i + factor].push(factor);
-					}
-				}
-				delete nextPrimeDivisors[i];
-			}
-		},
-		{ isMonotonic: true }
-	);
-
 	static PRIMES = new Sequence(
 		function*() {
-			const isPrime = (n, primesBelow) => {
-				for(let i = 0; i < primesBelow.length && primesBelow[i] ** 2 <= n; i ++) {
-					if(n % primesBelow[i] === 0) { return false; }
+			const factorsMap = new Map();
+			for(let possiblePrime = 2; possiblePrime < Infinity; possiblePrime ++) {
+				const factors = factorsMap.get(possiblePrime) ?? [];
+				if(factors.length === 0) {
+					yield possiblePrime;
+					factorsMap.set(possiblePrime ** 2, [possiblePrime]);
 				}
-				return true;
-			};
-
-			yield 2;
-			let step = 2;
-			let nextStep = null;
-			let primesInStep = 1;
-			let offsets = [1];
-			let nextOffsets = [1];
-			let primes = [2]; // numbers to check divisibility for when testing for primality
-			loop1: for(let i = 2; i < Infinity; i += step) {
-				loop2: for(let j = 0; j < offsets.length; j ++) {
-					const offset = offsets[j];
-					const possibleNextPrime = i + offset;
-					if(isPrime(possibleNextPrime, primes)) {
-						// `possibleNextPrime` is prime
-						yield possibleNextPrime;
-						primes.push(possibleNextPrime);
-						if(nextStep == null) {
-							primesInStep ++;
-							nextStep = primes.slice(0, primesInStep).product();
+				else {
+					for(const factor of factors) {
+						const nextNumber = possiblePrime + factor;
+						if(!factorsMap.has(nextNumber)) {
+							factorsMap.set(nextNumber, []);
 						}
+						factorsMap.get(nextNumber).push(factor);
 					}
-					if(possibleNextPrime % primes[primesInStep - 1] !== 0) {
-						nextOffsets.push(possibleNextPrime);
-					}
-					if(possibleNextPrime >= nextStep - 1) {
-						offsets = nextOffsets;
-						nextOffsets = nextOffsets.filter(v => v !== primes[primesInStep]);
-						step = nextStep;
-						if(primes[primesInStep]) {
-							nextStep = step * primes[primesInStep];
-							primesInStep ++;
-						}
-						else { primesInStep = null; }
-						i = step;
-						j = -1;
-						continue loop2;
-					}
+					factorsMap.delete(possiblePrime);
 				}
 			}
 		},
