@@ -35,13 +35,6 @@ class Sequence {
 				}
 			}
 		};
-		this.entries = function*() {
-			let index = 0;
-			for(const term of this) {
-				yield [term, index];
-				index ++;
-			}
-		};
 		this.cachedTerms = [];
 		this.numCachedTerms = 0;
 
@@ -215,6 +208,13 @@ class Sequence {
 				}
 				return terms;
 			}
+		}
+	}
+	*entries() {
+		let index = 0;
+		for(const term of this) {
+			yield [term, index];
+			index ++;
 		}
 	}
 
