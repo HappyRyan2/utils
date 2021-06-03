@@ -26,6 +26,24 @@ testing.addUnit("Math.factorize()", {
 		expect(result).toEqual({ 2: 2, 3: 1, 5: 2 });
 	}
 });
+testing.addUnit("Math.gcd()", {
+	"correctly returns the GCD of 2 numbers": () => {
+		const result = Math.gcd(100, 70);
+		expect(result).toEqual(10);
+	},
+	"correctly returns the GCD of 3 or more numbers": () => {
+		const result = Math.gcd(95, 115, 155);
+		expect(result).toEqual(5);
+	}
+});
+testing.addUnit("Math.areCoprime()", {
+	"returns true for coprime integers": () => {
+		expect(Math.areCoprime(15, 77)).toEqual(true);
+	},
+	"returns false for non-coprime integers": () => {
+		expect(Math.areCoprime(14, 35)).toEqual(false);
+	}
+});
 testing.addUnit("Math.isPrime()", Math.isPrime, [
 	[1, false],
 	[2, true],

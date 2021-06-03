@@ -33,3 +33,30 @@ Math.isPrime = function(number) {
 	}
 	return true;
 };
+Math.gcd = function(...numbers) {
+	if(numbers.length === 1) {
+		return numbers[0];
+	}
+	else if(numbers.length === 2) {
+		let [a, b] = numbers;
+		while(a !== b) {
+			if(a > b) {
+				a = (a % b === 0) ? b : a % b;
+			}
+			else {
+				b = (b % a === 0) ? a : b % a;
+			}
+		}
+		return a;
+	}
+	else {
+		let gcd = Math.gcd(numbers[0], numbers[1]);
+		for(let i = 2; i < numbers.length; i ++) {
+			gcd = Math.gcd(gcd, numbers[i]);
+		}
+		return gcd;
+	}
+}
+Math.areCoprime = function(a, b) {
+	return Math.gcd(a, b) === 1;
+};
