@@ -154,6 +154,18 @@ testing.addUnit("Sequence.slice()", {
 		expect(termsCalculated).toEqual(10);
 	}
 });
+testing.addUnit("Sequence.termsBelow()", {
+	"correctly returns the terms below a given value": () => {
+		const sequence = new Sequence(i => i, { isMonotonic: true });
+		const terms = sequence.termsBelow(5);
+		expect(terms).toEqual([0, 1, 2, 3, 4]);
+	},
+	"correctly returns the terms less than or equal to a given value": () => {
+		const sequence = new Sequence(i => i, { isMonotonic: true });
+		const terms = sequence.termsBelow(5, true);
+		expect(terms).toEqual([0, 1, 2, 3, 4, 5]);
+	}
+});
 testing.addUnit("Sequence.nthTerm()", {
 	"correctly calculates the term at a given index": () => {
 		const sequence = new Sequence(function*() {
