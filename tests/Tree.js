@@ -55,5 +55,59 @@ testing.addUnit("Tree.iterate()", {
 			"ACB",
 			"ACC",
 		]);
+	},
+	"correctly iterates through the tree when called with a generator function": () => {
+		const rootNode = "A";
+		const getChildren = function*(str) {
+			if(str.length < 3) {
+				for(const newChar of ["A", "B", "C"]) {
+					yield str + newChar;
+				}
+			}
+		};
+		const results = [];
+		for(const string of Tree.iterate(rootNode, getChildren)) {
+			results.push(string);
+		}
+		expect(results).toEqual([
+			"A",
+			"AA",
+			"AAA",
+			"AAB",
+			"AAC",
+			"AB",
+			"ABA",
+			"ABB",
+			"ABC",
+			"AC",
+			"ACA",
+			"ACB",
+			"ACC"
+		]);
+	},
+	"correctly iterates through the leaves of the tree when called with a generator function": () => {
+		const rootNode = "A";
+		const getChildren = function*(str) {
+			if(str.length < 3) {
+				for(const newChar of ["A", "B", "C"]) {
+					yield str + newChar;
+				}
+			}
+		};
+		const results = [];
+		for(const string of Tree.iterate(rootNode, getChildren, true)) {
+			results.push(string);
+		}
+		expect(results).toEqual([
+			"AAA",
+			"AAB",
+			"AAC",
+			"ABA",
+			"ABB",
+			"ABC",
+			"ACA",
+			"ACB",
+			"ACC"
+		]);
 	}
 });
