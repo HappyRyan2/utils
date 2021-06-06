@@ -260,6 +260,13 @@ testing.addUnit("Sequence.filter()", [
 		expect(terms).toEqual([2, 4, 6, 8, 10]);
 	}
 ]);
+testing.addUnit("Sequence.find()", {
+	"correctly returns the first term that meets the criteria": () => {
+		const sequence = new Sequence(n => n + 1); // [1, 2, 3, ...]
+		const number = sequence.find(v => v % 2 === 0 && v % 7 === 0);
+		expect(number).toEqual(14);
+	}
+});
 testing.addUnit("Sequence.map()", [
 	() => {
 		const positiveIntegers = new Sequence(

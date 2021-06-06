@@ -86,6 +86,13 @@ class Sequence {
 			}
 		}
 	}
+	find(callback) {
+		for(const [term, index] of this.entries()) {
+			if(callback(term, index, this)) {
+				return term;
+			}
+		}
+	}
 	filter(callback) {
 		const originalSequence = this;
 		return new Sequence(
