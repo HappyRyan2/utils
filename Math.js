@@ -1,6 +1,21 @@
 Math.logBase = function(base, number) {
 	return Math.log(number) / Math.log(base);
 };
+Math.divisors = function(number) {
+	/*
+	Returns the divisors of the number, in an array in ascending order.
+	Runs in O(sqrt(n)) time.
+	*/
+	const divisorsBelowSqrt = [];
+	const divisorsAboveSqrt = [];
+	for(let i = 1; i * i <= number; i ++) {
+		if(number % i === 0) {
+			divisorsBelowSqrt.push(i);
+			if(i * i !== number) { divisorsAboveSqrt.push(number / i); }
+		}
+	}
+	return [...divisorsBelowSqrt, ...divisorsAboveSqrt.reverse()];
+};
 Math.factorize = function(number, mode = "factors-list") {
 	let result;
 	if(mode === "factors-list") { result = []; }
