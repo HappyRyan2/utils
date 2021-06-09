@@ -152,7 +152,17 @@ testing.addUnit("Sequence.slice()", {
 		expect(terms2).toEqual([0, 1, 2, 3, 4]);
 		expect(terms3).toEqual([0]);
 		expect(termsCalculated).toEqual(10);
-	}
+	},
+	"returns an empty list when start=end for sequences with nth-term formulas": () => {
+		const sequence = new Sequence(n => n);
+		expect(sequence.slice(0, 0)).toEqual([]);
+	},
+	"returns an empty list when start=end for sequences without nth-term formulas": () => {
+		const sequence = new Sequence(function*() {
+			for(let i = 0; i < Infinity; i ++) { yield i; }
+		});
+		expect(sequence.slice(0, 0)).toEqual([]);
+	},
 });
 testing.addUnit("Sequence.termsBelow()", {
 	"correctly returns the terms below a given value": () => {
