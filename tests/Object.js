@@ -102,3 +102,44 @@ testing.addUnit("Object.equals()", {
 		testing.refute((false).equals(undefined));
 	}
 });
+testing.addUnit("Object.watch()", {
+	"runs the callback when the property is changed": () => {
+		const myObj = { foo: "bar" };
+		let arg1, arg2, arg3;
+		myObj.watch("foo", (obj, prop, value) => {
+			arg1 = obj;
+			arg2 = prop;
+			arg3 = value;
+		});
+		expect(myObj.foo).toEqual("bar");
+		myObj.foo = "qux";
+		expect(myObj.foo).toEqual("qux");
+		expect(arg1).toStrictlyEqual(myObj);
+		expect(arg2).toEqual("foo");
+		expect(arg3).toEqual("qux");
+	},
+	"works when there are already getters and setters for the property": () => {
+		let getterRun = false;
+		let setterRun = false;
+		let value = "bar";
+		const myObj = {
+			get foo() { getterRun = true; return value; },
+			set foo(newValue) { setterRun = true; value = newValue; }
+		};
+		let arg1, arg2, arg3;
+		myObj.watch("foo", (obj, prop, value) => {
+			arg1 = obj;
+			arg2 = prop;
+			arg3 = value;
+		});
+		setterRun = false;
+		myObj.foo = "bar";
+		getterRun = false;
+		expect(myObj.foo).toEqual("bar");
+		expect(arg1).toStrictlyEqual(myObj);
+		expect(arg2).toEqual("foo");
+		expect(arg3).toEqual("bar");
+		expect(setterRun).toEqual(true);
+		expect(getterRun).toEqual(true);
+	}
+});

@@ -68,6 +68,24 @@ Object.method(function set(key, value) {
 	this[key] = value;
 	return this;
 });
+Object.method(function watch(key, callback) {
+	const getter = this.__lookupGetter__(key);
+	const setter = this.__lookupSetter__(key);
+	let value = this[key];
+	Object.defineProperty(this, key, {
+		get: () => {
+			if(typeof getter === "function") { getter(); }
+			return value;
+		},
+		set: (newValue) => {
+			callback(this, key, newValue);
+			if(typeof setter === "function") {
+				setter();
+			}
+			else { value = newValue; }
+		}
+	});
+});
 Object.typeof = function(value) {
 	/*
 	This function serves to determine the type of a variable better than the default "typeof" operator, which returns strange values for some inputs (see special cases below).
