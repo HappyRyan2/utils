@@ -76,6 +76,11 @@ class Graph {
 			});
 		}
 	}
+	*[Symbol.iterator]() {
+		for(const node of this.nodes.values()) {
+			yield node.value;
+		}
+	}
 
 	has(value) {
 		return this.nodes.has(value);

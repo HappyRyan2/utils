@@ -90,6 +90,11 @@ class DirectedGraph {
 			});
 		}
 	}
+	*[Symbol.iterator]() {
+		for(const node of this.nodes.values()) {
+			yield node.value;
+		}
+	}
 
 	size() { return this.nodes.size; }
 	values() {

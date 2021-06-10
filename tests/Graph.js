@@ -88,6 +88,15 @@ testing.addUnit("Graph constructor", {
 		testing.assertThrows(() => new Graph(grid));
 	}
 });
+testing.addUnit("Graph iteration", {
+	"correctly iterates through all nodes of the graph": () => {
+		const graph = new Graph([1, 2, 3]);
+		const values = [];
+		for(const value of graph) { values.push(value); }
+		expect(values.length).toEqual(3);
+		expect(values.sort()).toEqual([1, 2, 3].sort());
+	}
+});
 testing.addUnit("Graph.has()", {
 	"returns true when the value is in the graph": () => {
 		const graph = new Graph([

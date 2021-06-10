@@ -108,6 +108,15 @@ testing.addUnit("DirectedGraph constructor", {
 		testing.assertThrows(() => new DirectedGraph(grid));
 	}
 });
+testing.addUnit("DirectedGraph iteration", {
+	"correctly iterates through all nodes of the graph": () => {
+		const graph = new DirectedGraph([1, 2, 3]);
+		const values = [];
+		for(const value of graph) { values.push(value); }
+		expect(values.length).toEqual(3);
+		expect(values.sort()).toEqual([1, 2, 3].sort());
+	}
+});
 testing.addUnit("DirectedGraph.has()", {
 	"returns true when the value is in the graph": () => {
 		const graph = new DirectedGraph(["A"]);
