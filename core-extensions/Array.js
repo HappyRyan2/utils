@@ -52,13 +52,15 @@ Array.method(function sum(func, thisArg) {
 	}
 });
 Array.method(function product(func, thisArg) {
-	const multiply = (a, b) => a * b;
-	if(typeof func === "function") {
-		return this.map(func, thisArg).reduce(multiply, 1);
+	if(typeof func === "function") { return this.map(func).product(); }
+
+	let product = 1;
+	for(let number of this) {
+		if(typeof number === "bigint") { product = BigInt(product); }
+		if(typeof product === "bigint") { number = BigInt(number); }
+		product *= number;
 	}
-	else {
-		return this.reduce(multiply, 1);
-	}
+	return product;
 });
 
 Array.method(function min(func, thisArg, resultType = "object") {

@@ -48,11 +48,33 @@ testing.addUnit("Array.sum()", {
 testing.addUnit("Array.product()", {
 	"basic usage": () => {
 		const result = [1, 2, 3, 4].product();
+		expect(typeof result).toEqual("number");
 		expect(result).toEqual(1 * 2 * 3 * 4);
 	},
 	"works when a callback is provided": () => {
 		const result = [1, 2, 3, 4].product(v => v + 10);
+		expect(typeof result).toEqual("number");
 		expect(result).toEqual(11 * 12 * 13 * 14);
+	},
+	"returns a BigInt when the array is entirely BigInts": () => {
+		const result = [1n, 2n, 3n].product();
+		expect(typeof result).toEqual("bigint");
+		expect(result).toEqual(6n);
+	},
+	"returns a BigInt when the array contains a mix of BigInts and regular numbers": () => {
+		const result = [1n, 2, 3n, 4].product();
+		expect(typeof result).toEqual("bigint");
+		expect(result).toEqual(24n);
+	},
+	"returns a BigInt when the callback returns only BigInts": () => {
+		const result = [1n, 2n, 3n, 4n].product(v => v + 10n);
+		expect(typeof result).toEqual("bigint");
+		expect(result).toEqual(11n * 12n * 13n * 14n);
+	},
+	"returns a BigInt when the callback returns a mix of BigInts and regular numbers": () => {
+		const result = [1, 2n, 3].product(v => v);
+		expect(typeof result).toEqual("bigint");
+		expect(result).toEqual(6n);
 	}
 });
 testing.addUnit("Array.min()", {
