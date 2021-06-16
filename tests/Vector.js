@@ -41,3 +41,27 @@ testing.addUnit("Vector constructor", {
 		expect(vector.y).toEqual(0);
 	}
 });
+testing.addUnit("Vector angle getter / setters", {
+	"getting the angle returns the angle of the vector": () => {
+		const vector = new Vector(1, -1);
+		expect(vector.angle).toEqual(45);
+	},
+	"setting the angle correctly modifies the x and y properties": () => {
+		const vector = new Vector(1, 0);
+		vector.angle = 45;
+		expect(vector.x).toApproximatelyEqual(1 / Math.SQRT2);
+		expect(vector.y).toApproximatelyEqual(-1 / Math.SQRT2);
+	}
+});
+testing.addUnit("Vector magnitude getters / setters", {
+	"getting the magnitude returns the magnitude of the vector": () => {
+		const vector = new Vector(3, 4);
+		expect(vector.magnitude).toEqual(5);
+	},
+	"setting the magnitude correctly modifies the x and y properties": () => {
+		const vector = new Vector(3, 4);
+		vector.magnitude *= 2;
+		expect(vector.x).toEqual(6);
+		expect(vector.y).toEqual(8);
+	}
+});

@@ -33,4 +33,24 @@ class Vector {
 			else if(direction === "down") { this.x = 0, this.y = 1; }
 		}
 	}
+
+	get angle() {
+		/* angles are in degrees, counterclockwise from the positive x-axis, where positive y = down and positive x = right. */
+		const TO_DEGREES = 180 / Math.PI;
+		return Math.atan2(-this.y, this.x) * TO_DEGREES;
+	}
+	set angle(newAngle) {
+		const TO_RADIANS = Math.PI / 180;
+		const magnitude = this.magnitude;
+		this.x = magnitude * Math.cos(TO_RADIANS * newAngle);
+		this.y = magnitude * -Math.sin(TO_RADIANS * newAngle);
+	}
+	get magnitude() {
+		return Math.sqrt((this.x ** 2) + (this.y ** 2));
+	}
+	set magnitude(newMagnitude) {
+		const multiplier = newMagnitude / this.magnitude;
+		this.x *= multiplier;
+		this.y *= multiplier;
+	}
 }
