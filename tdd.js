@@ -279,10 +279,10 @@ const expect = function() {
 				`Expected ${value} to be strictly between ${min} and ${max}.`
 			);
 		},
-		toApproximatelyEqual: function(num) {
+		toApproximatelyEqual: function(num, tolerance = 1e-15) {
 			testing.assert(
-				arguments.length === 1,
-				`expect(value).toApproximatelyEqual(value) should be called with exactly one argument.`
+				arguments.length >= 1 && arguments.length <= 2,
+				`expect(value).toApproximatelyEqual(value) should be called with one or two arguments.`
 			);
 			testing.assert(
 				isNumeric(value),
@@ -293,7 +293,11 @@ const expect = function() {
 				`expect(value).toApproximatelyEqual(value) should be called with a numeric argument.`
 			);
 			testing.assert(
-				Math.abs(value - num) < 1e-15,
+				isNumeric(tolerance),
+				`Tolerance value for approximate comparisons must be a number.`
+			);
+			testing.assert(
+				Math.abs(value - num) < tolerance,
 				`Expected ${value} to be extremely close to ${num}.`
 			);
 		},
