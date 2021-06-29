@@ -12,6 +12,7 @@ module.exports = function(grunt) {
 					"scripts/core-extensions/Function.js",
 					"scripts/core-extensions/Object.js",
 					"scripts/core-extensions/Array.js",
+					"scripts/core-extensions/Number.js",
 					"scripts/core-extensions/Set.js",
 					"scripts/core-extensions/Math.js",
 					"scripts/core-extensions/Map.js",
