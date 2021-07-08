@@ -29,4 +29,10 @@ testing.addUnit("utils.binarySearch()", {
 		const result = utils.binarySearch(0, 8, callback, "last");
 		expect(result).toEqual(8);
 	},
+	"works when the given min or max is a BigInt": () => {
+		const array = [1, 1, 2, 2, 2, 3, 4, 5, 10];
+		const callback = (n => array[n] - 3);
+		const result = utils.binarySearch(0n, 8n, callback);
+		expect(result).toEqual(5n);
+	}
 });
