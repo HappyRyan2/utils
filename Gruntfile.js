@@ -22,7 +22,8 @@ module.exports = function(grunt) {
 					"scripts/data-structures/Graph.js",
 					"scripts/data-structures/DirectedGraph.js",
 					"scripts/Vector.js",
-					"scripts/DOM.js"
+					"scripts/DOM.js",
+					"scripts/misc-utils.js"
 				],
 				dest: "utils.js",
 			},
