@@ -1132,6 +1132,9 @@ Math.gcd = function(...numbers) {
 Math.areCoprime = function(a, b) {
 	return Math.gcd(a, b) === 1;
 };
+Math.map = function(val, min1, max1, min2, max2) {
+	return (val - min1) / (max1 - min1) * (max2 - min2) + min2;
+};
 
 Map.method(function equals(map) {
 	if(this.size !== map.size) { return false; }

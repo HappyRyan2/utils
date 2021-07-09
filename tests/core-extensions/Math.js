@@ -70,3 +70,13 @@ testing.addUnit("Math.isPrime()", Math.isPrime, [
 	[9, false],
 	[10, false]
 ]);
+testing.addUnit("Math.map()", {
+	"correctly maps a number from one range to another": () => {
+		const result = Math.map(
+			16,
+			10, 20,
+			3000, 4000
+		);
+		expect(result).toEqual(3600);
+	}
+})
