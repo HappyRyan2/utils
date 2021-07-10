@@ -1042,6 +1042,9 @@ Set.cartesianProductGenerator = function*(...sets) {
 		}
 	}
 };
+Set.method(function cartesianPower(power) {
+	return Set.cartesianProduct(...[this].repeat(power));
+});
 
 
 Set.method(function map(callback) {

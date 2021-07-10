@@ -635,6 +635,21 @@ testing.addUnit("Set.cartesianProductGenerator()", [
 		expect(product).toEqual(Set.cartesianProduct(set1));
 	}
 ]);
+testing.addUnit("Set.cartesianPower()", {
+	"correctly returns the Cartesian product of the set and itself the given number of times": () => {
+		const set = new Set([0, 1]).cartesianPower(3);
+		expect(set).toEqual(new Set([
+			[0, 0, 0],
+			[0, 0, 1],
+			[0, 1, 0],
+			[0, 1, 1],
+			[1, 0, 0],
+			[1, 0, 1],
+			[1, 1, 0],
+			[1, 1, 1]
+		]));
+	}
+});
 
 testing.addUnit("DirectedGraph constructor", {
 	"can create an empty graph when the constructor is called without arguments": () => {
