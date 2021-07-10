@@ -810,13 +810,14 @@ Array.method(function* partitionGenerator() {
 });
 
 Array.method(function sum(func, thisArg) {
-	const add = (a, b) => a + b;
-	if(typeof func === "function") {
-		return this.map(func, thisArg).reduce(add, 0);
+	if(typeof func === "function") { return this.map(func, thisArg).sum(); }
+	let sum = 0;
+	for(let number of this) {
+		if(typeof number === "bigint") { sum = BigInt(sum); }
+		if(typeof sum === "bigint") { number = BigInt(number); }
+		sum += number;
 	}
-	else {
-		return this.reduce(add, 0);
-	}
+	return sum;
 });
 Array.method(function product(func, thisArg) {
 	if(typeof func === "function") { return this.map(func).product(); }

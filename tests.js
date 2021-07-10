@@ -43,6 +43,14 @@ testing.addUnit("Array.sum()", {
 	"works when a callback is provided": () => {
 		const result = [1, 2, 3, 4].sum(v => v * v);
 		expect(result).toEqual(1 + 4 + 9 + 16);
+	},
+	"works when the array contains BigInts": () => {
+		const result = [1, 2n, 3, 4n].sum();
+		expect(result).toStrictlyEqual(10n);
+	},
+	"works when the callback returns BigInts": () => {
+		const result = [1, 2n, 3, 4n].sum(v => v * v);
+		expect(result).toStrictlyEqual(1n + 4n + 9n + 16n);
 	}
 });
 testing.addUnit("Array.product()", {
