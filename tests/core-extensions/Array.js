@@ -149,6 +149,17 @@ testing.addUnit("Array.max()", {
 		expect(value).toEqual(3);
 	}
 });
+testing.addUnit("Array.count()", {
+	"can count how many values in the array satisfy the provided criteria": () => {
+		const array = [84, 1, -17, 84, 3.14, 0, -5, 84];
+		const isPositive = (num => num > 0);
+		expect(array.count(isPositive)).toEqual(5);
+	},
+	"can count how many times the value occurs in the array": () => {
+		const array = [84, 1, -17, 84, 3.14, 0, -5, 84];
+		expect(array.count(84)).toEqual(3);
+	}
+});
 testing.addUnit("Array.permutations()", {
 	"basic functionality works": () => {
 		const permutations = [1, 2, 3].permutations();

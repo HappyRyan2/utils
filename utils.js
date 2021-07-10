@@ -889,6 +889,17 @@ Array.method(function max(func, thisArg, resultType = "object") {
 	}
 });
 
+Array.method(function count() {
+	if(arguments[0] instanceof Function) {
+		const [callback] = arguments;
+		return this.filter(callback).length;
+	}
+	else {
+		const [searchTarget] = arguments;
+		return this.filter(v => v === searchTarget).length;
+	}
+});
+
 Array.method(function permutations() {
 	if(this.length === 1) {
 		return new Set([
