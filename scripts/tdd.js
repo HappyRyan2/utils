@@ -3,14 +3,16 @@ class Test {
 		this.functionToRun = functionToRun;
 		this.name = name;
 		this.unitName = null;
+		this.error = null;
 	}
 	getResult() {
 		let passed = true;
 		try {
 			this.functionToRun();
 		}
-		catch {
+		catch (error) {
 			passed = false;
+			this.error = error;
 		}
 		return passed;
 	}
@@ -414,24 +416,7 @@ class Testing {
 		tests.forEach(test => {
 			test.result = test.getResult();
 		});
-		const failed = this.testsFailed();
-		const numFailed = failed.length;
-
-		if(numFailed === 0) {
-			console.log(`%cAll tests passed!%c (${this.units.length} ${this.units.length === 1 ? "unit" : "units"}, ${tests.length} ${tests.length === 1 ? "test" : "tests"}, ${this.assertionsRun} ${this.assertionsRun === 1 ? "assertion" : "assertions"})`, "color: rgb(0, 192, 64)", "");
-		}
-		else {
-			if(numFailed === 1) {
-				console.log(`%c1 test failed:%c ${failed[0].unitName} - ${failed[0].name}`, "color: red", "");
-			}
-			else {
-				const linesOfText = [`%c${numFailed} tests failed:%c`];
-				failed.forEach(failedTest => {
-					linesOfText.push(`- ${failedTest.unitName} - ${failedTest.name}`)
-				});
-				console.log(linesOfText.join("\n"), "color: red", "");
-			}
-		}
+		this.logFailures();
 	}
 	testUnit(unitName) {
 		this.assertionsRun = 0;
@@ -446,24 +431,7 @@ class Testing {
 		tests.forEach(test => {
 			test.result = test.getResult();
 		});
-		const failed = this.testsFailed();
-		const numFailed = failed.length;
-
-		if(numFailed === 0) {
-			console.log(`%cAll tests passed%c in unit ${unitName}`, "color: rgb(0, 192, 64)", "");
-		}
-		else {
-			if(numFailed === 1) {
-				console.log(`%c1 test failed%c in unit ${unitName}: ${failed[0].name}`, "color: red", "");
-			}
-			else {
-				const linesOfText = [`%c${numFailed} tests failed%c in unit ${unitName}`];
-				failed.forEach(failedTest => {
-					linesOfText.push(`- ${failedTest.name}`)
-				});
-				console.log(linesOfText.join("\n"), "color: red", "");
-			}
-		}
+		this.logFailures(unitName);
 	}
 	runTest(test) {
 		test.functionToRun();
@@ -514,6 +482,27 @@ class Testing {
 			});
 		});
 		console.log(linesOfText.join("\n"), ...styles);
+	}
+	logFailures(unitName = null) {
+		const failed = this.testsFailed();
+		const numFailed = failed.length;
+
+		const logSuffix = unitName === null ? "" : ` in unit ${unitName}`;
+		if(numFailed === 0) {
+			console.log(`%cAll tests passed%c${logSuffix}`, "color: rgb(0, 192, 64)", "");
+		}
+		else {
+			if(numFailed === 1) {
+				console.log(`%c1 test failed%c${logSuffix}: ${failed[0].name} (${failed[0].error.message})`, "color: red", "");
+			}
+			else {
+				const linesOfText = [`%c${numFailed} tests failed%c${logSuffix}`];
+				failed.forEach(failedTest => {
+					linesOfText.push(`- ${failedTest.name} (${failedTest.error.message})`)
+				});
+				console.log(linesOfText.join("\n"), "color: red", "");
+			}
+		}
 	}
 
 	tests() {
