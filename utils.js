@@ -498,7 +498,12 @@ class Testing {
 			else {
 				const linesOfText = [`%c${numFailed} tests failed%c${logSuffix}`];
 				failed.forEach(failedTest => {
-					linesOfText.push(`- ${failedTest.name} (${failedTest.error.message})`)
+					if(unitName) {
+						linesOfText.push(`- ${failedTest.name} (${failedTest.error.message})`)
+					}
+					else {
+						linesOfText.push(`- ${failedTest.unitName} - ${failedTest.name} (${failedTest.error.message})`)
+					}
 				});
 				console.log(linesOfText.join("\n"), "color: red", "");
 			}
