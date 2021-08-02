@@ -2247,12 +2247,14 @@ class CanvasIO {
 			this.parentElement.appendChild(this.canvas);
 			this.canvas.style.width = "100%";
 			this.canvas.style.height = "100%";
-			console.log(this.canvas);
-			new ResizeObserver(([entry]) => {
-				const rect = entry.contentRect;
-				this.canvas.width = rect.width;
-				this.canvas.height = rect.height;
-			}).observe(this.parentElement);
+			if(this.parentElement === document.body) {
+				this.canvas.width = window.innerWidth;
+				this.canvas.height = window.innerHeight;
+				window.addEventListener("resize", () => {
+					this.canvas.width = window.innerWidth;
+					this.canvas.height = window.innerHeight;
+				});
+			}
 		}
 	}
 }
