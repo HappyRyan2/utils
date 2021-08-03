@@ -408,9 +408,7 @@ class Testing {
 	}
 
 	testAll() {
-		this.assertionsRun = 0;
-		this.assertionsPassed = 0;
-		this.assertionsFailed = 0;
+		this.resetTests();
 
 		const tests = this.tests();
 		tests.forEach(test => {
@@ -419,9 +417,7 @@ class Testing {
 		this.logFailures();
 	}
 	testUnit(unitName) {
-		this.assertionsRun = 0;
-		this.assertionsPassed = 0;
-		this.assertionsFailed = 0;
+		this.resetTests();
 
 		const unit = this.units.find(u => u.unitName === unitName);
 		if(!unit) {
@@ -518,6 +514,18 @@ class Testing {
 	}
 	testsFailed() {
 		return this.tests().filter(t => t.result === false);
+	}
+
+	resetTests() {
+		this.assertionsRun = 0;
+		this.assertionsPassed = 0;
+		this.assertionsFailed = 0;
+		for(const unit of this.units) {
+			for(const test of unit.tests) {
+				test.error = null;
+				test.result = null;
+			}
+		}
 	}
 
 
