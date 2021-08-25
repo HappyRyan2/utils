@@ -200,6 +200,34 @@ testing.addUnit("Array.permutations()", {
 		]));
 	}
 });
+testing.addUnit("Array.isSorted", {
+	"returns true when the array is a list of numbers in ascending order": () => {
+		const array = [1, 2, 3, 5, 100];
+		const isSorted = array.isSorted();
+		expect(isSorted).toEqual(true);
+	},
+	"returns false when the array is not a list of numbers in ascending order": () => {
+		const array = [1, 2, 3, 5, 4, 100];
+		const isSorted = array.isSorted();
+		expect(isSorted).toEqual(false);
+	},
+	"returns true when the array is sorted according to the custom sort order": () => {
+		const array = ["a", "b", "foo", "insert word here"];
+		const wordLength = (a, b) => a.length - b.length;
+		const isSorted = array.isSorted(wordLength);
+		expect(isSorted).toEqual(true);
+	},
+	"returns false when the array is not sorted according to the custom sort order": () => {
+		const array = ["a", "foo", "b", "insert word here"];
+		const wordLength = (a, b) => a.length - b.length;
+		const isSorted = array.isSorted(wordLength);
+		expect(isSorted).toEqual(false);
+	},
+	"throws an error if no callback is provided and there is a non-number in the array": () => {
+		const array = ["foo", "bar"];
+		expect(() => array.isSorted()).toThrow();
+	}
+});
 
 testing.addUnit("Function.memoize()", {
 	"works for arguments that can be stringified": () => {

@@ -923,6 +923,26 @@ Array.method(function permutations() {
 	return permutations;
 });
 
+Array.method(function isSorted(callback) {
+	if(typeof callback === "function") {
+		for(let i = 0; i < this.length - 1; i ++) {
+			if(callback(this[i], this[i + 1]) > 0) { return false; }
+		}
+		return true;
+	}
+	else {
+		if(this.some(v => typeof v !== "number")) {
+			throw new Error("No callback provided; expected the array to contain only numbers.");
+		}
+		for(let i = 0; i < this.length - 1; i ++) {
+			if(this[i] > this[i + 1]) { return false; }
+		}
+		return true;
+	}
+});
+Array.SORT_ASCENDING = (a, b) => a - b;
+Array.SORT_DESCENDING = (a, b) => b - a;
+
 Number.method(function digits() {
 	const number = Math.abs(this);
 	if(number % 1 !== 0) {
