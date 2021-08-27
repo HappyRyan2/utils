@@ -1644,6 +1644,16 @@ testing.addUnit("Grid.columns()", {
 		]);
 	}
 });
+testing.addUnit("Grid.map()", {
+	"can map elements of one Grid to another": () => {
+		const grid = new Grid([ [1, 2], [3, 4] ]);
+		const mapped = grid.map((v, x, y) => v + x + y);
+		expect(mapped).toEqual(new Grid([
+			[1, 3],
+			[4, 6]
+		]));
+	}
+});
 
 testing.addUnit("Sequence constructor", {
 	"can create a sequence from a generator function": () => {

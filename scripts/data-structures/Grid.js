@@ -190,4 +190,11 @@ class Grid {
 		}
 		return false;
 	}
+	map(callback) {
+		const result = new Grid(this.width(), this.height());
+		this.forEach((value, x, y) => {
+			result.set(x, y, callback(value, x, y));
+		});
+		return result;
+	}
 }
