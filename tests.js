@@ -1668,6 +1668,21 @@ testing.addUnit("Grid.removeRow()", {
 		]))
 	}
 });
+testing.addUnit("Grid.removeColumn()", {
+	"can remove a column from the grid": () => {
+		const grid = new Grid([
+			[1, 2, 3],
+			[4, 5, 6],
+			[7, 8, 9]
+		]);
+		const result = grid.removeColumn(1);
+		expect(result).toEqual(new Grid([
+			[1, 3],
+			[4, 6],
+			[7, 9]
+		]))
+	}
+});
 
 testing.addUnit("Sequence constructor", {
 	"can create a sequence from a generator function": () => {
