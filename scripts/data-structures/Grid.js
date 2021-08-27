@@ -118,6 +118,12 @@ class Grid {
 		return false;
 	}
 
+	removeRow(rowIndex) {
+		const newRows = this.rows.map(row => row.map(v => v));
+		newRows.splice(rowIndex, 1);
+		return new Grid(newRows);
+	}
+
 	forEach(callback) {
 		for(let x = 0; x < this.width(); x ++) {
 			for(let y = 0; y < this.height(); y ++) {
