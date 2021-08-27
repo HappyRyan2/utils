@@ -1283,6 +1283,17 @@ class Grid {
 			throw new Error("When rotating grids, angle must be a multiple of 90 degrees.");
 		}
 	}
+	columns() {
+		const columns = [];
+		for(let x = 0; x < this.width(); x ++) {
+			columns.push([]);
+			for(let y = 0; y < this.height(); y ++) {
+				const value = this.get(x, y);
+				columns[columns.length - 1].push(value);
+			}
+		}
+		return columns;
+	}
 
 	containsGrid(grid) {
 		for(let gridX = 0; gridX <= this.width() - grid.width(); gridX ++) {

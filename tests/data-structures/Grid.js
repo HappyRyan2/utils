@@ -87,3 +87,16 @@ testing.addUnit("Grid.containsGrid()", {
 		expect(grid1.containsGrid(grid2)).toEqual(false);
 	}
 });
+testing.addUnit("Grid.columns()", {
+	"can return a list of the columns of the grid, as a 2D array": () => {
+		const grid = new Grid([
+			[1, 2],
+			[3, 4]
+		]);
+		const columns = grid.columns();
+		expect(columns).toEqual([
+			[1, 3],
+			[2, 4]
+		]);
+	}
+});
