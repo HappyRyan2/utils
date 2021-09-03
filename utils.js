@@ -553,14 +553,13 @@ class Testing {
 		}
 		this.assertionsPassed ++;
 	}
-	assertEqualApprox(value1, value2) {
+	assertEqualApprox(value1, value2, tolerance = 1e-12) {
 		this.assertionsRun ++;
 		if(Object.typeof(value1) !== "number" || Object.typeof(value2) !== "number") {
 			this.assertionsFailed ++;
 			throw new Error("arguments to assertEqualApprox() must be numbers. values of '" + value1 + "' or '" + value2 + "' are invalid.");
 		}
-		const MAXIMUM_DISTANCE = Math.pow(10, -12);
-		if(Math.dist(value1, value2) > MAXIMUM_DISTANCE) {
+		if(Math.dist(value1, value2) > tolerance) {
 			this.assertionsFailed ++;
 			throw new Error("assertion failed. expected " + value1 + " to be at least approximately equal to " + value2);
 		}
