@@ -382,6 +382,16 @@ testing.addUnit("Math.map()", {
 		expect(result).toEqual(3600);
 	}
 })
+testing.addUnit("Math.dist()", {
+	"can return the distance between two points": () => {
+		const distance = Math.dist(10, 10, 13, 14);
+		expect(distance).toEqual(5);
+	},
+	"can return the distance between two numbers": () => {
+		const distance = Math.dist(-3, 4);
+		expect(distance).toEqual(7);
+	}
+});
 
 testing.addUnit("Number.digits()", {
 	"correctly returns the digits of the number": () => {

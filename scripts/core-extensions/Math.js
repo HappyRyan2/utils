@@ -78,3 +78,16 @@ Math.areCoprime = function(a, b) {
 Math.map = function(val, min1, max1, min2, max2) {
 	return (val - min1) / (max1 - min1) * (max2 - min2) + min2;
 };
+Math.dist = function(...args) {
+	if(args.length === 2) {
+		const [a, b] = args;
+		return Math.abs(a - b);
+	}
+	else if(args.length === 4) {
+		const [x1, y1, x2, y2] = args;
+		return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+	}
+	else {
+		throw new Error("Invalid usage. Math.dist expects either two numbers or four numbers.");
+	}
+};
