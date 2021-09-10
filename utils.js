@@ -2266,6 +2266,10 @@ class Vector {
 		}
 	}
 
+	toString() {
+		return `(${this.x}, ${this.y})`;
+	}
+
 	get angle() {
 		/* angles are in degrees, counterclockwise from the positive x-axis, where positive y = down and positive x = right. */
 		const TO_DEGREES = 180 / Math.PI;

@@ -65,3 +65,10 @@ testing.addUnit("Vector magnitude getters / setters", {
 		expect(vector.y).toEqual(8);
 	}
 });
+testing.addUnit("Vector.toString()", {
+	"can return a string representation of the Vector": () => {
+		const vector = new Vector(123, 456);
+		const stringified = vector.toString();
+		expect(stringified).toEqual("(123, 456)");
+	}
+});
