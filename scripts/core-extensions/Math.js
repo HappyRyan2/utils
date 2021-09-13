@@ -21,18 +21,19 @@ Math.factorize = function(number, mode = "factors-list") {
 	if(mode === "factors-list") { result = []; }
 	else if(mode === "prime-exponents") { result = {}; }
 
-	for(let i = 2; i * i <= number; i ++) {
-		while(number % i === 0) {
+	number = BigInt(number);
+	for(let i = 2n; i * i <= number; i ++) {
+		while(number % i === 0n) {
 			number /= i;
-			if(mode === "factors-list") { result.push(i); }
+			if(mode === "factors-list") { result.push(Number(i)); }
 			else if(mode === "prime-exponents") {
 				result[i] ??= 0;
 				result[i] ++;
 			}
 		}
 	}
-	if(number !== 1) {
-		if(mode === "factors-list") { result.push(number); }
+	if(number != 1) {
+		if(mode === "factors-list") { result.push(Number(number)); }
 		else if(mode === "prime-exponents") {
 			result[number] ??= 0;
 			result[number] ++;

@@ -38,6 +38,14 @@ testing.addUnit("Math.factorize()", {
 	"can return an object containing the exponent on each prime": () => {
 		const result = Math.factorize(300, "prime-exponents");
 		expect(result).toEqual({ 2: 2, 3: 1, 5: 2 });
+	},
+	"can return a list of factors when the input is a BigInt": () => {
+		const result = Math.factorize(300n);
+		expect(result).toEqual([2, 2, 3, 5, 5]);
+	},
+	"can return an object containing the exponent on each prime when the input is a BigInt": () => {
+		const result = Math.factorize(300, "prime-exponents");
+		expect(result).toEqual({ 2: 2, 3: 1, 5: 2 });
 	}
 });
 testing.addUnit("Math.gcd()", {
