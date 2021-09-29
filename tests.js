@@ -2306,6 +2306,87 @@ testing.addUnit("Tree.iterate()", {
 			"ACB",
 			"ACC"
 		]);
+	},
+	"can iterate through the tree using a BFS algorithm": () => {
+		const ALPHABET = ["A", "B", "C"];
+		const getChildren = (string) => {
+			if(string.length < 3) {
+				return ALPHABET.map(char => string + char)
+			}
+			else { return []; }
+		};
+		const rootNode = "A";
+		const results = [];
+		for(const string of Tree.iterate(rootNode, getChildren, false, "bfs")) {
+			results.push(string);
+		}
+		expect(results).toEqual([
+			"A",
+			"AA",
+			"AB",
+			"AC",
+			"AAA",
+			"AAB",
+			"AAC",
+			"ABA",
+			"ABB",
+			"ABC",
+			"ACA",
+			"ACB",
+			"ACC",
+		]);
+	},
+	"can iterate through the leaves when using a BFS algorithm": () => {
+		const getChildren = (string) => (
+			string === "AB" ? [] :
+			string.length < 3 ? [string + "A", string + "B", string + "C"] :
+			[]
+		);
+		const results = [];
+		for(const string of Tree.iterate("A", getChildren, true, "bfs")) {
+			results.push(string);
+		}
+		expect(results).toEqual([
+			"AB",
+			"AAA", "AAB", "AAC",
+			"ACA", "ACB", "ACC"
+		]);
+	},
+	"can iterate through the tree when given a generator function and using a BFS algorithm": () => {
+		const getChildren = function*(str) {
+			if(str.length < 3) {
+				for(const char of ["A", "B", "C"]) { yield str + char; }
+			}
+		};
+		const result = [];
+		for(const string of Tree.iterate("A", getChildren, false, "bfs")) {
+			result.push(string);
+		}
+		expect(result).toEqual([
+			"A",
+			"AA",
+			"AB",
+			"AC",
+			"AAA", "AAB", "AAC",
+			"ABA", "ABB", "ABC",
+			"ACA", "ACB", "ACC"
+		]);
+	},
+	"can iterate through the leaves when using a BFS algorithm and when given a generator function": () => {
+		const getChildren = function*(str) {
+			if(str.length < 3 && str !== "AB") {
+				for(const char of ["A", "B", "C"]) { yield str + char; }
+			}
+		};
+		const results = [];
+		for(const string of Tree.iterate("A", getChildren, true, "bfs")) {
+			results.push(string);
+		}
+		expect(results).toEqual([
+			"AB",
+			"AAA", "AAB", "AAC",
+			"ACA", "ACB", "ACC"
+		]);
 	}
 });
 
