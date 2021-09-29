@@ -1421,15 +1421,23 @@ class Grid {
 class Tree {
 	static *iterate(root, getChildren, leavesOnly) {
 		const GeneratorFunction = (function*() {}).constructor;
-		if(getChildren instanceof GeneratorFunction) {
-			const stack = [];
-			stack.push({
-				value: root,
-				generator: getChildren(root),
-				numChildren: 0
-			});
-			if(!leavesOnly) { yield root; }
-			while(stack.length !== 0) {
+		if(!(getChildren instanceof GeneratorFunction)) {
+			const generatorFunc = function*(value) {
+				for(const nextChild of getChildren(value)) { yield nextChild; }
+			};
+			for(const value of Tree.iterate(root, generatorFunc, leavesOnly)) {
+				yield value;
+			}
+			return;
+		}
+		const stack = [];
+		stack.push({
+			value: root,
+			generator: getChildren(root),
+			numChildren: 0
+		});
+		if(!leavesOnly) { yield root; }
+		while(stack.length !== 0) {
 				const lastItem = stack[stack.length - 1];
 				const next = lastItem.generator.next();
 				if(next.done) {
@@ -1448,36 +1456,6 @@ class Tree {
 				});
 				if(!leavesOnly) { yield value; }
 			}
-		}
-		else {
-			const stack = [];
-			stack.push({
-				item: root,
-				children: getChildren(root),
-				childIndex: 0
-			});
-			if(stack[0].children.length === 0 || !leavesOnly) {
-				yield stack[0].item;
-			}
-			while(stack.length !== 0) {
-			const lastItem = stack[stack.length - 1];
-			if(lastItem.childIndex >= lastItem.children.length) {
-				stack.pop();
-				continue;
-			}
-			const nextChild = lastItem.children[lastItem.childIndex];
-			const childrenOfChild = getChildren(nextChild);
-			if(childrenOfChild.length === 0 || !leavesOnly) {
-				yield nextChild;
-			}
-			stack.push({
-				item: nextChild,
-				children: childrenOfChild ?? [],
-				childIndex: 0
-			});
-			lastItem.childIndex ++;
-		}
-		}
 	}
 
 	constructor(root, getChildren) {
