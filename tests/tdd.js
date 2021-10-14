@@ -1,87 +1,61 @@
 /* Meta-tests for the testing library. */
 
 
-(() => {
-	const increment = (value) => {
-		/*
-		This is a simple function that will be tested in order to test the testing library.
-		*/
-		if(value % 2 === 0) {
-			throw new Error("Uh oh!");
-		}
-		return value + 1;
-	};
-
-	testing.addUnit("TestUnit constructor", {
-		"can create a unit with auto-named tests from a list of functions": () => {
-			const unit = new TestUnit("increment()", [
-				() => {
-					const result = increment(1);
-					expect(result).toEqual(2);
-				},
-				() => {
-					/* this test will fail - see the intentionally bad implementation of increment() above */
-					const result = increment(2);
-					expect(result).toEqual(3);
-				}
-			]);
-			expect(unit.unitName).toEqual("increment()");
-			expect(unit.findTest("test case 1").getResult()).toEqual(true);
-			expect(unit.findTest("test case 2").getResult()).toEqual(false);
-		},
-		"can create a unit with custom-named tests from an object with functions as properties": () => {
-			const unit = new TestUnit("increment()", {
-				"test case foo": () => {
-					const result = increment(1);
-					expect(result).toEqual(2);
-				},
-				"test case bar": () => {
-					/* this test will fail - see the intentionally bad implementation of increment() above */
-					const result = increment(2);
-					expect(result).toEqual(3);
-				}
-			});
-			expect(unit.unitName).toEqual("increment()");
-			expect(unit.findTest("test case foo").getResult()).toEqual(true);
-			expect(unit.findTest("test case bar").getResult()).toEqual(false);
-		},
-		"can create a unit with auto-generated tests from an array of inputs and outputs - ordinary syntax": () => {
-			const unit = new TestUnit("increment()", [
-				increment,
-
-				/* first test case: increment(1) === 2 */
-				[1, 2],
-				/* this 2nd test will fail - see the intentionally bad implementation of increment() above */
-				[2, 3]
-			]);
-			expect(unit.unitName).toEqual("increment()");
-			expect(unit.findTest("test case 1").getResult()).toEqual(true);
-			expect(unit.findTest("test case 2").getResult()).toEqual(false);
-		},
-		"can create a unit with auto-generated tests from an array of inputs and outputs - alternative syntax": () => {
-			const unit = new TestUnit("increment()", increment, [
-				/* first test case: increment(1) === 2 */
-				[1, 2],
-				/* this 2nd test will fail - see the intentionally bad implementation of increment() above */
-				[2, 3]
-			]);
-			expect(unit.unitName).toEqual("increment()");
-			expect(unit.findTest("test case 1").getResult()).toEqual(true);
-			expect(unit.findTest("test case 2").getResult()).toEqual(false);
-		},
-		"can create a unit with custom-named but auto-generated tests": () => {
-			const unit = new TestUnit("increment()", increment, {
-				/* first test case: increment(1) === 2 */
-				"test case foo": [1, 2],
-				/* this 2nd test will fail - see the intentionally bad implementation of increment() above */
-				"test case bar": [2, 3]
-			});
-			expect(unit.unitName).toEqual("increment()");
-			expect(unit.findTest("test case foo").getResult()).toEqual(true);
-			expect(unit.findTest("test case bar").getResult()).toEqual(false);
-		}
-	});
-}) ();
+testing.addUnit("TestUnit constructor", {
+	"can create a unit with auto-named tests from a list of functions": () => {
+		const unit = new TestUnit("unit-name", [
+			() => { },
+			() => { throw new Error("test failed"); }
+		]);
+		expect(unit.unitName).toEqual("unit-name");
+		expect(unit.findTest("test case 1").getResult()).toEqual(true);
+		expect(unit.findTest("test case 2").getResult()).toEqual(false);
+	},
+	"can create a unit with custom-named tests from an object with functions as properties": () => {
+		const unit = new TestUnit("unit-name", {
+			"test case foo": () => { },
+			"test case bar": () => { throw new Error("test failed"); }
+		});
+		expect(unit.unitName).toEqual("unit-name");
+		expect(unit.findTest("test case foo").getResult()).toEqual(true);
+		expect(unit.findTest("test case bar").getResult()).toEqual(false);
+	},
+	"can create a unit with auto-generated tests from an array of inputs and outputs - ordinary syntax": () => {
+		const increment = (num) => num + 1;
+		const unit = new TestUnit("unit-name", [
+			increment,
+			[1, 2], // test passes
+			[2, 3], // test passes
+			[3, 100] // test fails
+		]);
+		expect(unit.unitName).toEqual("unit-name");
+		expect(unit.findTest("test case 1").getResult()).toEqual(true);
+		expect(unit.findTest("test case 2").getResult()).toEqual(true);
+		expect(unit.findTest("test case 3").getResult()).toEqual(false);
+	},
+	"can create a unit with auto-generated tests from an array of inputs and outputs - alternative syntax": () => {
+		const increment = (num) => num + 1;
+		const unit = new TestUnit("unit-name", increment, [
+			[1, 2], // test passes
+			[2, 3], // test passes
+			[3, 100] // test fails
+		]);
+		expect(unit.unitName).toEqual("unit-name");
+		expect(unit.findTest("test case 1").getResult()).toEqual(true);
+		expect(unit.findTest("test case 2").getResult()).toEqual(true);
+		expect(unit.findTest("test case 3").getResult()).toEqual(false);
+	},
+	"can create a unit with custom-named but auto-generated tests": () => {
+		const increment = (num) => num + 1;
+		const unit = new TestUnit("increment()", increment, {
+			"test that passes": [1, 2],
+			"test that fails": [2, 100],
+		});
+		expect(unit.unitName).toEqual("increment()");
+		expect(unit.findTest("test that passes").getResult()).toEqual(true);
+		expect(unit.findTest("test that fails").getResult()).toEqual(false);
+	}
+});
 testing.addUnit("expect()", {
 	"toEqual() works for primitives": () => {
 		expect(123).toEqual(123);
