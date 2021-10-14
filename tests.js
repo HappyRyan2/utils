@@ -3011,6 +3011,130 @@ testing.addUnit("expect()", {
 		});
 	}
 });
+testing.addUnit("Testing.testAll()", {
+	"correctly runs the tests and logs the output when all the tests pass": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that passes": () => { },
+			"other test that passes": () => { },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.testAll(output);
+		expect(results).toEqual([
+			["%cAll tests passed!", "color: rgb(0, 192, 64)"]
+		]);
+	},
+	"correctly runs the tests and logs the output when one test fails": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that passes": () => { },
+			"test that fails": () => { throw new Error("error message"); },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.testAll(output);
+		expect(results).toEqual([
+			["%c1 test failed%c: Unit 1 - test that fails (Error: error message)", "color: red;", ""]
+		]);
+	},
+	"correctly runs the tests and logs the output when multiple tests fail": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that fails": () => { throw new Error("error message 1"); },
+			"another test that fails": () => { throw new Error("error message 2"); },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.testAll(output);
+		expect(results).toEqual([[
+			"%c2 tests failed%c:\n- Unit 1 - test that fails (Error: error message 1)\n- Unit 1 - another test that fails (Error: error message 2)",
+			"color: red;", ""
+		]]);
+	}
+});
+testing.addUnit("Testing.testUnit()", {
+	"correctly runs the tests and logs the output when all the tests pass": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that passes": () => { },
+			"other test that passes": () => { },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.testUnit("Unit 1", output);
+		expect(results).toEqual([
+			["%cAll tests passed%c in unit Unit 1", "color: rgb(0, 192, 64)", ""]
+		]);
+	},
+	"correctly runs the tests and logs the output when one test fails": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that passes": () => { },
+			"test that fails": () => { throw new Error("test failed"); },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.testUnit("Unit 1", output);
+		expect(results).toEqual([
+			["%c1 test failed%c in unit Unit 1: test that fails (Error: test failed)", "color: red", ""]
+		]);
+	},
+	"correctly runs the tests and logs the output when multiple tests failed": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that fails": () => { throw new Error("error message 1"); },
+			"another test that fails": () => { throw new Error("error message 2"); },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.testUnit("Unit 1", output);
+		expect(results).toEqual([
+			["%c2 tests failed%c in unit Unit 1:\n- test that fails (Error: error message 1)\n- another test that fails (Error: error message 2)", "color: red;", ""]
+		]);
+	},
+});
+testing.addUnit("Testing.runTestByName()", {
+	"correctly runs the test and logs the output when the test passes": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that passes": () => { },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.runTestByName("Unit 1 - test that passes", output);
+		expect(results).toEqual([[
+			"%cTest passed: %cUnit 1 - test that passes", "color: rgb(0, 192, 64)", ""
+		]]);
+	},
+	"correctly finds the test when given a test name without a unit name": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that passes": () => { },
+		});
+		const results = [];
+		const output = { log: (...args) => results.push([...args]) };
+		fixture.runTestByName("test that passes", output);
+		expect(results).toEqual([[
+			"%cTest passed: %cUnit 1 - test that passes", "color: rgb(0, 192, 64)", ""
+		]]);
+	},
+	"throws the error when the test fails": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that fails": () => { throw new Error("error message 1"); },
+		});
+		let threwError = false;
+		try {
+			fixture.runTestByName("test that fails");
+		}
+		catch(e) {
+			threwError = true;
+			expect(e.message).toEqual("error message 1");
+		}
+		expect(threwError).toEqual(true);
+	}
+});
 
 testing.addUnit("Vector constructor", {
 	"can create a Vector from x and y coordinates": () => {
