@@ -9,6 +9,7 @@ class Test {
 		let passed = true;
 		try {
 			this.functionToRun();
+			this.error = null;
 		}
 		catch (error) {
 			passed = false;

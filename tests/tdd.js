@@ -1,6 +1,31 @@
 /* Meta-tests for the testing library. */
 
-
+testing.addUnit("Test.getResult()", {
+	"returns true for a test that passes": () => {
+		const test = new Test(() => {}, "example-test");
+		expect(test.getResult()).toEqual(true);
+	},
+	"returns false for a test that fails": () => {
+		const test = new Test(
+			() => { throw new Error("test failed"); },
+			"example-test"
+		);
+		expect(test.getResult()).toEqual(false);
+	},
+	"sets the `error` property on the Test object when it fails": () => {
+		const test = new Test(() => {
+			throw new Error("test failed");
+		}, "example-test");
+		test.getResult();
+		expect(test.error).toInstantiate(Error);
+	},
+	"sets the `error` property on the Test object to null when it passes": () => {
+		const test = new Test(() => {}, "example-test");
+		test.error = "foo";
+		test.getResult();
+		expect(test.error).toEqual(null);
+	}
+});
 testing.addUnit("TestUnit constructor", {
 	"can create a unit with auto-named tests from a list of functions": () => {
 		const unit = new TestUnit("unit-name", [
