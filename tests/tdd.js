@@ -26,6 +26,22 @@ testing.addUnit("Test.getResult()", {
 		expect(test.error).toEqual(null);
 	}
 });
+testing.addUnit("Test.autoGenerateName()", {
+	"can generate a test name from the function name": () => {
+		const increment = function increment(num) { return num + 1; };
+		const result = Test.autoGenerateName([1], 2, increment, "unit-name");
+		expect(result).toEqual("increment(1) should return 2");
+	},
+	"can generate a test name from the unit name": () => {
+		const increment = (num) => num + 1;
+		const result = Test.autoGenerateName([1], 2, increment, "increment()");
+		expect(result).toEqual("increment(1) should return 2");
+	},
+	"can generate a test name when the function name cannot be identified": () => {
+		const result = Test.autoGenerateName([1], 2, num => num + 1, "unit-name");
+		expect(result).toEqual("it should return 2 when given an input of 1");
+	}
+});
 testing.addUnit("TestUnit constructor", {
 	"can create a unit with auto-named tests from a list of functions": () => {
 		const unit = new TestUnit("unit-name", [
@@ -54,21 +70,21 @@ testing.addUnit("TestUnit constructor", {
 			[3, 100] // test fails
 		]);
 		expect(unit.unitName).toEqual("unit-name");
-		expect(unit.findTest("test case 1").getResult()).toEqual(true);
-		expect(unit.findTest("test case 2").getResult()).toEqual(true);
-		expect(unit.findTest("test case 3").getResult()).toEqual(false);
+		expect(unit.findTest("increment(1) should return 2").getResult()).toEqual(true);
+		expect(unit.findTest("increment(2) should return 3").getResult()).toEqual(true);
+		expect(unit.findTest("increment(3) should return 100").getResult()).toEqual(false);
 	},
 	"can create a unit with auto-generated tests from an array of inputs and outputs - alternative syntax": () => {
 		const increment = (num) => num + 1;
-		const unit = new TestUnit("unit-name", increment, [
+		const unit = new TestUnit("increment()", increment, [
 			[1, 2], // test passes
 			[2, 3], // test passes
 			[3, 100] // test fails
 		]);
-		expect(unit.unitName).toEqual("unit-name");
-		expect(unit.findTest("test case 1").getResult()).toEqual(true);
-		expect(unit.findTest("test case 2").getResult()).toEqual(true);
-		expect(unit.findTest("test case 3").getResult()).toEqual(false);
+		expect(unit.unitName).toEqual("increment()");
+		expect(unit.findTest("increment(1) should return 2").getResult()).toEqual(true);
+		expect(unit.findTest("increment(2) should return 3").getResult()).toEqual(true);
+		expect(unit.findTest("increment(3) should return 100").getResult()).toEqual(false);
 	},
 	"can create a unit with custom-named but auto-generated tests": () => {
 		const increment = (num) => num + 1;

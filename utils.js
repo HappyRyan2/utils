@@ -1,4 +1,40 @@
 class Test {
+	static autoGenerateName(input, expectedOutput, func, unitName) {
+		let funcName = null;
+		const GET_FUNCTION_NAME = /^(\w+)\(\)$/;
+		if(func.name !== "") {
+			funcName = func.name;
+		}
+		else if(GET_FUNCTION_NAME.test(unitName)) {
+			[funcName] = GET_FUNCTION_NAME.exec(unitName);
+		}
+		const toString = (obj) => {
+			const result = (
+				obj instanceof Array ? `[${obj.map(v => toString(v)).join(", ")}]` :
+				obj instanceof Set ? `{${[...obj].map(v => toString(v)).join(", ")}}` :
+				typeof obj === "string" ? `"${obj}"` :
+				`${obj}`
+			);
+			return (result.length < 30 ? result : `${obj}`);
+		};
+		const inputsStringified = input.map(toString).join(", ");
+		if(funcName != null) {
+			return `${funcName}(${inputsStringified}) should return ${toString(expectedOutput)}`;
+		}
+		else {
+			return `it should return ${toString(expectedOutput)} when given an input of ${inputsStringified}`;
+		}
+	}
+	static createTest(input, expectedOutput, func, unitName) {
+		return new Test(
+			() => {
+				const result = func(...input);
+				expect(result).toEqual(expectedOutput);
+			},
+			Test.autoGenerateName(input, expectedOutput, func, unitName)
+		);
+	}
+
 	constructor(functionToRun, name) {
 		this.functionToRun = functionToRun;
 		this.name = name;
@@ -29,16 +65,12 @@ class TestUnit {
 			}
 			else if(typeof arguments[1][0] === "function" && arguments[1].slice(1).every(Array.isArray)) {
 				const [unitName, [functionToRun, ...testCases]] = arguments;
-				const tests = testCases.map(testCase => {
+				this.tests = testCases.map(testCase => {
 					const input = testCase.slice(0, testCase.length - 1);
 					const expectedOutput = testCase[testCase.length - 1];
-					return () => {
-						const result = functionToRun(...input);
-						expect(result).toEqual(expectedOutput);
-					};
+					return Test.createTest(input, expectedOutput, functionToRun, unitName);
 				});
 				this.unitName = unitName;
-				this.tests = tests.map((func, index) => new Test(func, `test case ${index + 1}`));
 			}
 		}
 		else if(typeof arguments[1] === "function" && !Array.isArray(arguments[2]) && Object.keys(arguments[2]).every(key => Array.isArray(arguments[2][key]))) {
@@ -58,16 +90,12 @@ class TestUnit {
 		}
 		else if(typeof arguments[1] === "function" && arguments[2].every(Array.isArray)) {
 			const [unitName, functionToRun, testCases] = arguments;
-			const tests = testCases.map(testCase => {
+			this.tests = testCases.map(testCase => {
 				const input = testCase.slice(0, testCase.length - 1);
 				const expectedOutput = testCase[testCase.length - 1];
-				return () => {
-					const result = functionToRun(...input);
-					expect(result).toEqual(expectedOutput);
-				};
+				return Test.createTest(input, expectedOutput, functionToRun, unitName);
 			});
 			this.unitName = unitName;
-			this.tests = tests.map((func, index) => new Test(func, `test case ${index + 1}`));
 		}
 		else if(arguments[1] instanceof Object) {
 			if(Object.keys(arguments[1]).every(testName => typeof arguments[1][testName] === "function")) {
