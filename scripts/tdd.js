@@ -512,6 +512,34 @@ class Testing {
 			}
 		}
 	}
+	run(input, output = console) {
+		if(input instanceof Test) {
+			this.runTest(input, output);
+		}
+		else if(input instanceof TestUnit) {
+			this.testUnit(input.unitName, output);
+		}
+		else if(typeof input === "string") {
+			const unit = this.units.find(u => u.unitName === input);
+			const test1 = this.tests().find(t => t.name === input);
+			const test2 = this.tests().find(t => `${t.unitName} - ${t.name}` === input);
+			if(unit) {
+				this.testUnit(unit.unitName, output);
+			}
+			else if(test1) {
+				this.runTestByName(`${test1.unitName} - ${test1.name}`, output);
+			}
+			else if(test2) {
+				this.runTestByName(`${test2.unitName} - ${test2.name}`, output);
+			}
+			else {
+				throw new Error(`No results found for query '${input}'.`);
+			}
+		}
+		else {
+			this.testAll(output);
+		}
+	}
 
 	logTests() {
 		/* prints all tests to the console, with their results (pass / fail). */

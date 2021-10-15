@@ -693,3 +693,67 @@ testing.addUnit("Testing.runTestByName()", {
 		expect(threwError).toEqual(true);
 	}
 });
+(() => {
+	const fixture = new Testing();
+	let testsRun = [];
+	fixture.addUnit("Unit A", {
+		"test case 1": () => testsRun.push("A1"),
+		"test case 2": () => testsRun.push("A2")
+	});
+	fixture.addUnit("Unit B", {
+		"test case 1": () => testsRun.push("B1"),
+		"test case 2": () => testsRun.push("B2")
+	});
+	let logs = [];
+	const output = { log: (...input) => logs.push(input) };
+	testing.addUnit("Testing.run()", {
+		"can run one test when the test is provided": () => {
+			logs = [], testsRun = [];
+			fixture.run(fixture.tests()[0], output);
+			expect(logs).toEqual([
+				[`%cTest passed: %cUnit A - test case 1`, "color: rgb(0, 192, 64)", ""]
+			]);
+			expect(testsRun).toEqual(["A1"]);
+		},
+		"can run one unit when the unit is provided": () => {
+			logs = [], testsRun = [];
+			fixture.run(fixture.units[1], output);
+			expect(logs).toEqual([
+				[`%cAll tests passed%c in unit Unit B`, "color: rgb(0, 192, 64)", ""]
+			]);
+			expect(testsRun).toEqual(["B1", "B2"]);
+		},
+		"can run one unit when the unit name is provided": () => {
+			logs = [], testsRun = [];
+			fixture.run("Unit A", output);
+			expect(logs).toEqual([
+				[`%cAll tests passed%c in unit Unit A`, "color: rgb(0, 192, 64)", ""]
+			]);
+			expect(testsRun).toEqual(["A1", "A2"]);
+		},
+		"can run one test when the test name is provided": () => {
+			logs = [], testsRun = [];
+			fixture.run("test case 1", output);
+			expect(logs).toEqual([
+				[`%cTest passed: %cUnit A - test case 1`, "color: rgb(0, 192, 64)", ""]
+			]);
+			expect(testsRun).toEqual(["A1"]);
+		},
+		"can run one test when the test name and unit name are provided": () => {
+			logs = [], testsRun = [];
+			fixture.run("Unit B - test case 1", output);
+			expect(logs).toEqual([
+				[`%cTest passed: %cUnit B - test case 1`, "color: rgb(0, 192, 64)", ""]
+			]);
+			expect(testsRun).toEqual(["B1"]);
+		},
+		"can run all the tests when called without arguments": () => {
+			logs = [], testsRun = [];
+			fixture.run(undefined, output);
+			expect(logs).toEqual([
+				[`%cAll tests passed!`, "color: rgb(0, 192, 64)"]
+			]);
+			expect(testsRun).toEqual(["A1", "A2", "B1", "B2"]);
+		},
+	});
+}) ();
