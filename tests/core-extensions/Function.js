@@ -51,5 +51,10 @@ testing.addUnit("Function.memoize()", {
 		expect(timesRun).toEqual(1);
 		expect(result1).toNotStrictlyEqual(result2);
 		expect(result2).toNotStrictlyEqual(result3);
+	},
+	"sets the name to be myFunction (memoized)": () => {
+		const myFunction = (argument) => { };
+		const result = myFunction.memoize();
+		expect(result.name).toEqual(`${myFunction.name} (memoized)`);
 	}
 });

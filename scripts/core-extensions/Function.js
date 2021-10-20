@@ -16,29 +16,34 @@ Function.method(function memoize(stringifyKeys = false, cloneOutput = false) {
 	*/
 	const map = new Map();
 	const func = this;
+	const name = `${this.name || "(anonymous)"} (memoized)`;
 	if(stringifyKeys) {
-		return function() {
-			const stringified = [...arguments].toString();
-			if(map.has(stringified)) {
-				const result = map.get(stringified);
-				return cloneOutput ? ((typeof result === "object" && result != null) ? result.clone() : result) : result;
-			}
+		return {
+			[name]: function() {
+				const stringified = [...arguments].toString();
+				if(map.has(stringified)) {
+					const result = map.get(stringified);
+					return cloneOutput ? ((typeof result === "object" && result != null) ? result.clone() : result) : result;
+				}
 
-			const result = func.apply(this, arguments);
-			map.set(stringified, result);
-			return result;
-		};
+				const result = func.apply(this, arguments);
+				map.set(stringified, result);
+				return result;
+			}
+		}[name];
 	}
 	else {
-		return function() {
-			for(let [key, value] of map.entries()) {
-				if([...key].every((val, i) => val === arguments[i])) {
-					return cloneOutput ? ((typeof value === "object" && value != null) ? value.clone() : value) : value;;
+		return {
+			[name]: function() {
+				for(let [key, value] of map.entries()) {
+					if([...key].every((val, i) => val === arguments[i])) {
+						return cloneOutput ? ((typeof value === "object" && value != null) ? value.clone() : value) : value;;
+					}
 				}
+				const result = func.apply(this, arguments);
+				map.set(arguments, result);
+				return result;
 			}
-			const result = func.apply(this, arguments);
-			map.set(arguments, result);
-			return result;
-		};
+		}[name];
 	}
 });
