@@ -692,6 +692,7 @@ Function.method(function memoize(stringifyKeys = false, cloneOutput = false) {
 	However, not all arguments can be stringified without information loss (think of all the "[object Object]"s! Oh no!). If your arguments are like this, then do not use this feature.
 	*/
 	const map = new Map();
+	Function.prototype.memoize.maps.push(map);
 	const func = this;
 	const name = `${this.name || "(anonymous)"} (memoized)`;
 	if(stringifyKeys) {
@@ -724,6 +725,13 @@ Function.method(function memoize(stringifyKeys = false, cloneOutput = false) {
 		}[name];
 	}
 });
+Function.prototype.memoize.maps = [];
+Function.prototype.memoize.clear = function() {
+	/* clears the cached results in ALL memoized functions. */
+	for(const map of Function.prototype.memoize.maps) {
+		map.clear();
+	}
+};
 
 Object.method(function clone() {
 	let clone;

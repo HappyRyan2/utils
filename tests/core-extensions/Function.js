@@ -56,5 +56,24 @@ testing.addUnit("Function.memoize()", {
 		const myFunction = (argument) => { };
 		const result = myFunction.memoize();
 		expect(result.name).toEqual(`${myFunction.name} (memoized)`);
+	},
+	"can clear the caches of all memoized functions": () => {
+		let timesRun = 0;
+		const increment = (num => {
+			timesRun ++;
+			return num + 1;
+		}).memoize(true);
+
+		expect(increment(1)).toEqual(2);
+		expect(increment(1)).toEqual(2);
+		expect(increment(1)).toEqual(2);
+		expect(timesRun).toEqual(1);
+
+		Function.prototype.memoize.clear();
+
+		expect(increment(1)).toEqual(2);
+		expect(increment(1)).toEqual(2);
+		expect(increment(1)).toEqual(2);
+		expect(timesRun).toEqual(2);
 	}
 });
