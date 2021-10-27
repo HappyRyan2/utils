@@ -2568,6 +2568,18 @@ testing.addUnit("TestUnit constructor", {
 		expect(unit.findTest("increment(2) should return 3").getResult()).toEqual(true);
 		expect(unit.findTest("increment(3) should return 100").getResult()).toEqual(false);
 	},
+	"can create a unit with auto-generated tests where the unit name is inferred from the function name": () => {
+		const increment = (num) => num + 1;
+		const unit = new TestUnit(increment, [
+			[1, 2], // test passes
+			[2, 3], // test passes
+			[3, 100] // test fails
+		]);
+		expect(unit.unitName).toEqual("increment()");
+		expect(unit.findTest("increment(1) should return 2").getResult()).toEqual(true);
+		expect(unit.findTest("increment(2) should return 3").getResult()).toEqual(true);
+		expect(unit.findTest("increment(3) should return 100").getResult()).toEqual(false);
+	},
 	"can create a unit with custom-named but auto-generated tests": () => {
 		const increment = (num) => num + 1;
 		const unit = new TestUnit("increment()", increment, {

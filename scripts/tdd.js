@@ -63,8 +63,18 @@ class TestUnit {
 				this.unitName = unitName;
 				this.tests = tests.map((functionToRun, index) => new Test(functionToRun, `test case ${index + 1}`));
 			}
-			else if(typeof arguments[1][0] === "function" && arguments[1].slice(1).every(Array.isArray)) {
+			else if(typeof arguments[0] === "string" && typeof arguments[1][0] === "function" && arguments[1].slice(1).every(Array.isArray)) {
 				const [unitName, [functionToRun, ...testCases]] = arguments;
+				this.tests = testCases.map(testCase => {
+					const input = testCase.slice(0, testCase.length - 1);
+					const expectedOutput = testCase[testCase.length - 1];
+					return Test.createTest(input, expectedOutput, functionToRun, unitName);
+				});
+				this.unitName = unitName;
+			}
+			else if(typeof arguments[0] === "function") {
+				const [functionToRun, testCases] = arguments;
+				const unitName = functionToRun.name.includes("(") ? functionToRun.name : `${functionToRun.name}()`;
 				this.tests = testCases.map(testCase => {
 					const input = testCase.slice(0, testCase.length - 1);
 					const expectedOutput = testCase[testCase.length - 1];
