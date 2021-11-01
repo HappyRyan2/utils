@@ -2481,6 +2481,46 @@ testing.addUnit("utils.binarySearch()", {
 		expect(result).toEqual(5n);
 	}
 });
+testing.addUnit("utils.toString()", {
+	"can convert a string to a string with quotes": () => {
+		const result = utils.toString(`hello`);
+		expect(result).toEqual(`"hello"`);
+	},
+	"can convert a long string to '[object String]'": () => {
+		const result = utils.toString("a very long string", 5);
+		expect(result).toEqual("[object String]");
+	},
+	"can convert an Array to a string": () => {
+		const result = utils.toString([1, 2, 3]);
+		expect(result).toEqual(`[1, 2, 3]`);
+	},
+	"can convert a Set to a string": () => {
+		const result = utils.toString(new Set([1, 2, 3]));
+		expect(result).toEqual(`{1, 2, 3}`);
+	},
+	"can convert a recursive Array structure to a string": () => {
+		const result = utils.toString([1, [2, 3], new Set(["a", "b"])]);
+		expect(result).toEqual(`[1, [2, 3], {"a", "b"}]`);
+	},
+	"can create a shorter string representation of an Array": () => {
+		const result = utils.toString([1, [2, 3, 4, 5, 6, 7, 8], 9], 25);
+		expect(result).toEqual("[1, [object Array], 9]");
+	},
+	"can create a much shorter string representation of an Array": () => {
+		const result = utils.toString([1, [2, 3, 4, 5, 6, 7, 8], 9], 10);
+		expect(result).toEqual("[object Array]");
+	},
+	"can create a shorter string representation of a Set": () => {
+		const obj = new Set([1, new Set([2, 3, 4, 5, 6, 7, 8]), 9]);
+		const result = utils.toString(obj, 25);
+		expect(result).toEqual("{1, [object Set], 9}");
+	},
+	"can create a much shorter string representation of a Set": () => {
+		const obj = new Set([1, new Set([2, 3, 4, 5, 6, 7, 8]), 9]);
+		const result = utils.toString(obj, 10);
+		expect(result).toEqual("[object Set]");
+	},
+});
 
 testing.addUnit("Test.getResult()", {
 	"returns true for a test that passes": () => {
