@@ -2464,7 +2464,10 @@ utils.toString = (obj, maxLength = Infinity) => {
 	- Strings: return the string WITH QUOTES, or "[object String]" if too long and "[object String]" is shorter
 	- Other objects: call default toString; return "[object ObjectType]" if default is too long and if "[object ObjectType]" is shorter
 	*/
-	if(obj instanceof Array || obj instanceof Set) {
+	if(obj === undefined || obj === null) {
+		return `${obj}`;
+	}
+	else if(obj instanceof Array || obj instanceof Set) {
 		const result = [...obj].map(v => utils.toString(v)).join(", ");
 		if(result.length + 2 <= maxLength) {
 			return obj instanceof Array ? `[${result}]` : `{${result}}`;
@@ -2472,7 +2475,7 @@ utils.toString = (obj, maxLength = Infinity) => {
 		else {
 			const shorterResult = [...obj].map(v => {
 				const string1 = utils.toString(v);
-				const string2 = `[object ${v.constructor.name}]`;
+				const string2 = (v == null) ? `${v}` : `[object ${v.constructor.name}]`;
 				return string1.length <= string2.length ? string1 : string2;
 			}).join(", ");
 			if(shorterResult.length + 2 <= maxLength) {

@@ -75,4 +75,16 @@ testing.addUnit("utils.toString()", {
 		const result = utils.toString(obj, 10);
 		expect(result).toEqual("[object Set]");
 	},
+	"can convert undefined to a string": () => {
+		const result = utils.toString(undefined);
+		expect(result).toEqual("undefined");
+	},
+	"can convert null to a string": () => {
+		const result = utils.toString(null);
+		expect(result).toEqual("null");
+	},
+	"can convert an Array containing null and undefined to a string": () => {
+		const result = utils.toString([null, undefined, null], 5);
+		expect(result).toEqual("[object Array]");
+	}
 });
