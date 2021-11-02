@@ -347,6 +347,10 @@ testing.addUnit("Math.logBase()", {
 	"works for non-integer results": () => {
 		const result = Math.logBase(2, 10);
 		expect(result).toApproximatelyEqual(Math.log2(10));
+	},
+	"returns exact results when the input and output are integers": () => {
+		const result = Math.logBase(3, 9);
+		expect(result).toEqual(2); // 2, not 2.0000000000000004
 	}
 });
 testing.addUnit("Math.divisors()", {

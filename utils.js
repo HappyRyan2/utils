@@ -1174,7 +1174,11 @@ Set.method(function onlyItem() {
 });
 
 Math.logBase = function(base, number) {
-	return Math.log(number) / Math.log(base);
+	const result = Math.log(number) / Math.log(base);
+	if(base % 1 === 0 && number % 1 === 0 && base ** Math.round(result) === number) {
+		return Math.round(result); // return exact results for integer inputs + outputs
+	}
+	return result;
 };
 Math.divisors = function(number) {
 	/*
