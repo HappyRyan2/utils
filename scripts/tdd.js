@@ -8,21 +8,13 @@ class Test {
 		else if(GET_FUNCTION_NAME.test(unitName)) {
 			[funcName] = GET_FUNCTION_NAME.exec(unitName);
 		}
-		const toString = (obj) => {
-			const result = (
-				obj instanceof Array ? `[${obj.map(v => toString(v)).join(", ")}]` :
-				obj instanceof Set ? `{${[...obj].map(v => toString(v)).join(", ")}}` :
-				typeof obj === "string" ? `"${obj}"` :
-				`${obj}`
-			);
-			return (result.length < 30 ? result : `${obj}`);
-		};
-		const inputsStringified = input.map(toString).join(", ");
+		const MAX_LENGTH = 30;
+		const inputsStringified = input.map(v => utils.toString(v, MAX_LENGTH)).join(", ");
 		if(funcName != null) {
-			return `${funcName}(${inputsStringified}) should return ${toString(expectedOutput)}`;
+			return `${funcName}(${inputsStringified}) should return ${utils.toString(expectedOutput, MAX_LENGTH)}`;
 		}
 		else {
-			return `it should return ${toString(expectedOutput)} when given an input of ${inputsStringified}`;
+			return `it should return ${utils.toString(expectedOutput, MAX_LENGTH)} when given an input of ${inputsStringified}`;
 		}
 	}
 	static createTest(input, expectedOutput, func, unitName) {
