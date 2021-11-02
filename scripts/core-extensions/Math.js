@@ -26,15 +26,17 @@ Math.factorize = function(number, mode = "factors-list") {
 	else if(mode === "prime-exponents") { result = {}; }
 
 	number = BigInt(number);
-	for(let i = 2n; i * i <= number; i ++) {
-		while(number % i === 0n) {
-			number /= i;
-			if(mode === "factors-list") { result.push(Number(i)); }
+	for(let prime of Sequence.PRIMES) {
+		prime = BigInt(prime);
+		while(number % prime === 0n) {
+			number /= prime;
+			if(mode === "factors-list") { result.push(Number(prime)); }
 			else if(mode === "prime-exponents") {
-				result[i] ??= 0;
-				result[i] ++;
+				result[prime] ??= 0;
+				result[prime] ++;
 			}
 		}
+		if(number == 1) { break; }
 	}
 	if(number != 1) {
 		if(mode === "factors-list") { result.push(Number(number)); }
