@@ -173,3 +173,7 @@ Array.method(function isSorted(callback) {
 });
 Array.SORT_ASCENDING = (a, b) => a - b;
 Array.SORT_DESCENDING = (a, b) => b - a;
+
+Array.method(function deduplicate() {
+	return [...new Set(this)];
+});

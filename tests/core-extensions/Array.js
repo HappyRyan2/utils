@@ -228,3 +228,14 @@ testing.addUnit("Array.isSorted", {
 		expect(() => array.isSorted()).toThrow();
 	}
 });
+testing.addUnit("Array.deduplicate()", {
+	"can remove the duplicates from an array": () => {
+		const result = [1, 2, 3, 2, 1].deduplicate();
+		expect(result).toEqual([1, 2, 3]);
+	},
+	"does not modify the original array": () => {
+		const arr = [1, 2, 3, 2, 1];
+		const result = arr.deduplicate();
+		expect(arr).toEqual([1, 2, 3, 2, 1]);
+	}
+});
