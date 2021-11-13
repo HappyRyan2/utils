@@ -5,6 +5,9 @@ class CanvasIO {
 		this.ctx = this.canvas.getContext("2d");
 		this.canvasType = canvasType;
 		this.parentElement = parentElement;
+
+		this.keys = {};
+		this.mouse = new Vector();
 	}
 
 	activate() {
@@ -22,5 +25,28 @@ class CanvasIO {
 				});
 			}
 		}
+
+		this.parentElement.addEventListener("keydown", (event) => {
+			this.keys[event.code] = true;
+		});
+		this.parentElement.addEventListener("keyup", (event) => {
+			this.keys[event.code] = false;
+		});
+		this.canvas.addEventListener("mousedown", (event) => {
+			this.mouse.pressed = true;
+			this.mouse.button = (event.which === 3) ? "right" : "left";
+		});
+		this.canvas.addEventListener("mouseup", (event) => {
+			this.mouse.pressed = false;
+			this.mouse.button = null;
+		});
+		this.canvas.addEventListener("mousemove", (event) => {
+			const canvasRect = this.canvas.getBoundingClientRect();
+			this.mouse.x = (event.clientX - canvasRect.left) / (canvasRect.right - canvasRect.left) * this.canvas.width
+			this.mouse.y = (event.clientY - canvasRect.top) / (canvasRect.bottom - canvasRect.top) * this.canvas.height;
+		});
+		this.canvas.addEventListener("contextmenu", (event) => {
+			event.preventDefault();
+		});
 	}
 }
