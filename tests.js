@@ -3434,3 +3434,27 @@ testing.addUnit("Vector.subtract()", {
 		expect(v2).toEqual(new Vector(3, 4));
 	}
 });
+testing.addUnit("Vector.multiply()", {
+	"can multiply a Vector and a number": () => {
+		const vector = new Vector(1, 2);
+		const multiplied = vector.multiply(10);
+		expect(multiplied).toEqual(new Vector(10, 20));
+	},
+	"does not modify the original Vector": () => {
+		const vector = new Vector(1, 2);
+		const multiplied = vector.multiply(10);
+		expect(vector).toEqual(new Vector(1, 2));
+	}
+});
+testing.addUnit("Vector.divide()", {
+	"can divide a Vector by a number": () => {
+		const vector = new Vector(10, 20);
+		const divided = vector.divide(10);
+		expect(divided).toEqual(new Vector(1, 2));
+	},
+	"does not modify the original Vector": () => {
+		const vector = new Vector(10, 20);
+		const divided = vector.divide(10);
+		expect(vector).toEqual(new Vector(10, 20));
+	}
+});

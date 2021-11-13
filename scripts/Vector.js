@@ -78,4 +78,16 @@ class Vector {
 			return new Vector(this.x - vector.x, this.y - vector.y);
 		}
 	}
+	multiply(multiplier) {
+		const result = new Vector(this);
+		result.x *= multiplier;
+		result.y *= multiplier;
+		return result;
+	}
+	divide(divisor) {
+		const result = new Vector(this);
+		result.x /= divisor;
+		result.y /= divisor;
+		return result;
+	}
 }
