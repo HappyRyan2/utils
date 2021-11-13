@@ -2376,6 +2376,27 @@ class Vector {
 		this.x *= multiplier;
 		this.y *= multiplier;
 	}
+
+	add() {
+		if(arguments[0] instanceof Vector) {
+			const [vector] = arguments;
+			return new Vector(this.x + vector.x, this.y + vector.y);
+		}
+		else {
+			const vector = new Vector(...arguments);
+			return new Vector(this.x + vector.x, this.y + vector.y);
+		}
+	}
+	subtract() {
+		if(arguments[0] instanceof Vector) {
+			const [vector] = arguments;
+			return new Vector(this.x - vector.x, this.y - vector.y);
+		}
+		else {
+			const vector = new Vector(...arguments);
+			return new Vector(this.x - vector.x, this.y - vector.y);
+		}
+	}
 }
 
 window.utils ??= {};

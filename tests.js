@@ -3393,3 +3393,44 @@ testing.addUnit("Vector.toString()", {
 		expect(stringified).toEqual("(123, 456)");
 	}
 });
+
+testing.addUnit("Vector.add()", {
+	"can add two Vectors": () => {
+		const v1 = new Vector(1, 2);
+		const v2 = new Vector(3, 4);
+		const sum = v1.add(v2);
+		expect(sum).toEqual(new Vector(1 + 3, 2 + 4));
+	},
+	"can add a Vector and any other form of input supported in the constructor": () => {
+		const vector = new Vector(1, 2);
+		const sum = vector.add(3, 4);
+		expect(sum).toEqual(new Vector(1 + 3, 2 + 4));
+	},
+	"does not modify either of the Vectors": () => {
+		const v1 = new Vector(1, 2);
+		const v2 = new Vector(3, 4);
+		const sum = v1.add(v2);
+		expect(v1).toEqual(new Vector(1, 2));
+		expect(v2).toEqual(new Vector(3, 4));
+	}
+});
+testing.addUnit("Vector.subtract()", {
+	"can subtract two Vectors": () => {
+		const v1 = new Vector(1, 2);
+		const v2 = new Vector(3, 4);
+		const difference = v1.subtract(v2);
+		expect(difference).toEqual(new Vector(1 - 3, 2 - 4));
+	},
+	"can subtract a Vector and any other form of input supported in the constructor": () => {
+		const vector = new Vector(1, 2);
+		const difference = vector.subtract(3, 4);
+		expect(difference).toEqual(new Vector(1 - 3, 2 - 4));
+	},
+	"does not modify either of the Vectors": () => {
+		const v1 = new Vector(1, 2);
+		const v2 = new Vector(3, 4);
+		const difference = v1.subtract(v2);
+		expect(v1).toEqual(new Vector(1, 2));
+		expect(v2).toEqual(new Vector(3, 4));
+	}
+});
