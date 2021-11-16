@@ -3465,3 +3465,12 @@ testing.addUnit("Vector.divide()", {
 		expect(vector).toEqual(new Vector(10, 20));
 	}
 });
+
+testing.addUnit("Vector.dotProduct()", {
+	"correctly returns the dot product": () => {
+		const vector1 = new Vector(1, 3);
+		const vector2 = new Vector(4, -2);
+		const dotProduct = vector1.dotProduct(vector2);
+		expect(dotProduct).toEqual(-2); // (1)(4) + (3)(-2)
+	}
+});

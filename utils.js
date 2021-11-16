@@ -2416,6 +2416,10 @@ class Vector {
 		result.y /= divisor;
 		return result;
 	}
+
+	dotProduct(vector) {
+		return (this.x * vector.x) + (this.y * vector.y);
+	}
 }
 
 window.utils ??= {};
