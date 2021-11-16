@@ -102,3 +102,10 @@ testing.addUnit("Math.dist()", {
 		expect(distance).toEqual(7);
 	}
 });
+testing.addUnit("Math.rotate()", {
+	"returns the rotated point": () => {
+		const rotated = Math.rotate(1, 0, 90);
+		expect(rotated.x).toApproximatelyEqual(0);
+		expect(rotated.y).toApproximatelyEqual(1);
+	}
+});

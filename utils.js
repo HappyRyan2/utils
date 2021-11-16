@@ -1273,6 +1273,13 @@ Math.dist = function(...args) {
 		throw new Error("Invalid usage. Math.dist expects either two numbers or four numbers.");
 	}
 };
+Math.rotate = function(x, y, degrees) {
+	const radians = degrees * Math.PI / 180;
+	return new Vector(
+		x * Math.cos(radians) - y * Math.sin(radians),
+		x * Math.sin(radians) + y * Math.cos(radians)
+	);
+};
 
 Map.method(function equals(map) {
 	if(this.size !== map.size) { return false; }
