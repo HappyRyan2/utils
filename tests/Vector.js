@@ -163,3 +163,17 @@ testing.addUnit("Vector.projection", {
 		expect(projection.y).toEqual(1);
 	}
 });
+testing.addUnit("Vector.scalarProjection", {
+	"returns the magnitude of the vector projection when the vectors overlap": () => {
+		const v1 = new Vector(1, 1);
+		const v2 = new Vector(1, 0);
+		const projection = v1.scalarProjection(v2);
+		expect(projection).toEqual(1);
+	},
+	"returns the opposite of the magnitude of the vector projection when the vectors do not overlap": () => {
+		const v1 = new Vector(-1, 1);
+		const v2 = new Vector(1, 0);
+		const projection = v1.scalarProjection(v2);
+		expect(projection).toEqual(-1);
+	},
+});

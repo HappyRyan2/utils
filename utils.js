@@ -2436,6 +2436,9 @@ class Vector {
 		result.magnitude = this.magnitude * Math.cos(TO_RADIANS * (this.angle - vector.angle));
 		return result;
 	}
+	scalarProjection(vector) {
+		return this.dotProduct(vector.normalize());
+	}
 }
 
 window.utils ??= {};
