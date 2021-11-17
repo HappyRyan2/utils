@@ -2420,6 +2420,12 @@ class Vector {
 	dotProduct(vector) {
 		return (this.x * vector.x) + (this.y * vector.y);
 	}
+
+	normalize() {
+		const result = new Vector(this);
+		result.magnitude = 1;
+		return result;
+	}
 }
 
 window.utils ??= {};
