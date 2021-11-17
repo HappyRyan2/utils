@@ -2426,6 +2426,16 @@ class Vector {
 		result.magnitude = 1;
 		return result;
 	}
+	projection(vector) {
+		const magnitude = this.dotProduct(vector.normalize());
+		return vector.normalize().multiply(magnitude);
+
+
+		const TO_RADIANS = Math.PI / 180;
+		const result = new Vector(vector);
+		result.magnitude = this.magnitude * Math.cos(TO_RADIANS * (this.angle - vector.angle));
+		return result;
+	}
 }
 
 window.utils ??= {};

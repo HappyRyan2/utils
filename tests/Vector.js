@@ -146,3 +146,20 @@ testing.addUnit("Vector.dotProduct()", {
 		expect(dotProduct).toEqual(-2); // (1)(4) + (3)(-2)
 	}
 });
+
+testing.addUnit("Vector.projection", {
+	"correctly returns the projection of one vector onto another": () => {
+		const vector1 = new Vector(5, 0);
+		const vector2 = new Vector(1, 1);
+		const projection = vector1.projection(vector2);
+		expect(projection.x).toApproximatelyEqual(2.5);
+		expect(projection.y).toApproximatelyEqual(2.5);
+	},
+	"correctly returns the projection of one vector onto another - test case 2": () => {
+		const vector1 = new Vector(1, 1);
+		const vector2 = new Vector(0, -2);
+		const projection = vector1.projection(vector2);
+		expect(projection.x).toEqual(0);
+		expect(projection.y).toEqual(1);
+	}
+});
