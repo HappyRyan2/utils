@@ -16,6 +16,7 @@ module.exports = function(grunt) {
 					"scripts/core-extensions/Set.js",
 					"scripts/core-extensions/Math.js",
 					"scripts/core-extensions/Map.js",
+					"scripts/core-extensions/CanvasRenderingContext2D.js",
 					"scripts/data-structures/Grid.js",
 					"scripts/data-structures/Tree.js",
 					"scripts/data-structures/Sequence.js",
