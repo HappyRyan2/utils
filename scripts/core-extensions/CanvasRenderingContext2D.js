@@ -45,3 +45,22 @@ CanvasRenderingContext2D.method(function fillCanvas(color = this.fillStyle) {
 	this.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	this.restore();
 });
+CanvasRenderingContext2D.method(function strokeLine() {
+	if([...arguments].every(v => typeof v === "number")) {
+		const [x1, y1, x2, y2] = arguments;
+		this.beginPath();
+		this.moveTo(x1, y1);
+		this.lineTo(x2, y2);
+		this.stroke();
+	}
+	else if(
+		typeof arguments[0].x === "number" && typeof arguments[0].y === "number" &&
+		typeof arguments[1].x === "number" && typeof arguments[1].y === "number"
+	) {
+		const [p1, p2] = arguments;
+		this.beginPath();
+		this.moveTo(p1.x, p1.y);
+		this.lineTo(p2.x, p2.y);
+		this.stroke();
+	}
+});
