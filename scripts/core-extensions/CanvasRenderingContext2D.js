@@ -38,3 +38,10 @@ CanvasRenderingContext2D.method(function strokeCircle(x, y, r) {
 	this.arc(x, y, r, 0, 2 * Math.PI);
 	this.stroke();
 });
+CanvasRenderingContext2D.method(function fillCanvas(color = this.fillStyle) {
+	this.save();
+	this.setTransform(1, 0, 0, 1, 0, 0); // reset transformations
+	this.fillStyle = color;
+	this.fillRect(0, 0, this.canvas.width, this.canvas.height);
+	this.restore();
+});
