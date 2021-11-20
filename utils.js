@@ -1329,6 +1329,16 @@ CanvasRenderingContext2D.method(function strokePoly() {
 	this.polygon(...arguments);
 	this.stroke();
 });
+CanvasRenderingContext2D.method(function fillCircle(x, y, r) {
+	this.beginPath();
+	this.arc(x, y, r, 0, 2 * Math.PI);
+	this.fill();
+});
+CanvasRenderingContext2D.method(function strokeCircle(x, y, r) {
+	this.beginPath();
+	this.arc(x, y, r, 0, 2 * Math.PI);
+	this.stroke();
+});
 
 class Grid {
 	constructor() {
