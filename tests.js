@@ -532,19 +532,29 @@ testing.addUnit("Number.digits()", {
 
 testing.addUnit("Object.clone()", {
 	"basic functionality works": () => {
-		const myObject = { foo: "bar" };
-		const cloned = myObject.clone();
-		expect(Object.keys(cloned).length).toEqual(1);
-		expect(cloned.foo).toEqual("bar");
+		const object = { foo: "bar" };
+		const clone = object.clone();
+		expect(clone).toEqual(object);
+		expect(clone).toNotStrictlyEqual(object);
 	},
 	"works for nested objects": () => {
-		const myObject = { prop1: { prop2: "foo" } };
-		const cloned = myObject.clone();
-
-		expect(Object.keys(cloned).length).toEqual(1);
-		expect(cloned.prop1).toInstantiate(Object);
-		expect(Object.keys(cloned.prop1).length).toEqual(1);
-		expect(cloned.prop1.prop2).toEqual("foo");
+		const object = { prop1: { prop2: "foo" } };
+		const clone = object.clone();
+		expect(clone).toEqual(object);
+		expect(clone).toNotStrictlyEqual(object);
+	},
+	"works for cyclic objects": () => {
+		const object = { foo: "bar" };
+		object.self = object;
+		const clone = object.clone();
+		expect(clone).toEqual(object);
+		expect(clone).toNotStrictlyEqual(object);
+	},
+	"works for primitive values": () => {
+		const object = 123;
+		const clone = object.clone();
+		expect(clone).toEqual(object);
+		expect(clone).toStrictlyEqual(object);
 	}
 });
 testing.addUnit("Object.equals()", {
