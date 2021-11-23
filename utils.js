@@ -1248,6 +1248,7 @@ Math.isPrime = function(number) {
 	return true;
 };
 Math.gcd = function(...numbers) {
+	numbers = numbers.map(v => v < 0 ? -v : v); // Math.abs doesn't work for BigInts
 	if(numbers.length === 1) {
 		return numbers[0];
 	}

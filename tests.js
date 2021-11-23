@@ -472,6 +472,10 @@ testing.addUnit("Math.gcd()", {
 	"works when the inputs are BigInts": () => {
 		const result = Math.gcd(100n, 70n);
 		expect(result).toStrictlyEqual(10n);
+	},
+	"works when some of the numbers are negative": () => {
+		const result = Math.gcd(-100, 70);
+		expect(result).toEqual(10);
 	}
 });
 testing.addUnit("Math.areCoprime()", {
