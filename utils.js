@@ -1253,15 +1253,18 @@ Math.gcd = function(...numbers) {
 	}
 	else if(numbers.length === 2) {
 		let [a, b] = numbers;
+		const bigIntInput = (typeof a === "bigint" || typeof b === "bigint");
+		a = BigInt(a);
+		b = BigInt(b);
 		while(a !== b) {
 			if(a > b) {
-				a = (a % b === 0) ? b : a % b;
+				a = (a % b == 0) ? b : a % b;
 			}
 			else {
-				b = (b % a === 0) ? a : b % a;
+				b = (b % a == 0) ? a : b % a;
 			}
 		}
-		return a;
+		return bigIntInput ? a : Number(a);
 	}
 	else {
 		let gcd = Math.gcd(numbers[0], numbers[1]);

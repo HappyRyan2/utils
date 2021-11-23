@@ -55,11 +55,15 @@ testing.addUnit("Math.factorize()", {
 testing.addUnit("Math.gcd()", {
 	"correctly returns the GCD of 2 numbers": () => {
 		const result = Math.gcd(100, 70);
-		expect(result).toEqual(10);
+		expect(result).toStrictlyEqual(10);
 	},
 	"correctly returns the GCD of 3 or more numbers": () => {
 		const result = Math.gcd(95, 115, 155);
-		expect(result).toEqual(5);
+		expect(result).toStrictlyEqual(5);
+	},
+	"works when the inputs are BigInts": () => {
+		const result = Math.gcd(100n, 70n);
+		expect(result).toStrictlyEqual(10n);
 	}
 });
 testing.addUnit("Math.areCoprime()", {
