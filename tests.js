@@ -3612,3 +3612,16 @@ testing.addUnit("Vector.rotateAbout()", {
 		expect(rotated).toEqual(new Vector(7, 3));
 	}
 });
+testing.addUnit("Vector.distanceFrom()", {
+	"can calculate the distance between the vectors": () => {
+		const v1 = new Vector(10, 10);
+		const v2 = new Vector(13, 14);
+		const distance = v1.distanceFrom(v2);
+		expect(distance).toEqual(5);
+	},
+	"can calculate the distance between the vector and a point given by its x and y coordinates": () => {
+		const v1 = new Vector(10, 10);
+		const distance = v1.distanceFrom(13, 14);
+		expect(distance).toEqual(5);
+	}
+});

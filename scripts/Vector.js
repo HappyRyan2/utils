@@ -122,4 +122,14 @@ class Vector {
 			return this.rotateAbout(new Vector(x, y), angle);
 		}
 	}
+
+	distanceFrom() {
+		if(arguments[0] instanceof Vector) {
+			const [vector] = arguments;
+			return this.subtract(vector).magnitude;
+		}
+		else {
+			return this.subtract(new Vector(...arguments)).magnitude;
+		}
+	}
 }
