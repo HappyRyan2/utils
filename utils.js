@@ -2521,6 +2521,21 @@ class Vector {
 	scalarProjection(vector) {
 		return this.dotProduct(vector.normalize());
 	}
+
+	rotateAbout() {
+		if(arguments[0] instanceof Vector && typeof arguments[1] === "number") {
+			const [point, angle] = arguments;
+			let result = new Vector(this);
+			result = result.subtract(point);
+			result.angle += angle;
+			result = result.add(point);
+			return result;
+		}
+		else if([...arguments].every(v => typeof v === "number")) {
+			const [x, y, angle] = arguments;
+			return this.rotateAbout(new Vector(x, y), angle);
+		}
+	}
 }
 
 window.utils ??= {};

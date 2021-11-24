@@ -177,3 +177,21 @@ testing.addUnit("Vector.scalarProjection", {
 		expect(projection).toEqual(-1);
 	},
 });
+
+testing.addUnit("Vector.rotateAbout()", {
+	"can rotate about a given Vector": () => {
+		const vector = new Vector(5, 5);
+		const rotated = vector.rotateAbout(new Vector(5, 3), 90);
+		expect(rotated).toEqual(new Vector(7, 3));
+	},
+	"does not modify the original vector": () => {
+		const vector = new Vector(5, 5);
+		const rotated = vector.rotateAbout(new Vector(5, 3), 90);
+		expect(vector).toEqual(new Vector(5, 5));
+	},
+	"can rotate about a point given by its x and y coordinates": () => {
+		const vector = new Vector(5, 5);
+		const rotated = vector.rotateAbout(5, 3, 90);
+		expect(rotated).toEqual(new Vector(7, 3));
+	}
+});
