@@ -438,13 +438,16 @@ class Testing {
 		}
 	}
 
-	testAll(output = console) {
+	testAll(fastOnly = false, output = console) {
 		this.resetTests();
 
-		const tests = this.tests();
+		const tests = fastOnly ? this.tests().filter(t => !t.isSlow && !this.units.find(u => u.unitName === t.unitName).isSlow) : this.tests();
 		tests.forEach(test => {
 			test.result = test.getResult();
 		});
+		if(tests.length !== this.tests().length) {
+			output.warn(`Only running ${tests.length} of ${this.tests().length} tests.`);
+		}
 
 		const failed = this.testsFailed();
 		const numFailed = failed.length;
@@ -539,7 +542,7 @@ class Testing {
 			}
 		}
 		else {
-			this.testAll(output);
+			this.testAll(false, output);
 		}
 	}
 

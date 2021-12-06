@@ -590,7 +590,7 @@ testing.addUnit("Testing.testAll()", {
 		});
 		const results = [];
 		const output = { log: (...args) => results.push([...args]) };
-		fixture.testAll(output);
+		fixture.testAll(false, output);
 		expect(results).toEqual([
 			["%cAll tests passed!", "color: rgb(0, 192, 64)"]
 		]);
@@ -603,7 +603,7 @@ testing.addUnit("Testing.testAll()", {
 		});
 		const results = [];
 		const output = { log: (...args) => results.push([...args]) };
-		fixture.testAll(output);
+		fixture.testAll(false, output);
 		expect(results).toEqual([
 			["%c1 test failed%c: Unit 1 - test that fails (Error: error message)", "color: red;", ""]
 		]);
@@ -616,11 +616,34 @@ testing.addUnit("Testing.testAll()", {
 		});
 		const results = [];
 		const output = { log: (...args) => results.push([...args]) };
-		fixture.testAll(output);
+		fixture.testAll(false, output);
 		expect(results).toEqual([[
 			"%c2 tests failed%c:\n- Unit 1 - test that fails (Error: error message 1)\n- Unit 1 - another test that fails (Error: error message 2)",
 			"color: red;", ""
 		]]);
+	},
+	"can run only the fast tests": () => {
+		const fixture = new Testing();
+		fixture.addUnit("Unit 1", {
+			"test that passes": () => { },
+			"test that fails": () => { throw new Error("error message 1"); },
+		});
+		fixture.addUnit("Unit 2", {
+			"test that passes": () => { },
+			"test that fails": () => { throw new Error("error message 2"); },
+		});
+		fixture.units[fixture.units.length - 1].isSlow = true;
+
+		const results = [];
+		const output = {
+			log: (...args) => results.push({ type: "log", data: [...args] }),
+			warn: (...args) => results.push({ type: "warn", data: [...args] }),
+		};
+		fixture.testAll(true, output);
+		expect(results).toEqual([
+			{ type: "warn", data: [`Only running 2 of 4 tests.`] },
+			{ type: "log", data: [`%c1 test failed%c: Unit 1 - test that fails (Error: error message 1)`, `color: red;`, ``] }
+		]);
 	}
 });
 testing.addUnit("Testing.testUnit()", {
