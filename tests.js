@@ -239,6 +239,36 @@ testing.addUnit("Array.deduplicate()", {
 		expect(arr).toEqual([1, 2, 3, 2, 1]);
 	}
 });
+testing.addUnit("Array.group()", {
+	"can reorder the array into groups based on a callback function": () => {
+		const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+		const grouped = array.group(n => n % 2 === 0);
+		expect(grouped).toEqual([
+			2, 4, 6, 8, 10,
+			1, 3, 5, 7, 9
+		]);
+	},
+	"can reorder the array into groups based on multiple callback functions": () => {
+		const array = [0, 1, 2, 3, "foo", 4, 5, "bar", 6, 7];
+		const grouped = array.group(
+			n => n % 2 === 0,
+			n => typeof n === "number"
+		);
+		expect(grouped).toEqual([
+			0, 2, 4, 6,
+			1, 3, 5, 7,
+			"foo", "bar"
+		]);
+	},
+	"correctly passes in the value and index to the callback": () => {
+		const array = ["A", "B", "C", "D", "E", "F"];
+		const grouped = array.group((value, index) => index % 2 === 0);
+		expect(grouped).toEqual([
+			"A", "C", "E",
+			"B", "D", "F"
+		]);
+	}
+});
 
 testing.addUnit("CanvasRenderingContext2D.polygon()", {
 	"can draw a polygon when given the coordinates of the vertices as numbers": () => {

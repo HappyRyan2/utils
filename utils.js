@@ -1044,6 +1044,24 @@ Array.method(function deduplicate() {
 	return [...new Set(this)];
 });
 
+Array.method(function group(...callbacks) {
+	const groups = new Array(callbacks.length + 1).fill().map(v => []);
+	for(const [index, value] of this.entries()) {
+		let addedToGroup = false;
+		for(const [callbackIndex, callback] of callbacks.entries()) {
+			if(callback(value, index, this)) {
+				groups[callbackIndex].push(value);
+				addedToGroup = true;
+				break;
+			}
+		}
+		if(!addedToGroup) {
+			groups[groups.length - 1].push(value);
+		}
+	}
+	return [].concat(...groups);
+});
+
 Number.method(function digits() {
 	const number = Math.abs(this);
 	if(number % 1 !== 0) {
