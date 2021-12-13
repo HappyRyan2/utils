@@ -1235,18 +1235,24 @@ Math.divisors = function(number) {
 };
 Math.factorize = function(number, mode = "factors-list") {
 	let result;
-	if(mode === "factors-list") { result = []; }
+	if(mode === "factors-list" || mode === "exponents-list") { result = []; }
 	else if(mode === "prime-exponents") { result = {}; }
 
 	number = BigInt(number);
-	for(let prime of Sequence.PRIMES) {
+	for(let [prime, i] of Sequence.PRIMES.entries()) {
 		prime = BigInt(prime);
+		if(mode === "exponents-list") {
+			result[i] = 0;
+		}
 		while(number % prime === 0n) {
 			number /= prime;
 			if(mode === "factors-list") { result.push(Number(prime)); }
 			else if(mode === "prime-exponents") {
 				result[prime] ??= 0;
 				result[prime] ++;
+			}
+			else if(mode === "exponents-list") {
+				result[i] ++;
 			}
 		}
 		if(number == 1) { break; }
@@ -1256,6 +1262,11 @@ Math.factorize = function(number, mode = "factors-list") {
 		else if(mode === "prime-exponents") {
 			result[number] ??= 0;
 			result[number] ++;
+		}
+		else if(mode === "exponents-list") {
+			const index = Sequence.PRIMES.indexOf(number);
+			result[index] ??= 0;
+			result[index] ++;
 		}
 	}
 	return result;
