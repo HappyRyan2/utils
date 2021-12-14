@@ -2615,6 +2615,9 @@ class CanvasIO {
 			this.canvas.style.width = "100%";
 			this.canvas.style.height = "100%";
 			if(this.parentElement === document.body) {
+				this.parentElement.style.margin = "0px";
+				this.parentElement.style.overlow = "hidden";
+
 				this.canvas.width = window.innerWidth;
 				this.canvas.height = window.innerHeight;
 				window.addEventListener("resize", () => {
