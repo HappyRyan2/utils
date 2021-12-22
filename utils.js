@@ -2472,11 +2472,20 @@ class Vector {
 			this.y = y;
 		}
 		else if(typeof arguments[0] === "string") {
-			const [direction] = arguments;
-			if(direction === "left") { this.x = -1, this.y = 0; }
-			else if(direction === "right") { this.x = 1, this.y = 0; }
-			if(direction === "up") { this.x = 0, this.y = -1; }
-			else if(direction === "down") { this.x = 0, this.y = 1; }
+			const [string] = arguments;
+			if(string === "left") { this.x = -1, this.y = 0; }
+			else if(string === "right") { this.x = 1, this.y = 0; }
+			else if(string === "up") { this.x = 0, this.y = -1; }
+			else if(string === "down") { this.x = 0, this.y = 1; }
+			else {
+				const PARSER = /^\((-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)\)$/;
+				if(!PARSER.test(string)) {
+					throw new Error("Cannot parse Vector; invalid format.");
+				}
+				const [str, num1, num2] = string.match(PARSER);
+				this.x = Number.parseFloat(num1);
+				this.y = Number.parseFloat(num2);
+			}
 		}
 	}
 

@@ -35,6 +35,11 @@ testing.addUnit("Vector constructor", {
 		expect(vector.x).toApproximatelyEqual(0, 1e-10);
 		expect(vector.y).toApproximatelyEqual(-123, 1e-10);
 	},
+	"can create a vector by parsing a coordinate string": () => {
+		const vector = new Vector("(1, 2)");
+		expect(vector.x).toEqual(1);
+		expect(vector.y).toEqual(2);
+	},
 	"sets the vector's position to (0, 0) when no arguments are passed in": () => {
 		const vector = new Vector();
 		expect(vector.x).toEqual(0);
