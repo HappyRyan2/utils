@@ -435,6 +435,14 @@ testing.addUnit("Map.equals()", {
 		testing.refute(obj2.equals(obj1));
 	}
 });
+testing.addUnit("Map.clone()", {
+	"correctly clones the Map": () => {
+		const map = new Map([[1, 2], [3, 4]]);
+		const clone = map.clone();
+		expect(clone.get(1)).toEqual(2);
+		expect(clone.get(3)).toEqual(4);
+	}
+});
 
 testing.addUnit("Math.logBase()", {
 	"basic functionality - test case 1": () => {

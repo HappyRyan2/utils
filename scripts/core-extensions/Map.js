@@ -15,3 +15,12 @@ Map.method(function equals(map) {
 	}
 	return true;
 });
+Map.method(function clone() {
+	const clone = new Map();
+	for(const [key, value] of this.entries()) {
+		const newKey = (key != null) ? key.clone() : key;
+		const newValue = (value != null) ? value.clone() : value;
+		clone.set(newKey, newValue);
+	}
+	return clone;
+});
