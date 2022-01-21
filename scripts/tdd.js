@@ -438,7 +438,7 @@ class Testing {
 		}
 	}
 
-	testAll(fastOnly = false, output = console) {
+	testAll(fastOnly = false, debugFailed = true, output = console) {
 		this.resetTests();
 
 		const tests = fastOnly ? this.tests().filter(t => !t.isSlow && !this.units.find(u => u.unitName === t.unitName).isSlow) : this.tests();
@@ -464,6 +464,11 @@ class Testing {
 				result += `\n- ${test.unitName} - ${test.name} (${test.error})`;
 			}
 			output.log(result, "color: red;", "");
+		}
+		if(debugFailed) {
+			for(const test of failed) {
+				testing.run(test);
+			}
 		}
 	}
 	testUnit(unitName, output = console) {
@@ -542,7 +547,7 @@ class Testing {
 			}
 		}
 		else {
-			this.testAll(false, output);
+			this.testAll(false, true, output);
 		}
 	}
 
