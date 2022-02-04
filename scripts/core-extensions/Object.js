@@ -5,6 +5,7 @@ Object.method(function clone(history = new Map()) {
 		this instanceof String ||
 		this instanceof Boolean
 	) { return this.valueOf(); }
+	if(history.has(this)) { return history.get(this); }
 	let clone;
 	if(Array.isArray(this)) {
 		clone = [];

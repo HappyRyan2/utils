@@ -750,6 +750,7 @@ Object.method(function clone(history = new Map()) {
 		this instanceof String ||
 		this instanceof Boolean
 	) { return this.valueOf(); }
+	if(history.has(this)) { return history.get(this); }
 	let clone;
 	if(Array.isArray(this)) {
 		clone = [];
@@ -1332,12 +1333,12 @@ Math.rotate = function(x, y, degrees) {
 	);
 };
 
-Map.method(function equals(map) {
+Map.method(function equals(map, history = new Map()) {
 	if(this.size !== map.size) { return false; }
 
 	const areEqual = (a, b) => (
 		a === b ||
-		(typeof a === "object" && a != null) && a.equals(b)
+		(typeof a === "object" && a != null) && a.equals(b, history)
 	);
 	loop1: for(const [key, value] of this) {
 		loop2: for(const [otherKey, otherValue] of map) {
@@ -1349,11 +1350,11 @@ Map.method(function equals(map) {
 	}
 	return true;
 });
-Map.method(function clone() {
+Map.method(function clone(history = new Map()) {
 	const clone = new Map();
 	for(const [key, value] of this.entries()) {
-		const newKey = (key != null) ? key.clone() : key;
-		const newValue = (value != null) ? value.clone() : value;
+		const newKey = (key != null) ? key.clone(history) : key;
+		const newValue = (value != null) ? value.clone(history) : value;
 		clone.set(newKey, newValue);
 	}
 	return clone;
