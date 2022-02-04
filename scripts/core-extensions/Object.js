@@ -1,4 +1,4 @@
-Object.method(function clone(history = [], baseObject) {
+Object.method(function clone(history = []) {
 	if(this == null) { return null; }
 	if(
 		this instanceof Number ||
@@ -6,10 +6,7 @@ Object.method(function clone(history = [], baseObject) {
 		this instanceof Boolean
 	) { return this.valueOf(); }
 	let clone;
-	if(baseObject) {
-		clone = baseObject;
-	}
-	else if(Array.isArray(this)) {
+	if(Array.isArray(this)) {
 		clone = [];
 	}
 	else {
@@ -22,11 +19,7 @@ Object.method(function clone(history = [], baseObject) {
 				clone[i] = historyItem.otherItem;
 			}
 			else if(typeof this[i] === "object" && this[i] !== null) {
-				const newBaseObject = Array.isArray(this[i]) ? [] : Object.create(this[i].__proto__);
-				clone[i] = this[i].clone(
-					[...history, { selfItem: this[i], otherItem: newBaseObject }],
-					newBaseObject
-				);
+				clone[i] = this[i].clone([...history, { selfItem: this[i], otherItem: clone }]);
 			}
 			else {
 				clone[i] = this[i];
