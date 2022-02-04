@@ -1,4 +1,4 @@
-Object.method(function clone(history = []) {
+Object.method(function clone(history = new Map()) {
 	if(this == null) { return null; }
 	if(
 		this instanceof Number ||
@@ -12,14 +12,14 @@ Object.method(function clone(history = []) {
 	else {
 		clone = Object.create(this.__proto__);
 	}
+	history.set(this, clone);
 	for(let i in this) {
 		if(this.hasOwnProperty(i)) {
-			const historyItem = history.find(v => v.selfItem === this[i]);
-			if(historyItem) {
-				clone[i] = historyItem.otherItem;
+			if(history.has(this[i])) {
+				clone[i] = history.get(this[i]);
 			}
 			else if(typeof this[i] === "object" && this[i] !== null) {
-				clone[i] = this[i].clone([...history, { selfItem: this[i], otherItem: clone }]);
+				clone[i] = this[i].clone(history);
 			}
 			else {
 				clone[i] = this[i];
