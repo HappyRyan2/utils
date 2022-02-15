@@ -325,3 +325,30 @@ testing.addUnit("Graph.connections()", {
 		]));
 	}
 });
+
+testing.addUnit("Graph.componentContaining()", {
+	"correctly returns the component containing the given node": () => {
+		const graph = new Graph([
+			[1, [2]],
+			[2, [1, 3]],
+			[3, [2]],
+			[4, []]
+		]);
+		const component = graph.componentContaining(1);
+		expect(component).toEqual(new Set([1, 2, 3]));
+	},
+	"throws an error if the node is not in the graph": () => {
+		const graph = new Graph([1, 2, 3]);
+		testing.assertThrows(() => graph.componentContaining(4));
+	}
+});
+testing.addUnit("Graph.components()", {
+	"correctly returns the connected components of the graph": () => {
+		const graph = new Graph([1, 2, 3, 4], (a, b) => a % 2 === b % 2 && a !== b);
+		const components = graph.components();
+		expect(components).toEqual(new Set([
+			new Set([1, 3]),
+			new Set([2, 4])
+		]));
+	}
+});

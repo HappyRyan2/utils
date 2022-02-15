@@ -2206,6 +2206,38 @@ class Graph {
 			this.connect(value1, value2);
 		}
 	}
+
+	componentContaining(node) {
+		if(!this.nodes.has(node)) {
+			throw new Error(`Cannot find component; expected the given value to be a node in the graph, but it was not.`);
+		}
+		const nodesToCheck = [this.nodes.get(node)];
+		const component = new Set();
+		while(nodesToCheck.length !== 0) {
+			const currentNode = nodesToCheck.shift(0);
+			component.add(currentNode);
+			for(const neighbor of currentNode.connections) {
+				if(!component.has(neighbor)) {
+					nodesToCheck.push(neighbor);
+				}
+			}
+		}
+		return component.map(node => node.value);
+	}
+	components() {
+		const alreadyChecked = new Set();
+		const components = new Set();
+		for(const node of this.nodes.values()) {
+			if(!alreadyChecked.has(node)) {
+				const component = this.componentContaining(node.value);
+				components.add(component);
+				for(const value of component) {
+					alreadyChecked.add(this.nodes.get(value));
+				}
+			}
+		}
+		return components;
+	}
 }
 
 class DirectedGraph {
