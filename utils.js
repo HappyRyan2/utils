@@ -2637,6 +2637,16 @@ class Vector {
 			return this.subtract(new Vector(...arguments)).magnitude;
 		}
 	}
+
+	isAdjacentTo(vector) {
+		if(!(vector instanceof Vector)) {
+			return this.isAdjacentTo(new Vector(...arguments));
+		}
+		return (
+			(Math.dist(this.x, vector.x) === 0 && Math.dist(this.y, vector.y) === 1) ||
+			(Math.dist(this.x, vector.x) === 1 && Math.dist(this.y, vector.y) === 0)
+		);
+	}
 }
 
 window.utils ??= {};

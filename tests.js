@@ -3754,3 +3754,21 @@ testing.addUnit("Vector.distanceFrom()", {
 		expect(distance).toEqual(5);
 	}
 });
+
+testing.addUnit("Vector.isAdjacentTo()", {
+	"returns true when the vectors are adjacent": () => {
+		const v1 = new Vector(3, 4);
+		const v2 = new Vector(3, 5);
+		expect(v1.isAdjacentTo(v2)).toEqual(true);
+	},
+	"returns false when the vectors are not adjacent": () => {
+		const v1 = new Vector(3, 1);
+		const v2 = new Vector(-2, 4);
+		expect(v1.isAdjacentTo(v2)).toEqual(false);
+	},
+	"returns false when the vectors are only diagonally adjacent": () => {
+		const v1 = new Vector(3, 1);
+		const v2 = new Vector(4, 2);
+		expect(v1.isAdjacentTo(v2)).toEqual(false);
+	}
+});
