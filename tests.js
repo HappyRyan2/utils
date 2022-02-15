@@ -1489,6 +1489,18 @@ testing.addUnit("Graph constructor", {
 		expect(graph.areConnected("B", "C")).toEqual(false);
 		expect(graph.areConnected("C", "A")).toEqual(false);
 	},
+	"can create a graph from a list of nodes and a callback that determines connections": () => {
+		const graph = new Graph([1, 2, 3, 4], (a, b) => a % 2 === b % 2);
+		expect(graph.values()).toEqual([1, 2, 3, 4]);
+		expect(new Set(graph.connections().map(c => new Set(c)))).toEqual(new Set([
+			new Set([1, 1]),
+			new Set([1, 3]),
+			new Set([3, 3]),
+			new Set([2, 2]),
+			new Set([2, 4]),
+			new Set([4, 4])
+		]));
+	},
 	"throws an error if the list of nodes contains duplicates": () => {
 		testing.assertThrows(() => new Graph(["A", "B", "A"]));
 	},

@@ -2052,6 +2052,16 @@ class Graph {
 				const node = { value: value, connections: new Set() };
 				this.nodes.set(value, node);
 			}
+			if(typeof arguments[1] === "function") {
+				const [, callback] = arguments;
+				for(const node1 of values) {
+					for(const node2 of values) {
+						if(callback(node1, node2)) {
+							this.connect(node1, node2);
+						}
+					}
+				}
+			}
 		}
 		else if(arguments[0] instanceof Graph) {
 			const [graph] = arguments;
