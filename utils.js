@@ -1560,6 +1560,14 @@ class Grid {
 		return new Grid(newRows);
 	}
 
+	*entries() {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
+				const value = this.rows[y][x];
+				yield [value, new Vector(x, y)];
+			}
+		}
+	}
 	forEach(callback) {
 		for(let x = 0; x < this.width(); x ++) {
 			for(let y = 0; y < this.height(); y ++) {

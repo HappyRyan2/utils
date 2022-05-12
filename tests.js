@@ -1937,6 +1937,24 @@ testing.addUnit("Grid.removeColumn()", {
 		]))
 	}
 });
+testing.addUnit("Grid.entries()", {
+	"correctly iterates through the grid": () => {
+		const grid = new Grid([
+			[1, 2],
+			[3, 4]
+		]);
+		const results = [];
+		for(const result of grid.entries()) {
+			results.push(result);
+		}
+		expect(results).toEqual([
+			[1, new Vector(0, 0)],
+			[2, new Vector(1, 0)],
+			[3, new Vector(0, 1)],
+			[4, new Vector(1, 1)]
+		]);
+	}
+});
 
 testing.addUnit("Sequence constructor", {
 	"can create a sequence from a generator function": () => {
