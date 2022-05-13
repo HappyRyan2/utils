@@ -183,7 +183,7 @@ class Grid {
 			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(callback(value, x, y, this)) {
-					return window.Vector ? new Vector(x, y) : { x: x, y: y };
+					return new Vector(x, y);
 				}
 			}
 		}
@@ -196,7 +196,7 @@ class Grid {
 			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(callback(value, x, y, this)) {
-					positions.push(window.Vector ? new Vector(x, y) : { x: x, y: y });
+					positions.push(new Vector(x, y));
 				}
 			}
 		}
