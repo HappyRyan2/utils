@@ -140,16 +140,16 @@ class Grid {
 		}
 	}
 	forEach(callback) {
-		for(let x = 0; x < this.width(); x ++) {
-			for(let y = 0; y < this.height(); y ++) {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				callback(value, x, y, this);
 			}
 		}
 	}
 	some(callback) {
-		for(let x = 0; x < this.width(); x ++) {
-			for(let y = 0; y < this.height(); y ++) {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(callback(value, x, y, this)) { return true; }
 			}
@@ -157,8 +157,8 @@ class Grid {
 		return false;
 	}
 	every(callback) {
-		for(let x = 0; x < this.width(); x ++) {
-			for(let y = 0; y < this.height(); y ++) {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(!callback(value, x, y, this)) { return false; }
 			}
@@ -167,8 +167,8 @@ class Grid {
 	}
 	find(callback) {
 		/* returns the first (when searching left-to-right, then top-down) object that meets the criteria. */
-		for(let x = 0; x < this.width(); x ++) {
-			for(let y = 0; y < this.height(); y ++) {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(callback(value, x, y, this)) {
 					return value;
@@ -179,8 +179,8 @@ class Grid {
 	}
 	findPosition(callback) {
 		/* returns the position of the first (when searching left-to-right, then top-down) object that meets the criteria. */
-		for(let x = 0; x < this.width(); x ++) {
-			for(let y = 0; y < this.height(); y ++) {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(callback(value, x, y, this)) {
 					return window.Vector ? new Vector(x, y) : { x: x, y: y };
@@ -192,8 +192,8 @@ class Grid {
 	findPositions(callback) {
 		/* returns the positions of all elements that satisfy the provided criteria. */
 		const positions = [];
-		for(let x = 0; x < this.width(); x ++) {
-			for(let y = 0; y < this.height(); y ++) {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(callback(value, x, y, this)) {
 					positions.push(window.Vector ? new Vector(x, y) : { x: x, y: y });
@@ -203,8 +203,8 @@ class Grid {
 		return positions;
 	}
 	includes(object) {
-		for(let x = 0; x < this.width(); x ++) {
-			for(let y = 0; y < this.height(); y ++) {
+		for(let y = 0; y < this.height(); y ++) {
+			for(let x = 0; x < this.width(); x ++) {
 				const value = this.rows[y][x];
 				if(value === object) { return true; }
 			}
