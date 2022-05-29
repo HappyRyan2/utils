@@ -2761,6 +2761,10 @@ testing.addUnit("utils.toString()", {
 	"can convert an Array containing null and undefined to a string": () => {
 		const result = utils.toString([null, undefined, null], 5);
 		expect(result).toEqual("[object Array]");
+	},
+	"can convert a BigInt with more digits than maxLength to a string": () => {
+		const result = utils.toString(10n ** 5n, 5);
+		expect(result).toEqual(`100000`);
 	}
 });
 

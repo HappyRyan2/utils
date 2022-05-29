@@ -83,7 +83,7 @@ utils.toString = (obj, maxLength = Infinity) => {
 	else {
 		const result1 = `${obj}`;
 		const result2 = `[object ${obj.constructor.name}]`;
-		if(result1.length <= maxLength || result.length <= result2.length) {
+		if(result1.length <= maxLength || result1.length <= result2.length) {
 			return result1;
 		}
 		else {
