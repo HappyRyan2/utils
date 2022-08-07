@@ -75,5 +75,27 @@ testing.addUnit("Function.memoize()", {
 		expect(increment(1)).toEqual(2);
 		expect(increment(1)).toEqual(2);
 		expect(timesRun).toEqual(2);
+	},
+	"correctly records the number of times the function was called with/without distinct arguments when the function is stringifying keys": () => {
+		const func = function() {};
+		const memoized = func.memoize(false);
+		const data = memoized.memoizationData;
+		memoized(1);
+		expect(data).toEqual({ numDistinctArgs: 1, timesCalled: 1 });
+		memoized(2);
+		memoized(2);
+		memoized(2);
+		expect(data).toEqual({ numDistinctArgs: 2, timesCalled: 4 });
+	},
+	"correctly records the number of times the function was called with/without distinct arguments when the function is not stringifying keys": () => {
+		const func = function() {};
+		const memoized = func.memoize(true);
+		const data = memoized.memoizationData;
+		memoized(1);
+		expect(data).toEqual({ numDistinctArgs: 1, timesCalled: 1 });
+		memoized(2);
+		memoized(2);
+		memoized(2);
+		expect(data).toEqual({ numDistinctArgs: 2, timesCalled: 4 });
 	}
 });

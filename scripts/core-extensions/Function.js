@@ -18,34 +18,47 @@ Function.method(function memoize(stringifyKeys = false, cloneOutput = false) {
 	Function.prototype.memoize.maps.push(map);
 	const func = this;
 	const name = `${this.name || "(anonymous)"} (memoized)`;
+	const memoizationData = {
+		numDistinctArgs: 0,
+		timesCalled: 0
+	};
 	if(stringifyKeys) {
-		return {
+		const memoized = {
 			[name]: function() {
+				memoizationData.timesCalled ++;
 				const stringified = [...arguments].toString();
 				if(map.has(stringified)) {
 					const result = map.get(stringified);
 					return cloneOutput ? ((typeof result === "object" && result != null) ? result.clone() : result) : result;
 				}
 
+				memoizationData.numDistinctArgs ++;
 				const result = func.apply(this, arguments);
 				map.set(stringified, result);
 				return result;
 			}
 		}[name];
+		memoized.memoizationData = memoizationData;
+		return memoized;
 	}
 	else {
-		return {
+		const memoized = {
 			[name]: function() {
+				memoizationData.timesCalled ++;
 				for(let [key, value] of map.entries()) {
 					if([...key].every((val, i) => val === arguments[i])) {
 						return cloneOutput ? ((typeof value === "object" && value != null) ? value.clone() : value) : value;;
 					}
 				}
+
+				memoizationData.numDistinctArgs ++;
 				const result = func.apply(this, arguments);
 				map.set(arguments, result);
 				return result;
 			}
 		}[name];
+		memoized.memoizationData = memoizationData;
+		return memoized;
 	}
 });
 Function.prototype.memoize.maps = [];
