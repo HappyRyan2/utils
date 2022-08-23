@@ -449,17 +449,20 @@ class Testing {
 		this.resetTests();
 
 		const tests = fastOnly ? this.tests().filter(t => !t.isSlow && !this.units.find(u => u.unitName === t.unitName).isSlow) : this.tests();
+		const startTime = Date.now();
 		tests.forEach(test => {
 			test.result = test.getResult();
 		});
+		const endTime = Date.now();
 		if(tests.length !== this.tests().length) {
 			output.warn(`Only running ${tests.length} of ${this.tests().length} tests.`);
 		}
 
 		const failed = this.testsFailed();
 		const numFailed = failed.length;
+		const time = endTime - startTime;
 		if(numFailed === 0) {
-			output.log("%cAll tests passed!", "color: rgb(0, 192, 64)");
+			output.log(`%cAll tests passed%c in ${time}ms.`, "color: rgb(0, 192, 64)", "");
 		}
 		else if(numFailed === 1) {
 			const [test] = failed;
@@ -486,14 +489,17 @@ class Testing {
 			throw new Error(`Cannot find unit ${unitName}`);
 		}
 		const tests = unit.tests;
+		const startTime = Date.now();
 		tests.forEach(test => {
 			test.result = test.getResult();
 		});
+		const endTime = Date.now();
 
 		const failed = this.testsFailed();
 		const numFailed = failed.length;
+		const time = endTime - startTime;
 		if(numFailed === 0) {
-			output.log(`%cAll tests passed%c in unit ${unitName}`, "color: rgb(0, 192, 64)", "");
+			output.log(`%cAll tests passed%c in unit ${unitName} (${time}ms)`, "color: rgb(0, 192, 64)", "");
 		}
 		else if(numFailed === 1) {
 			const [test] = failed;
@@ -508,9 +514,12 @@ class Testing {
 		}
 	}
 	runTest(test, output = console) {
+		const startTime = Date.now();
 		test.functionToRun();
+		const endTime = Date.now();
 
-		const text = `%cTest passed: %c${test.unitName} - ${test.name}`;
+		const time = endTime - startTime;
+		const text = `%cTest passed: %c${test.unitName} - ${test.name} (${time}ms)`;
 		output.log(text, "color: rgb(0, 192, 64)", "");
 	}
 	runTestByName(testName, output = console) {
