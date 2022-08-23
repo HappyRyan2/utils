@@ -414,6 +414,13 @@ const expect = function() {
 				value.constructor === constructor,
 				`Expected ${value} to be an instance of ${constructor}.`
 			);
+		},
+
+		toMatch: function(regex) {
+			testing.assert(
+				regex.test(value),
+				`Expected ${value} to match the regex ${regex}`
+			);
 		}
 	};
 };

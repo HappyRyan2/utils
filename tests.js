@@ -3369,6 +3369,12 @@ testing.addUnit("expect()", {
 		testing.assertThrows(() => {
 			expect({}).toDirectlyInstantiate(Array);
 		});
+	},
+	"toMatch() works": () => {
+		expect("foo123bar").toMatch(/foo\d+bar/g);
+		testing.assertThrows(() => {
+			expect("foo123bar").toMatch(/foobar/g);
+		});
 	}
 });
 testing.addUnit("Testing.testAll()", {
