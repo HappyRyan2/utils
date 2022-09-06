@@ -97,5 +97,9 @@ testing.addUnit("Function.memoize()", {
 		memoized(2);
 		memoized(2);
 		expect(data).toEqual({ numDistinctArgs: 2, timesCalled: 4 });
+	},
+	"throws an error when the stringified result is [object Object]": () => {
+		const func = (() => {}).memoize(true);
+		testing.assertThrows(() => func({}));
 	}
 });

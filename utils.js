@@ -730,6 +730,9 @@ Function.method(function memoize(stringifyKeys = false, cloneOutput = false) {
 			[name]: function() {
 				memoizationData.timesCalled ++;
 				const stringified = [...arguments].toString();
+				if(stringified === "[object Object]") {
+					throw new Error(`Expected cache key to be unique, but instead got [object Object].`);
+				}
 				if(map.has(stringified)) {
 					const result = map.get(stringified);
 					return cloneOutput ? ((typeof result === "object" && result != null) ? result.clone() : result) : result;
