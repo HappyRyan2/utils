@@ -2737,6 +2737,38 @@ testing.addUnit("utils.binarySearch()", {
 		expect(result).toEqual(5n);
 	}
 });
+testing.addUnit("utils.binaryInsert()", {
+	"correctly inserts the element when it does not already occur in the array": () => {
+		const arr = [1, 2, 9, 10];
+		const inserted = utils.binaryInsert(arr, 5);
+		expect(arr).toEqual([1, 2, 9, 10]);
+		expect(inserted).toEqual([1, 2, 5, 9, 10]);
+	},
+	"correctly inserts the element when it already occurs in the array": () => {
+		const arr = [1, 2, 5, 9, 10];
+		const inserted = utils.binaryInsert(arr, 5);
+		expect(arr).toEqual([1, 2, 5, 9, 10]);
+		expect(inserted).toEqual([1, 2, 5, 5, 9, 10]);
+	},
+	"correctly inserts the element when it occurs multiple times in the array": () => {
+		const arr = [1, 2, 5, 5, 5, 9, 10];
+		const inserted = utils.binaryInsert(arr, 5);
+		expect(arr).toEqual([1, 2, 5, 5, 5, 9, 10]);
+		expect(inserted).toEqual([1, 2, 5, 5, 5, 5, 9, 10]);
+	},
+	"works when a custom comparison function is provided": () => {
+		const arr = [{x: 1}, {x: 2}, {x: 9}, {x: 10}];
+		const inserted = utils.binaryInsert(arr, {x: 5}, (a, b) => a.x - b.x);
+		expect(arr).toEqual([{x: 1}, {x: 2}, {x: 9}, {x: 10}]);
+		expect(inserted).toEqual([{x: 1}, {x: 2}, {x: 5}, {x: 9}, {x: 10}]);
+	},
+	"works when the array is sorted in reverse order": () => {
+		const arr = [10, 9, 2, 1];
+		const inserted = utils.binaryInsert(arr, 5);
+		expect(arr).toEqual([10, 9, 2, 1]);
+		expect(inserted).toEqual([10, 9, 5, 2, 1]);
+	}
+});
 testing.addUnit("utils.toString()", {
 	"can convert a string to a string with quotes": () => {
 		const result = utils.toString(`hello`);

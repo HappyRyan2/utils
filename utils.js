@@ -2795,6 +2795,13 @@ utils.binarySearch = (min, max, callback, whichOne = "first") => {
 	/* min === max */
 	return min;
 };
+utils.binaryInsert = (array, element, compareFn = Array.SORT_ASCENDING) => {
+	if(array.length > 2 && compareFn(array[0], array[array.length - 1]) > 0) {
+		return utils.binaryInsert(array, element, (a, b) => -compareFn(a, b));
+	}
+	const index = utils.binarySearch(0, array.length - 1, i => compareFn(array[i], element), "first");
+	return [...array.slice(0, index + 1), element, ...array.slice(index + 1)];
+};
 utils.toString = (obj, maxLength = Infinity) => {
 	/*
 	This method converts objects to strings, with some special cases:
