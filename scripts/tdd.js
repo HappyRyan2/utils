@@ -74,6 +74,9 @@ class TestUnit {
 				});
 				this.unitName = unitName;
 			}
+			else {
+				throw new Error("Invalid usage.");
+			}
 		}
 		else if(typeof arguments[1] === "function" && !Array.isArray(arguments[2]) && Object.keys(arguments[2]).every(key => Array.isArray(arguments[2][key]))) {
 			const [unitName, functionToRun, testCases] = arguments;
@@ -99,12 +102,10 @@ class TestUnit {
 			});
 			this.unitName = unitName;
 		}
-		else if(arguments[1] instanceof Object) {
-			if(Object.keys(arguments[1]).every(testName => typeof arguments[1][testName] === "function")) {
-				const [unitName, tests] = arguments;
-				this.unitName = unitName;
-				this.tests = Object.entries(tests).map(([testName, functionToRun]) => new Test(functionToRun, testName));
-			}
+		else if(arguments[1] instanceof Object && Object.keys(arguments[1]).every(testName => typeof arguments[1][testName] === "function")) {
+			const [unitName, tests] = arguments;
+			this.unitName = unitName;
+			this.tests = Object.entries(tests).map(([testName, functionToRun]) => new Test(functionToRun, testName));
 		}
 		else {
 			throw new Error("Invalid usage.");

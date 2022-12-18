@@ -2933,6 +2933,16 @@ testing.addUnit("TestUnit constructor", {
 		expect(unit.unitName).toEqual("increment()");
 		expect(unit.findTest("test that passes").getResult()).toEqual(true);
 		expect(unit.findTest("test that fails").getResult()).toEqual(false);
+	},
+
+	"throws an error when called with something other than one of the valid argument formats": () => {
+		testing.assertThrows(() => new TestUnit([1, 2, 3]));
+	},
+	"throws an error when auto-generating tests but the function is omitted": () => {
+		testing.assertThrows(() => new TestUnit("foo()", [ [1, 2] ]));
+	},
+	"throws an error when called with an object that has non-function values": () => {
+		testing.assertThrows(() => new TestUnit("foo()", { "test case 1": () => {}, "test case 2": "foo"} ));
 	}
 });
 testing.addUnit("expect()", {
