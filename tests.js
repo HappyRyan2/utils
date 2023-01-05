@@ -2943,6 +2943,10 @@ testing.addUnit("TestUnit constructor", {
 	},
 	"throws an error when called with an object that has non-function values": () => {
 		testing.assertThrows(() => new TestUnit("foo()", { "test case 1": () => {}, "test case 2": "foo"} ));
+	},
+	"throws an error when called with an input/output array that is not a 2D array": () => {
+		const func = () => {};
+		testing.assertThrows(() => new TestUnit("foo()", func, [undefined]));
 	}
 });
 testing.addUnit("expect()", {

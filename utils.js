@@ -102,13 +102,17 @@ class TestUnit {
 			});
 			this.unitName = unitName;
 		}
-		else if(arguments[1] instanceof Object && Object.keys(arguments[1]).every(testName => typeof arguments[1][testName] === "function")) {
+		else if(typeof arguments[1] === "object" && Object.keys(arguments[1]).every(testName => typeof arguments[1][testName] === "function")) {
 			const [unitName, tests] = arguments;
 			this.unitName = unitName;
 			this.tests = Object.entries(tests).map(([testName, functionToRun]) => new Test(functionToRun, testName));
 		}
 		else {
 			throw new Error("Invalid usage.");
+		}
+
+		if(this.tests.length === 0) {
+			console.warn(`Test unit ${this.name} created successfully but with no tests.`);
 		}
 
 
