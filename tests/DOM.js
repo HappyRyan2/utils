@@ -6,6 +6,7 @@ testing.addUnit("utils.createElement()", {
 	"can create an element with an ID": () => {
 		const element = utils.createElement("span#myID");
 		expect(element).toDirectlyInstantiate(HTMLSpanElement);
+		expect(element.id).toEqual("myID");
 	},
 	"can create an element with a class": () => {
 		const element = utils.createElement("p.myClass");
@@ -24,5 +25,15 @@ testing.addUnit("utils.createElement()", {
 		expect(element.id).toEqual("myID");
 		testing.assert(element.classList.contains("class1"));
 		testing.assert(element.classList.contains("class2"));
-	}
+	},
+	"can create an element with an ID containing a hyphen": () => {
+		const element = utils.createElement("div #my-id");
+		expect(element).toDirectlyInstantiate(HTMLDivElement);
+		expect(element.id).toEqual("my-id");
+	},
+	"can create an element with classes containing hyphens": () => {
+		const element = utils.createElement("div #my-id");
+		expect(element).toDirectlyInstantiate(HTMLDivElement);
+		expect(element.id).toEqual("my-id");
+	},
 });

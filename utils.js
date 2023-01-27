@@ -2696,7 +2696,7 @@ class Vector {
 
 window.utils ??= {};
 utils.createElement = (elementString) => {
-	const TOKENIZE = /(?:\.|#|)\w+/g;
+	const TOKENIZE = /(?:\.|#|)[\w_-]+/g;
 	const tokens = elementString.match(TOKENIZE);
 	const element = document.createElement(tokens.find(t => t[0] !== "#" && t[0] !== "."));
 	for(const token of tokens) {
